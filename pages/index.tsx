@@ -11,7 +11,6 @@ const center = {
   lng: 2.2945,
 };
 
-// ✅ Extend the expected type to include `source`
 type SVRequestOptions =
   | {
     pano: string;
@@ -42,9 +41,10 @@ function getSVData(
   });
 }
 
-// ✅ Safe way to access optional image date
+
 function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
-  return (data as any)?.imageDate ?? (data.tiles as any)?.imageDate ?? 'unknown';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+return (data as any)?.imageDate ?? (data.tiles as any)?.imageDate ?? 'unknown';
 }
 
 export default function Home() {
@@ -150,7 +150,7 @@ export default function Home() {
     }
   }, [panoData]);
 
-  if (loadError) return <p>❌ Error loading map</p>;
+  if (loadError) return <p>Error loading map</p>;
   if (!isLoaded) return <p>Loading map...</p>;
 
   return (
