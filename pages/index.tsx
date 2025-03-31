@@ -1,113 +1,218 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { useEffect, useRef, useState } from 'react';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const containerStyle = {
+  width: '100%',
+  height: '100vh',
+};
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const center = {
+  lat: 48.8584,
+  lng: 2.2945,
+};
+
+// ✅ Extend the expected type to include `source`
+type SVRequestOptions =
+  | {
+    pano: string;
+    location?: never;
+    radius?: never;
+    source?: google.maps.StreetViewSource;
+  }
+  | {
+    pano?: never;
+    location: google.maps.LatLngLiteral;
+    radius?: number;
+    source?: google.maps.StreetViewSource;
+  };
+
+// ✅ Wrap getPanorama in a promise
+function getSVData(
+  service: google.maps.StreetViewService,
+  options: SVRequestOptions
+): Promise<google.maps.StreetViewPanoramaData> {
+  return new Promise((resolve, reject) => {
+    service.getPanorama(options, (data, status) => {
+      if (status === google.maps.StreetViewStatus.OK && data) {
+        resolve(data);
+      } else {
+        reject(new Error('Panorama not found'));
+      }
+    });
+  });
+}
+
+// ✅ Safe way to access optional image date
+function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
+  return (data as any)?.imageDate ?? (data.tiles as any)?.imageDate ?? 'unknown';
+}
 
 export default function Home() {
+  const [panoData, setPanoData] = useState<{
+    panoId: string;
+    lat: number;
+    lng: number;
+    date?: string;
+  } | null>(null);
+
+  const [alternatePanoramas, setAlternatePanoramas] = useState<
+    { panoId: string; date: string }[]
+  >([]);
+
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const streetViewRef = useRef<HTMLDivElement | null>(null);
+  const panoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+    libraries: ['geometry'],
+  });
+
+  const loadPanorama = async (panoId: string) => {
+    const svService = new google.maps.StreetViewService();
+
+    try {
+      const data = await getSVData(svService, { pano: panoId });
+
+      if (data.location?.latLng) {
+        const { pano, latLng } = data.location;
+        const date = extractImageDate(data);
+
+        setPanoData({
+          panoId: pano,
+          lat: latLng.lat(),
+          lng: latLng.lng(),
+          date,
+        });
+
+        const nearby: { panoId: string; date: string }[] = [];
+
+        if (data.links) {
+          for (const link of data.links) {
+            try {
+              const linked = await getSVData(svService, { pano: link.pano ?? '' });
+
+              if (
+                linked.location?.latLng &&
+                google.maps.geometry.spherical.computeDistanceBetween(
+                  latLng,
+                  linked.location.latLng
+                ) < 10
+              ) {
+                const linkedDate = extractImageDate(linked);
+                nearby.push({ panoId: linked.location.pano, date: linkedDate });
+              }
+            } catch {
+              // skip broken pano
+            }
+          }
+        }
+
+        setAlternatePanoramas(nearby);
+      }
+    } catch (err) {
+      console.warn('Could not load pano:', err);
+    }
+  };
+
+  const handleMapClick = async (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      const svService = new google.maps.StreetViewService();
+      const location = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+
+      try {
+        const data = await getSVData(svService, {
+          location,
+          radius: 50,
+          source: google.maps.StreetViewSource.DEFAULT,
+        });
+
+        if (data.location?.pano) {
+          loadPanorama(data.location.pano);
+        }
+      } catch {
+        console.warn('No Google pano found at this location.');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (streetViewRef.current && panoData && window.google) {
+      if (!panoramaRef.current) {
+        panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, {
+          pano: panoData.panoId,
+          visible: true,
+        });
+      } else {
+        panoramaRef.current.setPano(panoData.panoId);
+        panoramaRef.current.setVisible(true);
+      }
+    }
+  }, [panoData]);
+
+  if (loadError) return <p>❌ Error loading map</p>;
+  if (!isLoaded) return <p>Loading map...</p>;
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <main style={{ display: 'flex', height: '100vh' }}>
+      <div style={{ flex: 1 }}>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={14}
+          onClick={handleMapClick}
+          onLoad={(map) => {
+            mapRef.current = map;
+            new google.maps.StreetViewCoverageLayer().setMap(map);
+          }}
+          options={{ streetViewControl: false }}
+        >
+          {panoData && (
+            <Marker
+              position={{ lat: panoData.lat, lng: panoData.lng }}
+              title={`Pano location - ${panoData.panoId}`}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          )}
+        </GoogleMap>
+
+      </div>
+
+      <div style={{ flex: 1, position: 'relative' }}>
+        <div ref={streetViewRef} style={{ width: '100%', height: '100%' }} />
+
+        {alternatePanoramas.length > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              background: '#fff',
+              padding: '0.5rem',
+              borderRadius: 8,
+              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+            }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <label>
+              View other dates:
+              <select
+                onChange={(e) => {
+                  const selected = alternatePanoramas.find((p) => p.panoId === e.target.value);
+                  if (selected) loadPanorama(selected.panoId);
+                }}
+              >
+                <option value={panoData?.panoId || ''}>
+                  Current ({panoData?.date || 'unknown'})
+                </option>
+                {alternatePanoramas.map((alt) => (
+                  <option key={alt.panoId} value={alt.panoId}>
+                    {alt.date}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
