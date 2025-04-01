@@ -160,60 +160,19 @@ export default function Home() {
 
   useEffect(() => {
     if (!streetViewRef.current || !panoData || !window.google) return;
-  
+
     // Clean up any old instance
     if (panoramaRef.current) {
       panoramaRef.current.setVisible(false);
       panoramaRef.current = null;
     }
-  
+
     // Create new instance
     panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, {
       pano: panoData.panoId,
       visible: true,
     });
   }, [panoData]);
-  
-  const handleCloseEditor = () => {
-    if (!panoData || !panoramaRef.current) {
-      resetEditor();
-      return;
-    }
-
-    const current: Omit<SavedPano, 'id'> = {
-      panoId: panoData.panoId,
-      panoDate: panoData.date || null,
-      lat: panoData.lat,
-      lng: panoData.lng,
-      heading: panoramaRef.current.getPov().heading,
-      pitch: panoramaRef.current.getPov().pitch,
-      zoom: panoramaRef.current.getZoom?.() ?? 1,
-      description,
-      tags,
-    };
-
-    const original = savedLocations.find((loc) => loc.id === editingFromId);
-    if (!original) {
-      resetEditor(); // just close, it's a new session
-      return;
-    }
-
-    const isEqual = JSON.stringify({ ...original, id: undefined }) === JSON.stringify(current);
-
-    if (isEqual) {
-      resetEditor();
-    } else {
-      const confirmSave = window.confirm(
-        'You have unsaved changes.\nClick OK to save as a new location, or Cancel to discard changes.'
-      );
-
-      if (confirmSave) {
-        handleSaveLocation(); // Save as new
-      } else {
-        resetEditor(); // Discard
-      }
-    }
-  };
 
   // ======== UI: Tag Handling ========
 
@@ -394,9 +353,47 @@ export default function Home() {
       tags,
     };
 
-    setSavedLocations(prev => [...prev, newLocation]);
-    resetEditor(); // we'll define this next
+    setSavedLocations((prev) => [...prev, newLocation]);
+    resetEditor();
   };
+
+  const handleUpdateLocation = () => {
+    if (!editingFromId || !panoData || !panoramaRef.current) return;
+
+    const updated = {
+      id: editingFromId,
+      panoId: panoData.panoId,
+      panoDate: panoData.date || null,
+      lat: panoData.lat,
+      lng: panoData.lng,
+      heading: panoramaRef.current.getPov().heading,
+      pitch: panoramaRef.current.getPov().pitch,
+      zoom: panoramaRef.current.getZoom?.() ?? 1,
+      description,
+      tags,
+    };
+
+    setSavedLocations((prev) =>
+      prev.map((p) => (p.id === editingFromId ? updated : p))
+    );
+    resetEditor();
+  };
+
+  const handleSplitLocation = () => {
+    handleSaveLocation(); // Simply save a copy
+  };
+
+  const handleDeleteLocation = () => {
+    if (editingFromId) {
+      setSavedLocations((prev) => prev.filter((p) => p.id !== editingFromId));
+    }
+    resetEditor(); // Works for both saved and unsaved cases
+  };
+
+  const handleCloseEditor = () => {
+    resetEditor(); // No longer handles duplication logic
+  };
+
   const resetEditor = () => {
     setPanoData(null);
     setDescription('');
@@ -496,13 +493,33 @@ export default function Home() {
               {renderDescriptionInput()}
               {renderAlternatePanoDatesDropdown()}
               <div className={styles.buttonRow}>
-                <button className={styles.saveButton} onClick={handleSaveLocation}>
-                  💾 Save Location
-                </button>
-                <button className={styles.closeButton} onClick={handleCloseEditor}>
-                  ❌ Close
-                </button>
+                {!editingFromId ? (
+                  <>
+                    <button className={styles.saveButton} onClick={handleSaveLocation}>
+                      💾 Save Location
+                    </button>
+                    <button className={styles.deleteButton} onClick={handleDeleteLocation}>
+                      🗑 Delete
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className={styles.updateButton} onClick={handleUpdateLocation}>
+                      ✅ Update
+                    </button>
+                    <button className={styles.splitButton} onClick={handleSplitLocation}>
+                      ➕ Split
+                    </button>
+                    <button className={styles.deleteButton} onClick={handleDeleteLocation}>
+                      🗑 Delete
+                    </button>
+                    <button className={styles.closeButton} onClick={handleCloseEditor}>
+                      ❌ Close
+                    </button>
+                  </>
+                )}
               </div>
+
 
             </div>
           </div>
