@@ -64,6 +64,11 @@ export default function Home() {
   const [description, setDescription] = useState('');
   const [editingFromId, setEditingFromId] = useState<string | null>(null);
 
+  const markerIcons = {
+    current: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+    saved: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+  };  
+
   interface SavedPano {
     id: string; // Use a unique ID string to track each save
     panoId: string;
@@ -225,14 +230,27 @@ export default function Home() {
       }}
       options={{ streetViewControl: false }}
     >
+      {/* 🔵 Saved pano markers */}
+      {savedLocations.map((loc) => (
+        <Marker
+          key={loc.id}
+          position={{ lat: loc.lat, lng: loc.lng }}
+          icon={markerIcons.saved}
+          title={`Saved: ${loc.description || 'Untitled'}`}
+        />
+      ))}
+  
+      {/* 🟢 Currently editing pano marker */}
       {panoData && (
         <Marker
           position={{ lat: panoData.lat, lng: panoData.lng }}
-          title={`Pano location - ${panoData.panoId}`}
+          icon={markerIcons.current}
+          title={`Currently editing - ${panoData.panoId}`}
         />
       )}
     </GoogleMap>
   );
+  
 
   const renderStreetView = () => (
     <>
@@ -453,6 +471,11 @@ export default function Home() {
       onClick={() => loadSavedLocation(pano)}
       style={{ cursor: 'pointer' }}
     >
+      <img
+        src={getStreetViewPreviewUrl(pano.panoId, pano.heading, pano.pitch)}
+        alt="Street View Preview"
+        className={styles.savedPanoPreview}
+      />
       <div className={styles.savedPanoListItemInfo}>
         <div><strong>Description:</strong></div>
         <div>{pano.description || 'No description'}</div>
@@ -463,7 +486,16 @@ export default function Home() {
       </div>
     </div>
   );
-
+  
+  function getStreetViewPreviewUrl(
+    panoId: string,
+    heading: number,
+    pitch: number
+  ): string {
+    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    return `https://maps.googleapis.com/maps/api/streetview?size=300x150&pano=${panoId}&heading=${heading}&pitch=${pitch}&key=${key}`;
+  }
+  
 
   const renderSavedPanoList = () => {
     if (savedLocations.length === 0) {

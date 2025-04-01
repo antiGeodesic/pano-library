@@ -1,223 +1,244 @@
 .container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .map {
-    flex: 1;
-  }
-  
-  .panoEditor {
-    width: 100%;
-    position: relative;
-  }
-  .panoSettings {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-  }
-  .inactive {
-    /*filter: grayscale(80%) brightness(0.2);*/
-  }
-  
-  
-  .streetView {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-  }
-  .containerElement {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .dropdown {
-    background: white;
-    padding: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-  }
+  display: flex;
+  height: 100vh;
+}
 
-  .panoEditorInfoWrapper {
-    padding: 1rem;
-    max-width: 35%;
-  }
-  .tagList {
-    background: #f8f9fa;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .tagListItem {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-  
-  .tagInput {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    color: black;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .tagButton,
-  .removeButton {
-    padding: 0.4rem 0.6rem;
-    background: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .removeButton {
-    background: #e63946;
-  }
-  
-  .removeButton:hover {
-    background: #d62828;
-  }
-  
-  .tagButton:hover {
-    background: #0059c1;
-  }
-  
-  .errorInput {
-    border-color: red;
-  }
-  
-  .errorButton {
-    background: #ff4d4f;
-  }
-  
-  .errorText {
-    color: red;
-    font-size: 0.9rem;
-    margin: 0;
-  }
-  
-  
-  .descriptionInput {
-    width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: inherit;
-    background-color: #fff;
-    color: #333;
-  }
-  
-  .saveButton {
-    margin-top: 1rem;
-    padding: 0.6rem 1rem;
-    background: #00c853;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.2s ease;
-  }
-  
-  .saveButton:hover {
-    background: #009624;
-  }
+.map {
+  flex: 1;
+}
 
-  .panoEditor {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .panoSettings {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
-  
-  .panoSelector {
-    padding: 1rem;
-    background-color: #f4f4f4;
-    overflow-y: auto;
-  }
-  
-  .savedPanoList {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .savedPanoListItem {
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  }
-  
-  .savedPanoListItemInfo {
-    margin-bottom: 0.5rem;
-  }
-  
-  .savedPanoEmpty {
-    padding: 1rem;
-    color: #666;
-  }
+.panoEditor {
+  width: 100%;
+  position: relative;
+}
 
-  .buttonGrid{
-    margin: 20px auto;
-    width:400px;
-    height:400px;
-    background-color:#fff;
-    display:grid;
-    grid-template-columns: 200px 200px;
-    grid-row: auto auto;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
-  }
-  .editButton {
-    border-radius:10px;
-    border: 3px solid #000000;
-    background-color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition: all 0.25s ease;
-  }  
-  .editButton:hover {
-    transform: scale(1.05);
-    border-radius: 15px;
-  }
-  .saveButton {
-    border: 3px solid #a0ff00;
-  }
-  .updateButton {
-    border: 3px solid #a0ff00;
-  }
-  .splitButton {
-    border: 3px solid #a000ff;
-  }
-  .deleteButton {
-    border: 3px solid #ff0000;
-  }
-  .closeButton {
-    border: 3px solid #ffa000;
-    cursor: pointer;
-  }
-  /*.closeButton:hover {
+.panoSettings {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.inactive {
+  /*filter: grayscale(80%) brightness(0.2);*/
+}
+
+
+.streetView {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.containerElement {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown {
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.panoEditorInfoWrapper {
+  padding: 1rem;
+  /*max-width: 35%;*/
+}
+
+.tagList {
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tagListItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tagInput {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  color: black;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.tagButton,
+.removeButton {
+  padding: 0.4rem 0.6rem;
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.removeButton {
+  background: #e63946;
+}
+
+.removeButton:hover {
+  background: #d62828;
+}
+
+.tagButton:hover {
+  background: #0059c1;
+}
+
+.errorInput {
+  border-color: red;
+}
+
+.errorButton {
+  background: #ff4d4f;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+
+.descriptionInput {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  background-color: #fff;
+  color: #333;
+}
+
+.saveButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  background: #00c853;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.saveButton:hover {
+  background: #009624;
+}
+
+.panoEditor {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.panoSettings {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.panoSelector {
+  padding: 1rem;
+  background-color: #f4f4f4;
+  overflow-y: auto;
+}
+
+.savedPanoList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.savedPanoListItem {
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.savedPanoPreview {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  object-fit: cover;
+}
+
+.savedPanoListItemInfo {
+  margin-bottom: 0.5rem;
+}
+
+.savedPanoEmpty {
+  padding: 1rem;
+  color: #666;
+}
+
+.buttonGrid {
+  margin: 20px auto;
+  width: 6.5rem;
+  height: 3.5rem;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: 3rem 1.5rem;
+  grid-row: auto auto;
+  /*grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;*/
+  grid-gap: 0.5rem;
+}
+
+.editButton {
+  border-radius: 10px;
+  border: 3px solid #000000;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.editButton:hover {
+  transform: scale(1.05);
+  border-radius: 15px;
+}
+
+.saveButton {
+  border: 3px solid #a0ff00;
+}
+
+.updateButton {
+  border: 3px solid #a0ff00;
+}
+
+.splitButton {
+  border: 3px solid #a000ff;
+}
+
+.deleteButton {
+  border: 3px solid #ff0000;
+}
+
+.closeButton {
+  border: 3px solid #ffa000;
+  cursor: pointer;
+}
+
+/*.closeButton:hover {
     background: #ddd;
   }*/
-  
