@@ -53,7 +53,8 @@ export default function Home() {
     lng: number;
     date?: string;
   } | null>(null);
-  const [activeSection, setActiveSection] = useState<'map' | 'panoEditor' | null>(null);
+  //const [activeSection, setActiveSection] = useState<'map' | 'panoEditor' | null>(null);
+  
   const [alternatePanoramas, setAlternatePanoramas] = useState<
     { panoId: string; date: string }[]
   >([]);
@@ -114,10 +115,10 @@ export default function Home() {
     }
   };
   const handlePanoClick = () => {
-    setActiveSection('panoEditor');
+    //setActiveSection('panoEditor');
   };
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
-    setActiveSection('map'); // 👈 user just interacted with the map
+    //setActiveSection('map'); 
     if (e.latLng) {
       const svService = new google.maps.StreetViewService();
       const location = { lat: e.latLng.lat(), lng: e.latLng.lng() };
@@ -152,7 +153,6 @@ export default function Home() {
     }
   }, [panoData]);
 
-  // ✅ Clean UI helpers below:
   const createMapElement = () => (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -263,7 +263,7 @@ export default function Home() {
       {createTagListElement()}
     </div>
   );
-  if (loadError) return <p>❌ Error loading map</p>;
+  if (loadError) return <p>Error loading map</p>;
   if (!isLoaded) return <p>Loading map...</p>;
 
 
