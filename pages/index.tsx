@@ -237,7 +237,7 @@ export default function Home() {
   const renderStreetView = () => (
     <>
       <div ref={streetViewRef} className={styles.streetView} />
-      {alternatePanoramas.length > 0 && (
+      {/*{alternatePanoramas.length > 0 && (
         <div className={styles.dropdown}>
           <label>
             View other dates:
@@ -258,7 +258,7 @@ export default function Home() {
             </select>
           </label>
         </div>
-      )}
+      )}*/}
     </>
   );
 
