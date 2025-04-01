@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import styles from '../styles/Home.module.css';
 import PlusMinusButton from '../components/PlusMinusButton';
+
 const containerStyle = {
   width: '100%',
   height: '100%',
@@ -63,11 +64,12 @@ export default function Home() {
   const [error, setError] = useState('');
   const [description, setDescription] = useState('');
   const [editingFromId, setEditingFromId] = useState<string | null>(null);
+  const [toggledEditButton, setToggledEditButton] = useState<string | null>(null);
 
   const markerIcons = {
     current: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
     saved: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-  };  
+  };
 
   interface SavedPano {
     id: string; // Use a unique ID string to track each save
@@ -239,7 +241,7 @@ export default function Home() {
           title={`Saved: ${loc.description || 'Untitled'}`}
         />
       ))}
-  
+
       {/* 🟢 Currently editing pano marker */}
       {panoData && (
         <Marker
@@ -250,7 +252,7 @@ export default function Home() {
       )}
     </GoogleMap>
   );
-  
+
 
   const renderStreetView = () => (
     <>
@@ -486,7 +488,7 @@ export default function Home() {
       </div>
     </div>
   );
-  
+
   function getStreetViewPreviewUrl(
     panoId: string,
     heading: number,
@@ -495,7 +497,7 @@ export default function Home() {
     const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     return `https://maps.googleapis.com/maps/api/streetview?size=300x150&pano=${panoId}&heading=${heading}&pitch=${pitch}&key=${key}`;
   }
-  
+
 
   const renderSavedPanoList = () => {
     if (savedLocations.length === 0) {
@@ -509,6 +511,26 @@ export default function Home() {
     );
   };
 
+  const renderEditButton = (
+    id: string,
+    label: string,
+    onClick: () => void,
+    extraClass: string
+  ) => (
+    <button
+      className={`${styles.editButton} ${extraClass} ${toggledEditButton === id ? styles.editButtonToggled : ''}`}
+      onClick={() => {
+        if (toggledEditButton === id) {
+          onClick(); // Second click → confirm
+          setToggledEditButton(null); // Optionally reset
+        } else {
+          setToggledEditButton(id); // First click → toggle
+        }
+      }}
+    >
+      {label}
+    </button>
+  );
 
   // ======== Layout ========
 
@@ -531,30 +553,19 @@ export default function Home() {
               <div className={styles.buttonGrid}>
                 {!editingFromId ? (
                   <>
-                    <button className={`${styles.saveButton} ${styles.editButton}`} onClick={handleSaveLocation}>
-                      💾 Save Location
-                    </button>
-                    <button className={`${styles.deleteButton} ${styles.editButton}`} onClick={handleDeleteLocation}>
-                      🗑 Delete
-                    </button>
+                    {renderEditButton('save', '💾 Save Location', handleSaveLocation, styles.saveButton)}
+                    {renderEditButton('delete', '🗑 Delete', handleDeleteLocation, styles.deleteButton)}
                   </>
                 ) : (
                   <>
-                    <button className={`${styles.updateButton} ${styles.editButton}`} onClick={handleUpdateLocation}>
-                      ✅ Update
-                    </button>
-                    <button className={`${styles.splitButton} ${styles.editButton}`} onClick={handleSplitLocation}>
-                      ➕ Split
-                    </button>
-                    <button className={`${styles.deleteButton} ${styles.editButton}`} onClick={handleDeleteLocation}>
-                      🗑 Delete
-                    </button>
-                    <button className={`${styles.closeButton} ${styles.editButton}`} onClick={handleCloseEditor}>
-                      ❌ Close
-                    </button>
+                    {renderEditButton('update', '✅ Update', handleUpdateLocation, styles.updateButton)}
+                    {renderEditButton('split', '➕ Split', handleSplitLocation, styles.splitButton)}
+                    {renderEditButton('delete', '🗑 Delete', handleDeleteLocation, styles.deleteButton)}
+                    {renderEditButton('close', '❌ Close', handleCloseEditor, styles.closeButton)}
                   </>
                 )}
               </div>
+
 
 
             </div>

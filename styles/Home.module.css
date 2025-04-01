@@ -192,15 +192,16 @@
 
 .buttonGrid {
   margin: 20px auto;
-  width: 6.5rem;
-  height: 3.5rem;
+  width: 17rem;
+  height: 9rem;
   background-color: #fff;
   display: grid;
-  grid-template-columns: 3rem 1.5rem;
+  grid-template-columns: 8rem 8rem;
+  grid-template-rows: 4rem 4rem;
   grid-row: auto auto;
   /*grid-column-gap: 0.5rem;
   grid-row-gap: 0.5rem;*/
-  grid-gap: 0.5rem;
+  grid-gap: 1rem;
 }
 
 .editButton {
@@ -217,7 +218,11 @@
   transform: scale(1.05);
   border-radius: 15px;
 }
-
+.editButtonToggled {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+  transform: rotateX(180deg);
+  background-color: #ffd166 !important; /* or any highlight color */
+}
 .saveButton {
   border: 3px solid #a0ff00;
 }
