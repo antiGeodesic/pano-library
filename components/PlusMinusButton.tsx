@@ -9,14 +9,15 @@ interface PlusMinusButtonProps {
 const PlusMinusButton: React.FC<PlusMinusButtonProps> = ({ isMinus, onClick }) => {
   return (
     <div
-      className={`${styles.plusMinus} ${isMinus ? styles.minus : ''}`}
-      onClick={onClick}
-    >
+  className={styles.plusMinus}
+  onClick={onClick}
+>
+
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className={`${styles.svg} ${isMinus ? styles.svgMinus : ''}`}
-        viewBox="0 0 160 160"
-      >
+  xmlns="http://www.w3.org/2000/svg"
+  className={`${styles.svg} ${isMinus ? styles.svgMinus : ''}`}
+  viewBox="0 0 160 160"
+>
         <rect
           className={styles.verticalLine}
           x="70"
