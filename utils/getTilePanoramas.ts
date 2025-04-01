@@ -38,7 +38,7 @@ export interface TilePano {
   ): Promise<TilePano[]> {
     const { x, y, zoom: z } = latLngToTileCoords(lat, lng, zoom);
   
-    const url = `https://www.google.com/maps/photometa/ac/v1?pb=!1m2!1sapiv3!5sen!6m3!1i${z}!2i${x}!3i${y}`;
+    const url = `https://www.google.com/maps/photometa/ac/v1?pb=!1m2!1sapiv3!5sen!6m3!1i${x}!2i${y}!3i${z}`;
   
     try {
       const res = await fetch(url);
