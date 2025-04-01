@@ -410,6 +410,7 @@ export default function Home() {
 
       if (data.location?.latLng) {
         const { pano: panoId, latLng } = data.location;
+        setEditingFromId(pano.id);
         const date = extractImageDate(data);
 
         setPanoData({
