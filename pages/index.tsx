@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import styles from '../styles/Home.module.css';
 
 const containerStyle = {
   width: '100%',
-  height: '100vh',
+  height: '100%',
 };
 
 const center = {
@@ -25,7 +26,6 @@ type SVRequestOptions =
     source?: google.maps.StreetViewSource;
   };
 
-// ✅ Wrap getPanorama in a promise
 function getSVData(
   service: google.maps.StreetViewService,
   options: SVRequestOptions
@@ -41,10 +41,9 @@ function getSVData(
   });
 }
 
-
 function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-return (data as any)?.imageDate ?? (data.tiles as any)?.imageDate ?? 'unknown';
+  return (data as any)?.imageDate ?? (data.tiles as any)?.imageDate ?? 'unknown';
 }
 
 export default function Home() {
@@ -54,7 +53,7 @@ export default function Home() {
     lng: number;
     date?: string;
   } | null>(null);
-
+  const [activeSection, setActiveSection] = useState<'map' | 'panoEditor' | null>(null);
   const [alternatePanoramas, setAlternatePanoramas] = useState<
     { panoId: string; date: string }[]
   >([]);
@@ -103,7 +102,7 @@ export default function Home() {
                 nearby.push({ panoId: linked.location.pano, date: linkedDate });
               }
             } catch {
-              // skip broken pano
+              // skip
             }
           }
         }
@@ -114,8 +113,11 @@ export default function Home() {
       console.warn('Could not load pano:', err);
     }
   };
-
+  const handlePanoClick = () => {
+    setActiveSection('panoEditor');
+  };
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
+    setActiveSection('map'); // 👈 user just interacted with the map
     if (e.latLng) {
       const svService = new google.maps.StreetViewService();
       const location = { lat: e.latLng.lat(), lng: e.latLng.lng() };
@@ -150,68 +152,134 @@ export default function Home() {
     }
   }, [panoData]);
 
-  if (loadError) return <p>Error loading map</p>;
+  // ✅ Clean UI helpers below:
+  const createMapElement = () => (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={14}
+      onClick={handleMapClick}
+      onLoad={(map) => {
+        mapRef.current = map;
+        new google.maps.StreetViewCoverageLayer().setMap(map);
+      }}
+      options={{ streetViewControl: false }}
+    >
+      {panoData && (
+        <Marker
+          position={{ lat: panoData.lat, lng: panoData.lng }}
+          title={`Pano location - ${panoData.panoId}`}
+        />
+      )}
+    </GoogleMap>
+  );
+
+  const createStreetViewElement = () => (
+    <>
+      <div 
+        ref={streetViewRef} 
+        className={styles.streetView} 
+        onClick={handlePanoClick}
+      />
+      {alternatePanoramas.length > 0 && (
+        <div className={styles.dropdown}>
+          <label>
+            View other dates:
+            <select
+              onChange={(e) => {
+                const selected = alternatePanoramas.find((p) => p.panoId === e.target.value);
+                if (selected) loadPanorama(selected.panoId);
+              }}
+            >
+              <option value={panoData?.panoId || ''}>
+                Current ({panoData?.date || 'unknown'})
+              </option>
+              {alternatePanoramas.map((alt) => (
+                <option key={alt.panoId} value={alt.panoId}>
+                  {alt.date}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
+    </>
+  );
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [error, setError] = useState('');
+
+  const handleAddTag = () => {
+    const trimmed = inputValue.trim();
+
+    if (!trimmed) {
+      setError('Tag cannot be empty.');
+      return;
+    }
+
+    if (tags.includes(trimmed.toLowerCase())) {
+      setError('Tag already exists.');
+      return;
+    }
+
+    setTags([...tags, trimmed.toLowerCase()]);
+    setInputValue('');
+    setError('');
+  };
+
+  const createTagListElement = () => (
+    <div className={styles.tagListElement}>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+          setError(''); // clear error on typing
+        }}
+        placeholder="Enter a tag..."
+        className={`${styles.tagInput} ${error ? styles.errorInput : ''}`}
+      />
+      <button
+        onClick={handleAddTag}
+        className={`${styles.tagButton} ${error ? styles.errorButton : ''}`}
+      >
+        Add Tag
+      </button>
+      {error && <p className={styles.errorText}>{error}</p>}
+    </div>
+  );
+  const createTagList = () => (
+    <div className={styles.tagList}>
+      {tags.length > 0 && (
+        <ul className={styles.tagListDisplay}>
+          {tags.map((tag, i) => (
+            <li key={i} className={styles.tagItem}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+      )}
+      {createTagListElement()}
+    </div>
+  );
+  if (loadError) return <p>❌ Error loading map</p>;
   if (!isLoaded) return <p>Loading map...</p>;
 
+
+
   return (
-    <main style={{ display: 'flex', height: '100vh' }}>
-      <div style={{ flex: 1 }}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={14}
-          onClick={handleMapClick}
-          onLoad={(map) => {
-            mapRef.current = map;
-            new google.maps.StreetViewCoverageLayer().setMap(map);
-          }}
-          options={{ streetViewControl: false }}
-        >
-          {panoData && (
-            <Marker
-              position={{ lat: panoData.lat, lng: panoData.lng }}
-              title={`Pano location - ${panoData.panoId}`}
-            />
-          )}
-        </GoogleMap>
-
+    <main className={styles.container}>
+      <div className={styles.containerElement}>
+        <div className={styles.map}>
+          {createMapElement()}
+        </div>
       </div>
-
-      <div style={{ flex: 1, position: 'relative' }}>
-        <div ref={streetViewRef} style={{ width: '100%', height: '100%' }} />
-
-        {alternatePanoramas.length > 0 && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 10,
-              left: 10,
-              background: '#fff',
-              padding: '0.5rem',
-              borderRadius: 8,
-              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-            }}
-          >
-            <label>
-              View other dates:
-              <select
-                onChange={(e) => {
-                  const selected = alternatePanoramas.find((p) => p.panoId === e.target.value);
-                  if (selected) loadPanorama(selected.panoId);
-                }}
-              >
-                <option value={panoData?.panoId || ''}>
-                  Current ({panoData?.date || 'unknown'})
-                </option>
-                {alternatePanoramas.map((alt) => (
-                  <option key={alt.panoId} value={alt.panoId}>
-                    {alt.date}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        )}
+      <div className={styles.containerElement}>
+        <div className={styles.panoEditor}>
+          {createStreetViewElement()}
+          {createTagList()}
+        </div>
       </div>
     </main>
   );
