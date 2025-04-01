@@ -220,27 +220,46 @@
 }
 .editButtonToggled {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
-  transform: rotateX(180deg) scaleY(-1);
-  background-color: #ffd166 !important; /* or any highlight color */
+  transform: rotateX(180deg);
+  background-color: var(--button-color) !important; /* or any highlight color */
+  filter: brightness(1.1);
 }
+
+.editButtonContent {
+  display: inline-block;
+  transition: all 0.25s ease;
+  backface-visibility: hidden;
+}
+.editButtonContentToggled {
+  transform: rotateX(-180deg);
+}
+/*.editButtonToggled:hover {
+  transform: rotateX(180deg) scaleY(-1) scale(1.05);
+  border-radius: 15px;
+}*/
 .saveButton {
-  border: 3px solid #a0ff00;
+  --button-color: #a0ff00;
+  border: 3px solid var(--button-color);
 }
 
 .updateButton {
-  border: 3px solid #a0ff00;
+  --button-color: #a0ff00;
+  border: 3px solid var(--button-color);
 }
 
 .splitButton {
-  border: 3px solid #a000ff;
+  --button-color: #a000ff;
+  border: 3px solid var(--button-color);
 }
 
 .deleteButton {
-  border: 3px solid #ff0000;
+  --button-color: #ff0000;
+  border: 3px solid var(--button-color);
 }
 
 .closeButton {
-  border: 3px solid #ffa000;
+  --button-color: #ffa000;
+  border: 3px solid var(--button-color);
   cursor: pointer;
 }
 

@@ -65,7 +65,23 @@ export default function Home() {
   const [description, setDescription] = useState('');
   const [editingFromId, setEditingFromId] = useState<string | null>(null);
   const [toggledEditButton, setToggledEditButton] = useState<string | null>(null);
+  const editButtonContainerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        toggledEditButton &&
+        editButtonContainerRef.current &&
+        !editButtonContainerRef.current.contains(event.target as Node)
+      ) {
+        setToggledEditButton(null); // Cancel the confirmation
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [toggledEditButton]);
   const markerIcons = {
     current: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
     saved: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
@@ -528,7 +544,9 @@ export default function Home() {
         }
       }}
     >
-      {label}
+      <span className={`${styles.editButtonContent} ${toggledEditButton === id ? styles.editButtonContentToggled : ''}`}>
+        {label}
+      </span>
     </button>
   );
 
@@ -550,7 +568,7 @@ export default function Home() {
               {renderTagEditor()}
               {renderDescriptionInput()}
               {renderAlternatePanoDatesDropdown()}
-              <div className={styles.buttonGrid}>
+              <div className={styles.buttonGrid} ref={editButtonContainerRef}>
                 {!editingFromId ? (
                   <>
                     {renderEditButton('save', '💾 Save Location', handleSaveLocation, styles.saveButton)}
