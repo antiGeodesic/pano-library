@@ -91,11 +91,14 @@ export default function Home() {
   });
 
   const loadPanorama = async (panoId: string) => {
+    setEditingFromId(null);
     const svService = new google.maps.StreetViewService();
 
     try {
       const data = await getSVData(svService, { pano: panoId });
-
+      if (!data || !data.location?.latLng) {
+        throw new Error('Invalid pano data');
+      }
       if (data.location?.latLng) {
         const { pano, latLng } = data.location;
         const date = extractImageDate(data);
@@ -134,6 +137,7 @@ export default function Home() {
       }
     } catch (err) {
       console.warn('Could not load pano:', err);
+      alert('This panorama could not be loaded. It might be broken or no longer available.');
     }
   };
 
