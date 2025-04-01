@@ -496,28 +496,28 @@ export default function Home() {
               {renderTagEditor()}
               {renderDescriptionInput()}
               {renderAlternatePanoDatesDropdown()}
-              <div className={styles.buttonRow}>
+              <div className={styles.buttonGrid}>
                 {!editingFromId ? (
                   <>
-                    <button className={styles.saveButton} onClick={handleSaveLocation}>
+                    <button className={`${styles.saveButton} ${styles.editButton}`} onClick={handleSaveLocation}>
                       💾 Save Location
                     </button>
-                    <button className={styles.deleteButton} onClick={handleDeleteLocation}>
+                    <button className={`${styles.deleteButton} ${styles.editButton}`} onClick={handleDeleteLocation}>
                       🗑 Delete
                     </button>
                   </>
                 ) : (
                   <>
-                    <button className={styles.updateButton} onClick={handleUpdateLocation}>
+                    <button className={`${styles.updateButton} ${styles.editButton}`} onClick={handleUpdateLocation}>
                       ✅ Update
                     </button>
-                    <button className={styles.splitButton} onClick={handleSplitLocation}>
+                    <button className={`${styles.splitButton} ${styles.editButton}`} onClick={handleSplitLocation}>
                       ➕ Split
                     </button>
-                    <button className={styles.deleteButton} onClick={handleDeleteLocation}>
+                    <button className={`${styles.deleteButton} ${styles.editButton}`} onClick={handleDeleteLocation}>
                       🗑 Delete
                     </button>
-                    <button className={styles.closeButton} onClick={handleCloseEditor}>
+                    <button className={`${styles.closeButton} ${styles.editButton}`} onClick={handleCloseEditor}>
                       ❌ Close
                     </button>
                   </>
