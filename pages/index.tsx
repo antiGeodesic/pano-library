@@ -159,18 +159,21 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (streetViewRef.current && panoData && window.google) {
-      if (!panoramaRef.current) {
-        panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, {
-          pano: panoData.panoId,
-          visible: true,
-        });
-      } else {
-        panoramaRef.current.setPano(panoData.panoId);
-        panoramaRef.current.setVisible(true);
-      }
+    if (!streetViewRef.current || !panoData || !window.google) return;
+  
+    // Clean up any old instance
+    if (panoramaRef.current) {
+      panoramaRef.current.setVisible(false);
+      panoramaRef.current = null;
     }
+  
+    // Create new instance
+    panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, {
+      pano: panoData.panoId,
+      visible: true,
+    });
   }, [panoData]);
+  
   const handleCloseEditor = () => {
     if (!panoData || !panoramaRef.current) {
       resetEditor();
