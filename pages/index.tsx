@@ -62,7 +62,20 @@ export default function Home() {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [description, setDescription] = useState('');
-  const [savedLocations, setSavedLocations] = useState<any[]>([]);
+  interface SavedPano {
+    panoId: string;
+    panoDate: string | null;
+    lat: number;
+    lng: number;
+    heading: number;
+    pitch: number;
+    zoom: number;
+    description: string;
+    tags: string[];
+  }
+  
+  const [savedLocations, setSavedLocations] = useState<SavedPano[]>([]);
+  
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const streetViewRef = useRef<HTMLDivElement | null>(null);
