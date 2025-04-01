@@ -354,7 +354,7 @@ export default function Home() {
     console.log("Saved Locations:", [...savedLocations, locationData]); // for debug
   };
 
-  const renderSavedPanoListItem = (pano: any, index: number) => (
+  const renderSavedPanoListItem = (pano: SavedPano, index: number) => (
     <div key={index} className={styles.savedPanoListItem}>
       <div className={styles.savedPanoListItemInfo}>
         <div><strong>Description:</strong></div>
