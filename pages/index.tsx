@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import styles from '../styles/Home.module.css';
 import PlusMinusButton from '../components/PlusMinusButton';
-
+import {getTilePanoramas} from '../utils/getTilePanoramas';
 const containerStyle = {
   width: '100%',
   height: '100%',
@@ -165,25 +165,45 @@ export default function Home() {
   };
 
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      const svService = new google.maps.StreetViewService();
-      const location = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-
-      try {
-        const data = await getSVData(svService, {
-          location,
-          radius: 50,
-          source: google.maps.StreetViewSource.DEFAULT,
+    if (!e.latLng) return;
+  
+    const clickedLat = e.latLng.lat();
+    const clickedLng = e.latLng.lng();
+    const zoomLevel = 17; // Choose based on desired tile density
+  
+    try {
+      const tilePanos = await getTilePanoramas(clickedLat, clickedLng, zoomLevel);
+  
+      if (tilePanos.length > 0) {
+        // Find the closest pano
+        const closest = tilePanos.reduce((prev, curr) => {
+          const prevDist = Math.hypot(clickedLat - prev.lat, clickedLng - prev.lng);
+          const currDist = Math.hypot(clickedLat - curr.lat, clickedLng - curr.lng);
+          return currDist < prevDist ? curr : prev;
         });
-
-        if (data.location?.pano) {
-          loadPanorama(data.location.pano);
+  
+        if (closest && closest.panoId) {
+          loadPanorama(closest.panoId);
+          return;
         }
-      } catch {
-        console.warn('No Google pano found at this location.');
       }
+  
+      // Fallback to Google's own service
+      const svService = new google.maps.StreetViewService();
+      const data = await getSVData(svService, {
+        location: { lat: clickedLat, lng: clickedLng },
+        radius: 50,
+        source: google.maps.StreetViewSource.DEFAULT,
+      });
+  
+      if (data.location?.pano) {
+        loadPanorama(data.location.pano);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch Street View data:', err);
     }
   };
+  
 
   useEffect(() => {
     if (!streetViewRef.current || !panoData || !window.google) return;

@@ -218,7 +218,7 @@
   transform: scale(1.05);
   border-radius: 15px;
 }
-.editButtonToggled {
+.editButtonToggled, .editButtonToggled:hover {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
   transform: rotateX(180deg);
   background-color: var(--button-color) !important; /* or any highlight color */
