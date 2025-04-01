@@ -62,7 +62,10 @@ export default function Home() {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [description, setDescription] = useState('');
+  const [editingFromId, setEditingFromId] = useState<string | null>(null);
+
   interface SavedPano {
+    id: string; // Use a unique ID string to track each save
     panoId: string;
     panoDate: string | null;
     lat: number;
@@ -73,9 +76,10 @@ export default function Home() {
     description: string;
     tags: string[];
   }
-  
+
+
   const [savedLocations, setSavedLocations] = useState<SavedPano[]>([]);
-  
+
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const streetViewRef = useRef<HTMLDivElement | null>(null);
@@ -167,6 +171,46 @@ export default function Home() {
       }
     }
   }, [panoData]);
+  const handleCloseEditor = () => {
+    if (!panoData || !panoramaRef.current) {
+      resetEditor();
+      return;
+    }
+
+    const current: Omit<SavedPano, 'id'> = {
+      panoId: panoData.panoId,
+      panoDate: panoData.date || null,
+      lat: panoData.lat,
+      lng: panoData.lng,
+      heading: panoramaRef.current.getPov().heading,
+      pitch: panoramaRef.current.getPov().pitch,
+      zoom: panoramaRef.current.getZoom?.() ?? 1,
+      description,
+      tags,
+    };
+
+    const original = savedLocations.find((loc) => loc.id === editingFromId);
+    if (!original) {
+      resetEditor(); // just close, it's a new session
+      return;
+    }
+
+    const isEqual = JSON.stringify({ ...original, id: undefined }) === JSON.stringify(current);
+
+    if (isEqual) {
+      resetEditor();
+    } else {
+      const confirmSave = window.confirm(
+        'You have unsaved changes.\nClick OK to save as a new location, or Cancel to discard changes.'
+      );
+
+      if (confirmSave) {
+        handleSaveLocation(); // Save as new
+      } else {
+        resetEditor(); // Discard
+      }
+    }
+  };
 
   // ======== UI: Tag Handling ========
 
@@ -304,7 +348,7 @@ export default function Home() {
 
   const renderAlternatePanoDatesDropdown = () => {
     if (!panoData || alternatePanoramas.length === 0) return null;
-  
+
     return (
       <div className={styles.dropdown}>
         <label>
@@ -329,15 +373,13 @@ export default function Home() {
     );
   };
   const handleSaveLocation = () => {
-    if (!panoData || !panoramaRef.current) {
-      console.warn("No panorama loaded.");
-      return;
-    }
-  
+    if (!panoData || !panoramaRef.current) return;
+
     const pov = panoramaRef.current.getPov();
     const zoom = panoramaRef.current.getZoom?.() ?? 1;
-  
-    const locationData: SavedPano = {
+
+    const newLocation: SavedPano = {
+      id: crypto.randomUUID(),
       panoId: panoData.panoId,
       panoDate: panoData.date || null,
       lat: panoData.lat,
@@ -348,23 +390,62 @@ export default function Home() {
       description,
       tags,
     };
-  
-    setSavedLocations(prev => [...prev, locationData]);
-  
-    // Reset and close editor
+
+    setSavedLocations(prev => [...prev, newLocation]);
+    resetEditor(); // we'll define this next
+  };
+  const resetEditor = () => {
     setPanoData(null);
     setDescription('');
     setTags([]);
     setInputValue('');
     setError('');
   };
-  
+
+  const loadSavedLocation = async (pano: SavedPano) => {
+    const svService = new google.maps.StreetViewService();
+
+    try {
+      const data = await getSVData(svService, { pano: pano.panoId });
+
+      if (data.location?.latLng) {
+        const { pano: panoId, latLng } = data.location;
+        const date = extractImageDate(data);
+
+        setPanoData({
+          panoId,
+          lat: latLng.lat(),
+          lng: latLng.lng(),
+          date,
+        });
+
+        setDescription(pano.description);
+        setTags(pano.tags);
+        setInputValue('');
+        setError('');
+
+        // Optional: set POV after Street View loads
+        setTimeout(() => {
+          if (panoramaRef.current) {
+            panoramaRef.current.setPov({
+              heading: pano.heading,
+              pitch: pano.pitch,
+            });
+            panoramaRef.current.setZoom(pano.zoom);
+          }
+        }, 500);
+      }
+    } catch (err) {
+      console.warn('Could not load saved pano:', err);
+    }
+  };
+
 
   const renderSavedPanoListItem = (pano: SavedPano, index: number) => (
     <div
       key={index}
       className={styles.savedPanoListItem}
-      onClick={() => loadPanorama(pano.panoId)}
+      onClick={() => loadSavedLocation(pano)}
       style={{ cursor: 'pointer' }}
     >
       <div className={styles.savedPanoListItemInfo}>
@@ -377,21 +458,21 @@ export default function Home() {
       </div>
     </div>
   );
-  
-  
+
+
   const renderSavedPanoList = () => {
     if (savedLocations.length === 0) {
       return <p className={styles.savedPanoEmpty}>No saved locations yet.</p>;
     }
-  
+
     return (
       <div className={styles.savedPanoList}>
         {savedLocations.map((pano, index) => renderSavedPanoListItem(pano, index))}
       </div>
     );
   };
-  
-  
+
+
   // ======== Layout ========
 
   if (loadError) return <p>Error loading map</p>;
@@ -399,29 +480,36 @@ export default function Home() {
 
   return (
     <main className={styles.container}>
-  <div className={styles.containerElement}>
-    <div className={styles.map}>{renderMap()}</div>
-  </div>
-  <div className={styles.containerElement}>
-    {panoData ? (
-      <div className={styles.panoEditor}>
-        {renderStreetView()}
-        <div className={styles.panoSettings}>
-          {renderTagEditor()}
-          {renderDescriptionInput()}
-          {renderAlternatePanoDatesDropdown()}
-          <button className={styles.saveButton} onClick={handleSaveLocation}>
-            💾 Save Location
-          </button>
-        </div>
+      <div className={styles.containerElement}>
+        <div className={styles.map}>{renderMap()}</div>
       </div>
-    ) : (
-      <div className={styles.panoSelector}>
-        {renderSavedPanoList()}
+      <div className={styles.containerElement}>
+        {panoData ? (
+          <div className={styles.panoEditor}>
+            {renderStreetView()}
+            <div className={styles.panoSettings}>
+              {renderTagEditor()}
+              {renderDescriptionInput()}
+              {renderAlternatePanoDatesDropdown()}
+              <div className={styles.buttonRow}>
+                <button className={styles.saveButton} onClick={handleSaveLocation}>
+                  💾 Save Location
+                </button>
+                <button className={styles.closeButton} onClick={handleCloseEditor}>
+                  ❌ Close
+                </button>
+              </div>
+
+            </div>
+          </div>
+        ) : (
+          <div className={styles.panoSelector}>
+            {renderSavedPanoList()}
+          </div>
+
+        )}
       </div>
-    )}
-  </div>
-</main>
+    </main>
 
   );
 }
