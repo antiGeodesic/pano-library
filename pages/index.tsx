@@ -62,6 +62,7 @@ export default function Home() {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [description, setDescription] = useState('');
+  const [savedLocations, setSavedLocations] = useState<any[]>([]);
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const streetViewRef = useRef<HTMLDivElement | null>(null);
@@ -288,6 +289,84 @@ export default function Home() {
     </div>
   );
 
+  const renderAlternatePanoDatesDropdown = () => {
+    if (!panoData || alternatePanoramas.length === 0) return null;
+  
+    return (
+      <div className={styles.dropdown}>
+        <label>
+          View other dates:
+          <select
+            onChange={(e) => {
+              const selected = alternatePanoramas.find((p) => p.panoId === e.target.value);
+              if (selected) loadPanorama(selected.panoId);
+            }}
+          >
+            <option value={panoData.panoId}>
+              Current ({panoData.date || 'unknown'})
+            </option>
+            {alternatePanoramas.map((alt) => (
+              <option key={alt.panoId} value={alt.panoId}>
+                {alt.date}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    );
+  };
+  const handleSaveLocation = () => {
+    if (!panoData || !panoramaRef.current) {
+      console.warn("No panorama loaded.");
+      return;
+    }
+  
+    const pov = panoramaRef.current.getPov();
+    const zoom = panoramaRef.current.getZoom?.() ?? 1;
+  
+    const locationData = {
+      panoId: panoData.panoId,
+      panoDate: panoData.date || null,
+      lat: panoData.lat,
+      lng: panoData.lng,
+      heading: pov.heading,
+      pitch: pov.pitch,
+      zoom,
+      description,
+      tags,
+    };
+  
+    setSavedLocations(prev => [...prev, locationData]);
+  
+    console.log("Saved Locations:", [...savedLocations, locationData]); // for debug
+  };
+
+  const renderSavedPanoListItem = (pano: any, index: number) => (
+    <div key={index} className={styles.savedPanoListItem}>
+      <div className={styles.savedPanoListItemInfo}>
+        <div><strong>Description:</strong></div>
+        <div>{pano.description || 'No description'}</div>
+      </div>
+      <div className={styles.savedPanoListItemInfo}>
+        <div><strong>Tags:</strong></div>
+        <div>{pano.tags?.join(', ') || 'No tags'}</div>
+      </div>
+    </div>
+  );
+  
+  const renderSavedPanoList = () => {
+    if (savedLocations.length === 0) {
+      return <p className={styles.savedPanoEmpty}>No saved locations yet.</p>;
+    }
+  
+    return (
+      <div className={styles.savedPanoList}>
+        {savedLocations.map((pano, index) => renderSavedPanoListItem(pano, index))}
+      </div>
+    );
+  };
+  
+  
   // ======== Layout ========
 
   if (loadError) return <p>Error loading map</p>;
@@ -295,18 +374,29 @@ export default function Home() {
 
   return (
     <main className={styles.container}>
-      <div className={styles.containerElement}>
-        <div className={styles.map}>{renderMap()}</div>
-      </div>
-      <div className={styles.containerElement}>
-        <div className={styles.panoEditor}>
-          {renderStreetView()}
-          <div className={styles.panoSettings}>
-            {renderTagEditor()}
-            {renderDescriptionInput()}
-          </div>
+  <div className={styles.containerElement}>
+    <div className={styles.map}>{renderMap()}</div>
+  </div>
+  <div className={styles.containerElement}>
+    {panoData ? (
+      <div className={styles.panoEditor}>
+        {renderStreetView()}
+        <div className={styles.panoSettings}>
+          {renderTagEditor()}
+          {renderDescriptionInput()}
+          {renderAlternatePanoDatesDropdown()}
+          <button className={styles.saveButton} onClick={handleSaveLocation}>
+            💾 Save Location
+          </button>
         </div>
       </div>
-    </main>
+    ) : (
+      <div className={styles.panoSelector}>
+        {renderSavedPanoList()}
+      </div>
+    )}
+  </div>
+</main>
+
   );
 }
