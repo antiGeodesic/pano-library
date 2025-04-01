@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import styles from '../styles/Home.module.css';
-
+import PlusMinusButton from '../components/PlusMinusButton';
 const containerStyle = {
   width: '100%',
   height: '100%',
@@ -53,11 +53,15 @@ export default function Home() {
     lng: number;
     date?: string;
   } | null>(null);
-  //const [activeSection, setActiveSection] = useState<'map' | 'panoEditor' | null>(null);
-  
+
   const [alternatePanoramas, setAlternatePanoramas] = useState<
     { panoId: string; date: string }[]
   >([]);
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [error, setError] = useState('');
+  const [description, setDescription] = useState('');
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const streetViewRef = useRef<HTMLDivElement | null>(null);
@@ -114,11 +118,8 @@ export default function Home() {
       console.warn('Could not load pano:', err);
     }
   };
-  const handlePanoClick = () => {
-    //setActiveSection('panoEditor');
-  };
+
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
-    //setActiveSection('map'); 
     if (e.latLng) {
       const svService = new google.maps.StreetViewService();
       const location = { lat: e.latLng.lat(), lng: e.latLng.lng() };
@@ -153,7 +154,42 @@ export default function Home() {
     }
   }, [panoData]);
 
-  const createMapElement = () => (
+  // ======== UI: Tag Handling ========
+
+  const handleAddTag = () => {
+    const trimmed = inputValue.trim();
+
+    if (!trimmed) {
+      setError('Tag cannot be empty.');
+      return;
+    }
+
+    if (tags.includes(trimmed.toLowerCase())) {
+      setError('Tag already exists.');
+      return;
+    }
+
+    setTags([...tags, trimmed.toLowerCase()]);
+    setInputValue('');
+    setError('');
+  };
+
+  const handleTagChange = (index: number, newValue: string) => {
+    const trimmed = newValue.trim().toLowerCase();
+    const newTags = [...tags];
+    newTags[index] = trimmed;
+    setTags(newTags);
+  };
+
+  const handleRemoveTag = (index: number) => {
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    setTags(newTags);
+  };
+
+  // ======== Render Functions ========
+
+  const renderMap = () => (
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
@@ -174,13 +210,9 @@ export default function Home() {
     </GoogleMap>
   );
 
-  const createStreetViewElement = () => (
+  const renderStreetView = () => (
     <>
-      <div 
-        ref={streetViewRef} 
-        className={styles.streetView} 
-        onClick={handlePanoClick}
-      />
+      <div ref={streetViewRef} className={styles.streetView} />
       {alternatePanoramas.length > 0 && (
         <div className={styles.dropdown}>
           <label>
@@ -206,79 +238,73 @@ export default function Home() {
     </>
   );
 
-  const [tags, setTags] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState('');
+  const renderTagEditor = () => (
+    <div className={styles.panoEditorInfoWrapper}>
+      <div className={styles.tagList}>
+        {tags.map((tag, index) => (
+          <div key={index} className={styles.tagListItem}>
+            <input
+              type="text"
+              value={tag}
+              onChange={(e) => handleTagChange(index, e.target.value)}
+              className={styles.tagInput}
+            />
+            <PlusMinusButton
+              isMinus={true}
+              onClick={() => handleRemoveTag(index)}
+            />
+          </div>
+        ))}
 
-  const handleAddTag = () => {
-    const trimmed = inputValue.trim();
+        <div className={styles.tagListItem}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setError('');
+            }}
+            placeholder="Add a new tag..."
+            className={`${styles.tagInput} ${error ? styles.errorInput : ''}`}
+          />
+          <PlusMinusButton
+            isMinus={false}
+            onClick={handleAddTag}
+          />
+          {error && <p className={styles.errorText}>{error}</p>}
+        </div>
+      </div>
+    </div>
+  );
 
-    if (!trimmed) {
-      setError('Tag cannot be empty.');
-      return;
-    }
-
-    if (tags.includes(trimmed.toLowerCase())) {
-      setError('Tag already exists.');
-      return;
-    }
-
-    setTags([...tags, trimmed.toLowerCase()]);
-    setInputValue('');
-    setError('');
-  };
-
-  const createTagListElement = () => (
-    <div className={styles.tagListElement}>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          setError(''); // clear error on typing
-        }}
-        placeholder="Enter a tag..."
-        className={`${styles.tagInput} ${error ? styles.errorInput : ''}`}
+  const renderDescriptionInput = () => (
+    <div className={styles.panoEditorInfoWrapper}>
+      <textarea
+        className={styles.descriptionInput}
+        placeholder="Enter a description..."
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
-      <button
-        onClick={handleAddTag}
-        className={`${styles.tagButton} ${error ? styles.errorButton : ''}`}
-      >
-        Add Tag
-      </button>
-      {error && <p className={styles.errorText}>{error}</p>}
     </div>
   );
-  const createTagList = () => (
-    <div className={styles.tagList}>
-      {tags.length > 0 && (
-        <ul className={styles.tagListDisplay}>
-          {tags.map((tag, i) => (
-            <li key={i} className={styles.tagItem}>
-              {tag}
-            </li>
-          ))}
-        </ul>
-      )}
-      {createTagListElement()}
-    </div>
-  );
+
+  // ======== Layout ========
+
   if (loadError) return <p>Error loading map</p>;
   if (!isLoaded) return <p>Loading map...</p>;
-
-
 
   return (
     <main className={styles.container}>
       <div className={styles.containerElement}>
-        <div className={styles.map}>
-          {createMapElement()}
-        </div>
+        <div className={styles.map}>{renderMap()}</div>
       </div>
       <div className={styles.containerElement}>
         <div className={styles.panoEditor}>
-          {createStreetViewElement()}
-          {createTagList()}
+          {renderStreetView()}
+          <div className={styles.panoSettings}>
+            {renderTagEditor()}
+            {renderDescriptionInput()}
+          </div>
         </div>
       </div>
     </main>
