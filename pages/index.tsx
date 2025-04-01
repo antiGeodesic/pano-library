@@ -337,7 +337,7 @@ export default function Home() {
     const pov = panoramaRef.current.getPov();
     const zoom = panoramaRef.current.getZoom?.() ?? 1;
   
-    const locationData = {
+    const locationData: SavedPano = {
       panoId: panoData.panoId,
       panoDate: panoData.date || null,
       lat: panoData.lat,
@@ -351,11 +351,22 @@ export default function Home() {
   
     setSavedLocations(prev => [...prev, locationData]);
   
-    console.log("Saved Locations:", [...savedLocations, locationData]); // for debug
+    // Reset and close editor
+    setPanoData(null);
+    setDescription('');
+    setTags([]);
+    setInputValue('');
+    setError('');
   };
+  
 
   const renderSavedPanoListItem = (pano: SavedPano, index: number) => (
-    <div key={index} className={styles.savedPanoListItem}>
+    <div
+      key={index}
+      className={styles.savedPanoListItem}
+      onClick={() => loadPanorama(pano.panoId)}
+      style={{ cursor: 'pointer' }}
+    >
       <div className={styles.savedPanoListItemInfo}>
         <div><strong>Description:</strong></div>
         <div>{pano.description || 'No description'}</div>
@@ -366,6 +377,7 @@ export default function Home() {
       </div>
     </div>
   );
+  
   
   const renderSavedPanoList = () => {
     if (savedLocations.length === 0) {
