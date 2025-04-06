@@ -11,7 +11,7 @@ export const ArrowSvg: React.FC<{ heading: number | null | undefined, size?: num
             width={size}
             height={size}
             
-            viewBox="0 0 24 24" // Viewbox defines the coordinate system viewbox="0 0 1080 1080"
+            viewBox="0 0 1080 1080" // Viewbox defines the coordinate system 
             fill="#28a745" // Green color (similar to default green marker)
             xmlns="http://www.w3.org/2000/svg"
             style={{
