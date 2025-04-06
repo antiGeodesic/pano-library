@@ -1,7 +1,5 @@
 // utils/helpers.ts
-import { useState, useCallback } from 'react';
 import { LocalPano } from '@/types'; // Corrected import
-import { StreetViewPanorama } from '@react-google-maps/api';
 export function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
   // Use optional chaining and nullish coalescing for safety
   // The 'any' assertion is sometimes necessary due to incomplete Google Maps types
@@ -24,5 +22,6 @@ export function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData |
     description: "",
     tags: [],
     date: data.imageDate,
+    movementHistory: []
   } as LocalPano;
 }
