@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { AdvancedMarker, APIProvider, Map, useMap, MapMouseEvent } from '@vis.gl/react-google-maps';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
 import { MovementHistoryPolyline } from './MovementHistoryPolyline';
+import { ArrowSvg } from './ArrowSvg';
 import Image from 'next/image'
 
 const StreetViewLayerManager: React.FC = () => {
@@ -94,7 +95,9 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
             {/* --- Render Markers (including the conditional noPano marker) --- */}
             {localPanos.map((loc) => (
                 <AdvancedMarker key={loc.localId} position={{ lat: loc.lat, lng: loc.lng }} title={`Saved: ${loc.description || 'Untitled'}`}>
-                    <Image
+                    
+                    <ArrowSvg heading={loc.heading} size={28} rgb={{r: 0, g: 0, b: 0}} />
+                    {/*<Image
                         //SvgComponent={CircleAndArrow}
                         //src={'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/White_Arrow_Up.svg/1024px-White_Arrow_Up.svg.png?20101102112120'}
                         src={'@/media/CircleAndArrow.svg'}
@@ -110,15 +113,15 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
                             transformOrigin: 'center center',
                             objectFit: 'contain',
                         }}
-                    />
+                    />*/}
 
 
                 </AdvancedMarker>
             ))}
             {displayedPanorama && (
                 <AdvancedMarker key={displayedPanorama.localId} position={{ lat: displayedPanorama.lat, lng: displayedPanorama.lng }} >
-
-                    <Image
+                    <ArrowSvg heading={displayedPanorama.heading} size={28} rgb={{r: 1, g: 0, b: 0}} />
+                    {/*<Image
                         src={'@/media/CircleAndArrow.svg'}
                         alt='Arrow Pin'
                         width={30}
@@ -131,12 +134,13 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
                             objectFit: 'contain',
                             filter: 'brightness(0.7) sepia(0.6) hue-rotate(100deg) saturate(500%)',
                         }}
-                    />
+                    />*/}
                 </AdvancedMarker>
             )}
             {/* Use the prop to render the marker */}
             {noPanoMarkerPosition && (
                 <AdvancedMarker position={noPanoMarkerPosition} title="No panorama found">
+                    
                     <Image src={encodedNoPanoSvgDataUrl} width={24} height={24} alt="No panorama" />
                 </AdvancedMarker>
             )}
