@@ -24,8 +24,7 @@ export const ArrowSvg: React.FC<{ heading: number | null | undefined, size?: num
                  // Prevent marker events from interfering with map clicks if needed
                  pointerEvents: 'none',
             }}>
-             <svg 
-            >
+
             <g transform="matrix(1 0 0 1 540 540)"  >
                 <g  vector-effect="non-scaling-stroke"   >
                     <g transform="matrix(3.74 0 0 3.74 0 0)"  >
@@ -41,8 +40,6 @@ export const ArrowSvg: React.FC<{ heading: number | null | undefined, size?: num
 
                 </g>
             </g>
-
-        </svg>
  
         </svg>
     );
