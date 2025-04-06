@@ -1,6 +1,6 @@
 /*import React from 'react';
 import LocalEditorManager from '@/components/LocalEditorManager';
-import { LocalEditorContext } from '@/context/LocalEditorContext';
+import { LocalEditorContext } from '../context/LocalEditorContext';
 import { useLocalEditorManager } from '@/hooks/useLocalEditorManager';
 const App = () => {
   const editorManager = useLocalEditorManager();
