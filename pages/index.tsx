@@ -1,6 +1,6 @@
 /*import React from 'react';
 import LocalEditorManager from '@/components/LocalEditorManager';
-import { LocalEditorContext } from '@/context/LocalEditorContext';
+import { LocalEditorContext } from '@/contexts/LocalEditorContext';
 import { useLocalEditorManager } from '@/hooks/useLocalEditorManager';
 const App = () => {
   const editorManager = useLocalEditorManager();
@@ -41,7 +41,7 @@ export const useMyContext = () => {
 };*/
 /*import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocalEditorContext } from '@/contexts/LocalEditorContext';
+import { LocalEditorContext } from '@/contextss/LocalEditorContext';
 import { useLocalEditorManager } from '@/hooks/useLocalEditorManager'; // The custom hook that manages state
 
 export default function Home() {
@@ -50,7 +50,7 @@ export default function Home() {
 */
 // src/index.tsx
 import React from 'react';
-import { LocalEditorContext } from '@/context/LocalEditorContext';
+import { LocalEditorContext } from '@/contexts/LocalEditorContext';
 import { useLocalEditorManager } from '@/hooks/useLocalEditorManager'; // The custom hook that manages state
 import LocalEditorManager from '@/components/LocalEditorManager';
 
