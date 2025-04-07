@@ -21,7 +21,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 
   const addLocalPano = useCallback((panoData: LocalPano) => {
     const newPano = { ...panoData, localId: crypto.randomUUID() };
-    const lp = localPanos.find(pano => {console.warn("add - old pano: ", pano, "vs new: ", panoData);if(pano.localId === panoData.localId) return pano});
+    
     setLocalPanos(prev => {
       // Log the PREVIOUS state length inside the updater
       console.warn(`Adding pano. Previous localPanos length: ${prev.length}`);
@@ -38,7 +38,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
   }, [clearCurrentPano, localPanos]);
 
   const updateLocalPano = useCallback((panoData: LocalPano) => {
-    const lp = localPanos.find(pano => {console.warn("save - old pano: ", pano, "vs new: ", panoData);if(pano.localId === panoData.localId) return pano});
+    
     setLocalPanos(prev => prev.map(pano => pano.localId === panoData.localId ? panoData : pano));
     clearCurrentPano();
   }, [clearCurrentPano, localPanos]);
@@ -94,7 +94,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
   const loadExistingPanorama = useCallback((requestedPano: LocalPano) => {
     
     console.warn("hello?")
-    const lp = localPanos.find(pano => {console.warn("pano: ", pano, "vs", requestedPano);if(pano.localId === requestedPano.localId) return pano});
+    
     const localPano = getLocalPanoById2(requestedPano);
     if(!localPano) {
       console.warn("no saved pano was found")

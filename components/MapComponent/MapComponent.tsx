@@ -345,7 +345,7 @@ class CoordMapType implements google.maps.MapType {
     }
     releaseTile(tile: Element): void {
         // Optional: Cleanup if needed, e.g., remove event listeners if added
-        ////-commented-console.log("Releasing tile:", tile);
+        console.log("Releasing tile:", tile);
     }
   }
 
