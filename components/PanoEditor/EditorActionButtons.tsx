@@ -1,20 +1,24 @@
 import React, { useState, useRef } from 'react';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext'; // Correct path as needed
 import styles from '@/styles/Home.module.css';
-
 const EditorActionButtons: React.FC = () => {
-  const {
+  const { 
     currentPanorama,
-    addLocalPano,
-    updateLocalPano,
-    deleteLocalPano,
-    clearCurrentPano,
+    //addLocalPano,
+    //updateLocalPano,
+    //deleteLocalPano,
+    //clearCurrentPano,
+    saveDisplayedPano,
+    updateDisplayedPano,
+    deleteDisplayedPano,
+    clearDisplayedPano,
     currentPanoramaIsNew,
     displayedPanorama
   } = useLocalEditorContext();
+  
   const [toggledButtonId, setToggledButtonId] = useState<string | null>(null);
   const buttonContainerRef = useRef<HTMLDivElement>(null);
-  if(!currentPanorama) return (
+  if(!currentPanorama || !displayedPanorama) return (
     <div className={styles.buttonGrid} ref={buttonContainerRef}>
       <div className={`${styles.editButton}`}>Null 1</div>
       <div className={`${styles.editButton}`}>Null 2</div>
@@ -22,7 +26,7 @@ const EditorActionButtons: React.FC = () => {
       <div className={`${styles.editButton}`}>Null 4</div>
     </div>
   )
-  
+  //-commented-console.log("[EditorActionButtons] - Initialized")
 
   /*useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,29 +41,34 @@ const EditorActionButtons: React.FC = () => {
     };
   }, [toggledButtonId]);*/
   const handleSave = () => {
-      console.log("Saving new data...");
-      addLocalPano({ ...currentPanorama, ...displayedPanorama});
-      clearCurrentPano();
+      
+      //-commented-console.log("Saving new data...");
+      saveDisplayedPano();
+      //addLocalPano({ ...currentPanorama, ...displayedPanorama});
+      //clearCurrentPano();
     };
   
     const handleUpdate = () => {
-      console.log("Updating existing data...");
-      updateLocalPano({ ...currentPanorama, ...displayedPanorama});
-      clearCurrentPano();
+      //-commented-console.log("Updating existing data...");
+      updateDisplayedPano();
+      //updateLocalPano({ ...currentPanorama, ...displayedPanorama});
+      //clearCurrentPano();
     };
   
     const handleDelete = () => {
-      console.log("Deleting current data...");
-      deleteLocalPano(currentPanorama.localId);
-      clearCurrentPano();
+      //-commented-console.log("Deleting current data...");
+      deleteDisplayedPano();
+      //deleteLocalPano(currentPanorama.localId);
+      //clearCurrentPano();
     };
   
     const handleClose = () => {
-      console.log("Closing editor...");
-      clearCurrentPano();
+      //-commented-console.log("Closing editor...");
+      clearDisplayedPano();
+      //clearCurrentPano();
     };
   /*const handleSave = () => {
-    console.log(`[EditorActionButtons.tsx] - handleSave(){  if(${currentPanorama}){ ...}}`);
+    //-commented-console.log(`[EditorActionButtons.tsx] - handleSave(){  if(${currentPanorama}){ ...}}`);
     if (currentPanoramaIsNew) {
       //addLocalPano(currentPanorama);
       onSave();
@@ -69,7 +78,7 @@ const EditorActionButtons: React.FC = () => {
 
   const handleUpdate = () => {
     if (!currentPanoramaIsNew) {
-      console.log("⚠️ - Update Current Panorama")
+      //-commented-console.log("⚠️ - Update Current Panorama")
       //updateLocalPano(currentPanorama);
       onUpdate();
       //clearCurrentPano();
@@ -96,9 +105,9 @@ const EditorActionButtons: React.FC = () => {
       <button
         className={`${styles.editButton} ${className} ${isToggled ? styles.editButtonToggled : ''}`}
         onClick={() => {
-          console.log(`[EditorActionButtons.tsx] - handleClick( id=${id}, isToggled=${isToggled}, currentPanoIsNew=${currentPanoramaIsNew}, currentPanorama=${JSON.stringify(currentPanorama)} ){...}`);
-          console.log(`[EditorActionButtons.tsx] - handleClick( ${id} ){...}`);
-          console.log(`[EditorActionButtons.tsx] - handleClick( ${id} ){...}`);
+          //-commented-console.log(`[EditorActionButtons.tsx] - handleClick( id=${id}, isToggled=${isToggled}, currentPanoIsNew=${currentPanoramaIsNew}, currentPanorama=${JSON.stringify(currentPanorama)} ){...}`);
+          //-commented-console.log(`[EditorActionButtons.tsx] - handleClick( ${id} ){...}`);
+          //-commented-console.log(`[EditorActionButtons.tsx] - handleClick( ${id} ){...}`);
           if (isToggled) {
             action();
             setToggledButtonId(null);

@@ -12,7 +12,7 @@ const LocalEditorManager = () => {
     error,
     clearCurrentPano
   } = useLocalEditorContext();
-  console.log("[LocalEditorManager] - Initialized")
+  //-commented-console.log("[LocalEditorManager] - Initialized")
   const { isLoaded, loadError } = useGoogleMapsApi({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });

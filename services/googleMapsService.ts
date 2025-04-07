@@ -1,11 +1,8 @@
 // services/googleMapsService.ts
-import { useState, useCallback } from 'react';
-import { SVRequestOptions, AlternatePanorama } from '@/types'; // Corrected import
-import { extractImageDate } from '@/utils/helpers'; // Import helper
+import { SVRequestOptions } from '@/types'; // Corrected import
 
 // --- Cache for the Service Instance ---
 let cachedSvServiceInstance: google.maps.StreetViewService | null = null;
-let cachedSvPanoramaInstance: google.maps.StreetViewPanorama | null = null;
 // --- Google Maps API Key Access ---
 function getApiKey(): string {
     const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -26,7 +23,7 @@ export function getStreetViewServiceInstance(): google.maps.StreetViewService | 
     if (cachedSvServiceInstance) return cachedSvServiceInstance;
     // Check if API is loaded before creating
     if (typeof window !== 'undefined' && window.google?.maps?.StreetViewService) {
-        console.log(">>> getStreetViewServiceInstance: Creating and caching new StreetViewService instance.");
+        //-commented-console.log(">>> getStreetViewServiceInstance: Creating and caching new StreetViewService instance.");
         cachedSvServiceInstance = new google.maps.StreetViewService();
         return cachedSvServiceInstance;
     }
@@ -84,16 +81,31 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
             location: {lat: lat, lng: lng},
             radius: 50,
             preference: google.maps.StreetViewPreference.NEAREST,
-            source: google.maps.StreetViewSource.DEFAULT,
+            source: google.maps.StreetViewSource.GOOGLE,
         };
         svServiceInstance.getPanorama(requestOptions, (data, status) => {
             if (status === google.maps.StreetViewStatus.OK && data) resolve(data);
             else {
                 // Instead of rejecting, resolve with null indicating no panorama was found.
-                console.log(`Panorama not found or request failed. Status: ${status}`);
-                resolve(null);
+                //-commented-console.log(`Panorama not found or request failed. Status: ${status}`);
+                return;
+                
             }
         });
+        //-commented-console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+        requestOptions.radius = 1000;
+        requestOptions.preference = google.maps.StreetViewPreference.BEST;
+        //-commented-console.log(requestOptions.preference)
+        svServiceInstance.getPanorama(requestOptions, (data, status) => {
+            if (status === google.maps.StreetViewStatus.OK && data) resolve(data);
+            else {
+                // Instead of rejecting, resolve with null indicating no panorama was found.
+                //-commented-console.log(`Panorama not found or request failed. Status: ${status}`);
+                resolve(null);
+                
+            }
+        });
+        
     });
 }
 /*const loadPanoramaByPanoId = useCallback(async (panoId: string) => {
@@ -135,7 +147,7 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
       setAlternatePanoramas([]);
     } finally {
       // Set loading false regardless of background fetch status
-      console.log(`usePanoManagement: loadPanoramaByPanoId FINALLY - Setting isLoading=false`);
+      //-commented-console.log(`usePanoManagement: loadPanoramaByPanoId FINALLY - Setting isLoading=false`);
       setIsLoading(false);
     }
   }, []);*/
@@ -149,7 +161,7 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
 export function getSVData2(
     options: SVRequestOptions
 ): Promise<google.maps.StreetViewPanoramaData> {
-    console.log(`>>> getSVData: Called with options:`, options);
+    //-commented-console.log(`>>> getSVData: Called with options:`, options);
     return new Promise((resolve, reject) => {
         // --- Get the cached instance ---
         const svServiceInstance = getStreetViewServiceInstance();
@@ -159,7 +171,7 @@ export function getSVData2(
         }
         // --- End getting instance ---
 
-        console.log(`>>> getSVData: Using ${cachedSvServiceInstance === svServiceInstance ? 'cached' : 'newly created (?!)'} StreetViewService instance.`);
+        //-commented-console.log(`>>> getSVData: Using ${cachedSvServiceInstance === svServiceInstance ? 'cached' : 'newly created (?!)'} StreetViewService instance.`);
 
         const requestOptions: google.maps.StreetViewPanoRequest | google.maps.StreetViewLocationRequest = {
             preference: google.maps.StreetViewPreference.NEAREST,
@@ -167,11 +179,11 @@ export function getSVData2(
             ...options,
         };
 
-        console.log(`>>> getSVData: Calling svServiceInstance.getPanorama with request:`, requestOptions);
+        //-commented-console.log(`>>> getSVData: Calling svServiceInstance.getPanorama with request:`, requestOptions);
         svServiceInstance.getPanorama(requestOptions, (data, status) => {
-            console.log(`>>> getSVData: getPanorama callback executed. Status: ${status}`, data); // Keep this log!
+            //-commented-console.log(`>>> getSVData: getPanorama callback executed. Status: ${status}`, data); // Keep this log!
             if (status === google.maps.StreetViewStatus.OK && data) {
-                console.log(`>>> getSVData: Status OK. Resolving promise.`);
+                //-commented-console.log(`>>> getSVData: Status OK. Resolving promise.`);
                 resolve(data);
             } else {
                 console.warn(`>>> getSVData: Status not OK (${status}). Rejecting promise.`);
@@ -179,7 +191,7 @@ export function getSVData2(
                 reject(new Error(`Panorama not found or request failed. Status: ${status}`));
             }
         });
-        console.log(`>>> getSVData: getPanorama call initiated (async).`);
+        //-commented-console.log(`>>> getSVData: getPanorama call initiated (async).`);
     });
 }
 
@@ -286,7 +298,7 @@ export function getStreetViewPreviewUrl(
   maxDistance: number = 15 // Default to 15 meters
 ): Promise<AlternatePanorama[]> {
   if (!currentPanoData?.links || !currentPanoData.location?.latLng) {
-      console.log("findNearbyPanoramas: No links or location data, returning empty.");
+      //-commented-console.log("findNearbyPanoramas: No links or location data, returning empty.");
       return [];
   }
 
@@ -299,7 +311,7 @@ export function getStreetViewPreviewUrl(
       .map(link => link.pano) // Get pano IDs
       .filter((panoId): panoId is string => !!panoId && panoId !== originPanoId) // Filter out empty/self IDs
       .map(panoId => {
-          console.log(`findNearbyPanoramas: Creating getSVData promise for linked pano ${panoId}`);
+          //-commented-console.log(`findNearbyPanoramas: Creating getSVData promise for linked pano ${panoId}`);
           // Add a timeout wrapper around getSVData to prevent infinite hangs
           return Promise.race([
               getSVData({ pano: panoId }),
@@ -313,13 +325,13 @@ export function getStreetViewPreviewUrl(
 
 
   if (promises.length === 0) {
-       console.log("findNearbyPanoramas: No valid, unique links found.");
+       //-commented-console.log("findNearbyPanoramas: No valid, unique links found.");
       return [];
   }
 
-  console.log(`findNearbyPanoramas: Waiting for ${promises.length} linked pano fetches...`);
+  //-commented-console.log(`findNearbyPanoramas: Waiting for ${promises.length} linked pano fetches...`);
   const results = await Promise.allSettled(promises);
-  console.log(`findNearbyPanoramas: Fetches settled. Results:`, results);
+  //-commented-console.log(`findNearbyPanoramas: Fetches settled. Results:`, results);
 
   // Process the results
   results.forEach(result => {
@@ -343,13 +355,13 @@ export function getStreetViewPreviewUrl(
                           panoId: linkedPanoData.location.pano,
                           date: date,
                       });
-                       console.log(`findNearbyPanoramas: Added nearby pano ${linkedPanoData.location.pano} (Date: ${date}, Dist: ${distance.toFixed(1)}m)`);
+                       //-commented-console.log(`findNearbyPanoramas: Added nearby pano ${linkedPanoData.location.pano} (Date: ${date}, Dist: ${distance.toFixed(1)}m)`);
                   }
               } catch (processingError) {
                    console.warn(`findNearbyPanoramas: Error processing fulfilled result for pano ${linkedPanoData.location?.pano}:`, processingError);
               }
           } else {
-               console.log(`findNearbyPanoramas: Fulfilled result lacked valid location data.`);
+               //-commented-console.log(`findNearbyPanoramas: Fulfilled result lacked valid location data.`);
           }
       } else if (result.status === 'rejected') {
           console.warn(`findNearbyPanoramas: A linked pano fetch promise was rejected:`, result.reason);
@@ -363,7 +375,7 @@ export function getStreetViewPreviewUrl(
       }
   });
 
-  console.log(`findNearbyPanoramas: Finished processing. Returning ${nearby.length} nearby panos.`);
+  //-commented-console.log(`findNearbyPanoramas: Finished processing. Returning ${nearby.length} nearby panos.`);
   // Sort by date? Optional.
   return nearby;
 }*/

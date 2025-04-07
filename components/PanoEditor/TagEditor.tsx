@@ -4,23 +4,24 @@ import PlusMinusButton from '@/components/PanoEditor/PlusMinusButton';
 import styles from '@/styles/Home.module.css';
 
 const TagEditor: React.FC = () => {
-
-  const {
-    currentPanorama,
+  const { currentPanorama,
     displayedPanorama,
-    setDisplayedPanorama
+    updateCurrentTags
   } = useLocalEditorContext();
 
-
+  
+  //const tagRef = useRef<HTMLDivElement>(null);
+  
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string>('');
-
+  
   if (!currentPanorama || !displayedPanorama) {
-    return null; // Or some placeholder if no panorama is selected
+    return null;
   }
 
+  const tags: string[] = displayedPanorama.tags;
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && inputValue.trim()) {
+    if (event.key === 'Enter') {
       addTag();
     }
   };
@@ -30,34 +31,27 @@ const TagEditor: React.FC = () => {
       setError('Tag cannot be empty');
       return;
     }
-    if (displayedPanorama.tags.includes(inputValue)) {
-      setError('Tag already exists');
-      return;
-    }
-    //setCurrentPanorama({...currentPanorama, tags: [...currentPanorama.tags, inputValue] });
-    setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: [...displayedPanorama.tags, inputValue]})
+
+    updateCurrentTags(-1, inputValue)
     setInputValue('');
     setError('');
   };
 
   const removeTag = (index: number) => {
-    const updatedTags = displayedPanorama.tags.filter((_, idx) => idx !== index);
-    setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: updatedTags});
-    //setCurrentPanorama({...currentPanorama, tags: updatedTags});
+    updateCurrentTags(index, "");
+
   };
 
   const changeTag = (index: number, newValue: string) => {
-    const updatedTags = [...displayedPanorama.tags];
-    updatedTags[index] = newValue;
-    setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: updatedTags});
-    //setCurrentPanorama({...currentPanorama, tags: updatedTags});
+    updateCurrentTags(index, newValue);
+
   };
 
   return (
     <div className={styles.panoEditorInfoWrapper}>
       <label className={styles.editorLabel}>Tags:</label>
       <div className={styles.tagList}>
-        {displayedPanorama.tags.map((tag, index) => (
+        {tags.map((tag, index) => (
           <div key={index} className={styles.tagListItem}>
             <input
               type="text"

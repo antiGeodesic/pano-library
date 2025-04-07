@@ -56,7 +56,7 @@ import LocalEditorManager from '@/components/LocalEditorManager';
 
 export default function Home() {
   const localEditorContext = useLocalEditorManager();
-  console.log("Home")
+  //-commented-console.log("Home")
   return (
     <LocalEditorContext.Provider value={localEditorContext}>
       <LocalEditorManager />

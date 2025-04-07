@@ -49,7 +49,7 @@ export const MovementHistoryPolyline: React.FC<MovementHistoryPolylineProps> = (
 
             if (!polylineRef.current) {
                 // --- Create Polyline ---
-                console.log("Creating Movement History Polyline");
+                //-commented-console.log("Creating Movement History Polyline");
                 polylineRef.current = new google.maps.Polyline({
                     ...combinedOptions,
                     path: path,
@@ -57,7 +57,7 @@ export const MovementHistoryPolyline: React.FC<MovementHistoryPolylineProps> = (
                 });
             } else {
                 // --- Update existing Polyline ---
-                console.log("Updating Movement History Polyline path");
+                //-commented-console.log("Updating Movement History Polyline path");
                 polylineRef.current.setPath(path);
                  // Ensure options are updated if they change (optional)
                  // polylineRef.current.setOptions(combinedOptions);
@@ -69,7 +69,7 @@ export const MovementHistoryPolyline: React.FC<MovementHistoryPolylineProps> = (
         } else {
             // --- Remove Polyline if not enough points or history is null/empty ---
             if (polylineRef.current) {
-                console.log("Removing Movement History Polyline (not enough points)");
+                //-commented-console.log("Removing Movement History Polyline (not enough points)");
                 polylineRef.current.setMap(null); // Remove from map
                 // Optionally destroy the instance: polylineRef.current = null;
                 // Keeping the instance might be slightly more performant if history reappears
@@ -81,7 +81,7 @@ export const MovementHistoryPolyline: React.FC<MovementHistoryPolylineProps> = (
         return () => {
             // Check if the polyline instance exists when cleaning up
              if (polylineRef.current) {
-                 console.log("Cleaning up Movement History Polyline");
+                 //-commented-console.log("Cleaning up Movement History Polyline");
                  polylineRef.current.setMap(null); // Always remove from map on cleanup
                  // If you want to completely discard the instance on dependency change/unmount:
                  // polylineRef.current = null;

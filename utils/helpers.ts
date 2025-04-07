@@ -22,6 +22,6 @@ export function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData |
     description: "",
     tags: [],
     date: data.imageDate,
-    movementHistory: []
+    movementHistory: [{panoId: data.location.pano as string, lat: data.location.latLng.lat() as number, lng: data.location.latLng.lng() as number}]
   } as LocalPano;
 }
