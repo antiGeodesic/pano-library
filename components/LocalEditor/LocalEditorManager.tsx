@@ -1,16 +1,17 @@
 import React from 'react';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
-import MapComponent from '@/components/MapComponent/MapComponent';
-import PanoEditorPanel from '@/components/PanoEditor/PanoEditorPanel';
-import LocalPanoList from '@/components/PanoEditor/LocalPanoList/LocalPanoList';
-import styles from '@/styles/Home.module.css';
+import MapComponent from '@/components/LocalEditor/MapComponent/MapComponent';
+import PanoEditorPanel from '@/components/LocalEditor/PanoEditor/PanoEditorPanel';
+import PanoSelectionPanel from '@/components/LocalEditor/PanoEditor/PanoSelectionPanel';
+import styles from '@/styles/LocalEditor.module.css';
+
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 const LocalEditorManager = () => {
   const {
     currentPanorama,
     isLoading,
-    error,
-    clearCurrentPano
+    //error,
+    //clearCurrentPano
   } = useLocalEditorContext();
   //-commented-console.log("[LocalEditorManager] - Initialized")
   const { isLoaded, loadError } = useGoogleMapsApi({
@@ -22,14 +23,14 @@ const LocalEditorManager = () => {
   if (!isLoaded) return <p>Loading Map...</p>;
 
   // Centralized error handling
-  if (error) {
+  /*if (error) {
     return (
       <div className={styles.error}>
         <p>Error: {error}</p>
         <button onClick={clearCurrentPano}>Try Again</button>
       </div>
     );
-  }
+  }*/
 
   // Centralized loading state handling
   /*if (!currentPanorama || isLoading) {
@@ -39,29 +40,27 @@ const LocalEditorManager = () => {
   return (
     <main className={styles.container}>
       {/* Map View (Left Side) */}
-      <div className={styles.containerElement}>
-        <div className={styles.map}>
+
+        <div className={styles.panoEditorMap}>
           <MapComponent />
           {/* onMapClick={(e) => e.latLng && loadPanoramaByLocation(e.latLng.lat(), e.latLng.lng())}*/}
         </div>
-      </div>
+
 
       {/* Editor / List View (Right Side) */}
-      <div className={styles.containerElement}>
         {isLoading ? (
           <div className={styles.loadingIndicator}><p>Loading Panorama...</p></div> // Add a loading state indicator
-        ) : error ? (
+        )/* : error ? (
           <div className={styles.error}>
             <div className={styles.errorIndicator}><p>Error: {error}</p><button onClick={clearCurrentPano}>Clear</button></div>
             <button onClick={clearCurrentPano}>Try Again</button>
           </div>
           // Add error display
-        ) : currentPanorama ? (
+        )*/ : currentPanorama ? (
           <PanoEditorPanel />
         ) : (
-          <LocalPanoList />
+          <PanoSelectionPanel />
         )}
-      </div>
     </main>
   );
 };

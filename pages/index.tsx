@@ -50,16 +50,18 @@ export default function Home() {
 */
 // src/index.tsx
 import React from 'react';
-import { LocalEditorContext } from '@/contexts/LocalEditorContext';
-import { useLocalEditorManager } from '@/hooks/useLocalEditorManager'; // The custom hook that manages state
-import LocalEditorManager from '@/components/LocalEditorManager';
-
+//import { LocalEditorContext } from '@/contexts/LocalEditorContext';
+//import { useLocalEditorManager } from '@/hooks/useLocalEditorManager'; // The custom hook that manages state
+//import LocalEditorManager from '@/components/LocalEditor/LocalEditorManager';
+import LocalEditor from './local-editor';
 export default function Home() {
-  const localEditorContext = useLocalEditorManager();
+  //const localEditorContext = useLocalEditorManager();
   //-commented-console.log("Home")
   return (
-    <LocalEditorContext.Provider value={localEditorContext}>
-      <LocalEditorManager />
-    </LocalEditorContext.Provider>
+
+
+    <LocalEditor/>
+
+
   );
 };

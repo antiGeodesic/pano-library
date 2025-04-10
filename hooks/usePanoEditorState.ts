@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { LocalPano } from '@/types';
+import { LocalPano } from '@/types/LocalEditor';
 
 export function useLocalEditorManager() {
     const [panoramas, setPanoramas] = useState<LocalPano[]>([]);

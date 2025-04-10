@@ -1,6 +1,6 @@
 // components/PlusMinusButton.tsx
 import React, { useEffect, useState } from 'react';
-import styles from './PlusMinusButton.module.css';
+import styles from '@/components/LocalEditor/PanoEditor/PlusMinusButton.module.css';
 
 interface Props {
   isMinus: boolean;

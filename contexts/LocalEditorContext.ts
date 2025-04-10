@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { LocalEditorContextType } from '@/types'; // Import types
+import { LocalEditorContextType } from '@/types/LocalEditor'; // Import types
 // Create the context
 export const LocalEditorContext = createContext<LocalEditorContextType | undefined>(undefined);
 

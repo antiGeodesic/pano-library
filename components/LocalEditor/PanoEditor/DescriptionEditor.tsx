@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext'; // Adjust the import path as needed
-import styles from '@/styles/Home.module.css';
+import styles from '@/styles/LocalEditor.module.css';
 
 const DescriptionEditor: React.FC = () => {
   const { currentPanorama, displayedPanorama, updateCurrentDescription } = useLocalEditorContext();
@@ -10,7 +10,7 @@ const DescriptionEditor: React.FC = () => {
   let description = displayedPanorama.description;
   
   return (
-    <div className={styles.panoEditorInfoWrapper}>
+    <div className={styles.descriptionEditor}>
       <label htmlFor="pano-description" className={styles.editorLabel}>Description:</label>
       <textarea
         id="pano-description"

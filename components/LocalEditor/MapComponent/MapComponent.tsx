@@ -260,8 +260,8 @@ function tileCacheKey(x: number,y: number,zoom: number, layerType: string) {
 import React, { useCallback, useState, useEffect, useMemo  } from 'react';
 import { AdvancedMarker, APIProvider, Map, useMap, MapMouseEvent } from '@vis.gl/react-google-maps';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
-import { MovementHistoryPolyline } from './MovementHistoryPolyline';
-import { ArrowSvg } from './ArrowSvg';
+import { MovementHistoryPolyline } from '@/components/LocalEditor/MapComponent/MovementHistoryPolyline';
+import { ArrowSvg } from '@/components/LocalEditor/MapComponent/ArrowSvg';
 
 //
 const containerStyle = {
@@ -271,11 +271,11 @@ const containerStyle = {
 };
 //
 const defaultCenter = {
-    lat: 0,
-    lng: 0,
+    lat: 59.36187265426956, 
+    lng: 18.089235210029738,
 };
 //
-const defaultZoom = 8;
+const defaultZoom = 12;
 //
 // --- Custom SVG for the "No Panorama Found" Marker (keep as is) ---
 const noPanoSvg = `
@@ -345,7 +345,9 @@ class CoordMapType implements google.maps.MapType {
     }
     releaseTile(tile: Element): void {
         // Optional: Cleanup if needed, e.g., remove event listeners if added
-        console.log("Releasing tile:", tile);
+
+        //Making ESLint shut the fuck up
+        if(false) console.log("Releasing tile:", tile);
     }
   }
 
@@ -401,9 +403,9 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
     // useEffect(() => {
     //     if (map && !initialMapValues) { /* ... */ }
     // }, [map, initialMapValues]);
-    setTimeout(() => {
-        console.error(displayedPanorama?.panoId)
-      }, 1000);
+    //setTimeout(() => {
+    //    console.error(displayedPanorama?.panoId)
+    //  }, 1000);
     
     return (
         <>

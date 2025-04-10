@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
+import { TagCategory } from '@/types/index';
 import { useLocalEditorContext  } from '@/contexts/LocalEditorContext';
-import PlusMinusButton from '@/components/PanoEditor/PlusMinusButton';
-import styles from '@/styles/Home.module.css';
-
-const TagEditor: React.FC = () => {
-  const { currentPanorama,
-    displayedPanorama,
-    updateCurrentTags
+import PlusMinusButton from '@/components/LocalEditor/PanoEditor/PlusMinusButton';
+import styles from '@/styles/LocalEditor.module.css';
+interface TagEditorProps {
+  initialTags: TagCategory[],
+  setCurrentTags: (tags: TagCategory[]) => void;
+}
+const TagEditor: React.FC<TagEditorProps> = ({initialTags, setCurrentTags}) => {
+  const { /*currentPanorama,
+    setCurrentTags*/
   } = useLocalEditorContext();
 
   
   //const tagRef = useRef<HTMLDivElement>(null);
-  
+  const [tags, setTags] = useState<TagCategory[]>(initialTags);
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string>('');
   
-  if (!currentPanorama || !displayedPanorama) {
+  if (!initialTags) {
     return null;
   }
 
-  const tags: string[] = displayedPanorama.tags;
+  //const tags: TagCategory[] = displayedPanorama.tags;
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       addTag();
@@ -31,20 +34,30 @@ const TagEditor: React.FC = () => {
       setError('Tag cannot be empty');
       return;
     }
-
-    updateCurrentTags(-1, inputValue)
+    const newTag: TagCategory = {x: -1, y: -1, z: -1, t: inputValue};
+    setCurrentTags([...tags, newTag])
+    setTags([...tags, newTag])
+    
+    //updateCurrentTags(-1, {x: -1, y: -1, z: -1, t: inputValue})
     setInputValue('');
     setError('');
   };
 
   const removeTag = (index: number) => {
-    updateCurrentTags(index, "");
-
+    //updateCurrentTags(index, "");
+    console.log("[TagEditor]---------------- Tag Count (1): ", tags.length)
+    const newTags: TagCategory[] = tags.splice(index, 1);
+    console.log("[TagEditor]---------------- Tag Count (2):", tags.length)
+    setCurrentTags(newTags)
+    setTags(newTags)
+    
   };
 
   const changeTag = (index: number, newValue: string) => {
-    updateCurrentTags(index, newValue);
-
+    const newTags: TagCategory[] = tags;
+    newTags[index] = {x: -1, y: -1, z: -1, t: newValue};
+    setCurrentTags(newTags)
+    setTags(newTags)
   };
 
   return (
@@ -55,7 +68,7 @@ const TagEditor: React.FC = () => {
           <div key={index} className={styles.tagListItem}>
             <input
               type="text"
-              value={tag}
+              value={tag.t}
               onChange={(e) => changeTag(index, e.target.value)}
               className={styles.tagInput}
               aria-label={`Edit tag ${index + 1}`}

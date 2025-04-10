@@ -1,0 +1,137 @@
+.explorerManager {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.explorerMap {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 100%;
+    height: 100%;
+}
+
+.explorerSettingsPanel {
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 100%;
+    height: 100%;
+}
+
+.panoViewerPanel {
+    grid-column: 2;
+    grid-row: 1;
+  
+    --panoSettings-grid-col-1: 1fr;
+    --panoSettings-grid-col-2: 1fr;
+    --panoSettings-grid-col-3: 1fr;
+  
+    --panoSettings-grid-row-1: auto;
+    --panoSettings-grid-row-2: 3rem;
+    --panoSettings-grid-row-3: 50%;
+  
+  
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--panoSettings-grid-col-1) var(--panoSettings-grid-col-2) var(--panoSettings-grid-col-3);
+    grid-template-rows: var(--panoSettings-grid-row-1) var(--panoSettings-grid-row-2) var(--panoSettings-grid-row-3);
+  }
+  
+  .streetViewComponent {
+    grid-column: 1 / span 3;
+    grid-row: 1;
+  
+    width: 100%;
+    aspect-ratio: 16/9;
+  }
+
+  .controlPanel {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controlPanelHeader {
+    height: 10rem;
+    width: 100%;
+    font-size: 4rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .controlPanelSearchPanel {
+    height: 20rem;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .searchInput {
+    width: 100%;
+    resize: horizontal;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    background-color: #fff;
+    color: #333;
+  }
+
+  .submitSearchButton {
+    --submit-search-button-scale: 0.9;
+    --button-color: #a0ff00;
+    border: 3px solid var(--button-color);
+    width: calc(10rem * var(--submit-search-button-scale));
+    height: calc(5rem * var(--submit-search-button-scale));
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+  }
+  
+  .submitSearchButton:hover {
+    transform: scale(calc(1 / var(--submit-search-button-scale)));
+    border-radius: 15px;
+  }
+  .submitSearchButtonToggled, .submitSearchButtonToggled:hover {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+    transform: rotateX(180deg);
+    background-color: var(--button-color) !important; /* or any highlight color */
+    filter: brightness(1.1);
+  }
+
+
+.submitSearchButtonEmpty {
+  --button-color: #ff0000;
+  --submit-search-button-scale: 0.9;
+  border: 3px solid var(--button-color);
+    width: calc(10rem * var(--submit-search-button-scale));
+    height: calc(5rem * var(--submit-search-button-scale));
+    border-radius: 10px;
+    /*border: 3px solid #000000;*/
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    filter: grayscale(0.5)
+  }
+  
+  .submitSearchButtonContent {
+    user-select: none;
+    display: inline-block;
+    transition: all 0.25s ease;
+  }

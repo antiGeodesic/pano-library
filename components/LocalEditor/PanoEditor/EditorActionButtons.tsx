@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext'; // Correct path as needed
-import styles from '@/styles/Home.module.css';
+import styles from '@/styles/LocalEditor.module.css';
 const EditorActionButtons: React.FC = () => {
   const { 
     currentPanorama,
@@ -125,7 +125,7 @@ const EditorActionButtons: React.FC = () => {
   };
 
   return (
-    <div className={styles.buttonGrid} ref={buttonContainerRef}>
+    <div className={styles.editorActionButtons} ref={buttonContainerRef}>
       {currentPanoramaIsNew ? (
         <>
           {renderButton('save', '💾 Save', 'Confirm Save?', handleSave, styles.saveButton)}

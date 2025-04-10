@@ -1,0 +1,98 @@
+.sidebar {
+    --sidebar-width: 15rem ;
+    --sidebar-toggle-size: 3rem;
+    --sidebar-content-width: calc(var(--sidebar-width) - var(--sidebar-toggle-size));
+    --sidebar-background-color: #eeeeee;
+    --sidebar-background-color-hover: #dddddd;
+
+    position: absolute;
+    width: var(--sidebar-width);
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+
+    background-color: transparent;
+    pointer-events: none;
+    transition: transform 0.3s ease;
+}
+.sidebarHidden {
+    transform: translateX(calc(-1 * var(--sidebar-content-width)));
+  }
+  
+  .sidebarVisible {
+    transform: translateX(0);
+  }
+  
+.sidebarHeader {
+    pointer-events: all;
+    width:var(--sidebar-width);
+    background-color: var(--sidebar-background-color);
+    display: flex;
+    flex-wrap: nowrap;
+    height: auto;
+}
+.sidebarTitle {
+    width:var(--sidebar-content-width);
+    height: 100%;
+}
+.sidebarToggle {
+    width: var(--sidebar-toggle-size);
+    height: var(--sidebar-toggle-size);
+
+    z-index: 1100;
+    background-color: var(--sidebar-background-color);
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+  }
+  .sidebarToggle:hover {
+    transform: rotate(3deg);
+    background-color: var(--sidebar-background-color-hover);
+  }
+.sidebarContent {
+    width: var(--sidebar-content-width);
+    height: 100%;
+    pointer-events: all;
+    background-color: var(--sidebar-background-color);
+}
+
+  .sidebar h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  .sidebarNavItem {
+    height: 3rem;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+  .sidebarNavItemButton {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 0px solid transparent;
+    transition: all 0.15s ease;
+    border-radius: 4px;
+
+    align-items: center;
+    align-content: center;
+    text-align: center;
+  }
+
+  .sidebarNavItemButton:hover {
+    background-color: #cccccc;
+    border: 4px solid #444444;
+    border-radius: 4px;
+  }

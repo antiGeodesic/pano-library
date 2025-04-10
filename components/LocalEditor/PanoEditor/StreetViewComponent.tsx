@@ -1,35 +1,59 @@
 import React, { useRef, useEffect } from 'react';
-import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
-const StreetViewComponent: React.FC = () => {
-  const { currentPanorama, updateCurrentPos, updateCurrentPov } = useLocalEditorContext();
-  //-commented-console.log("[StreetViewComponent] - Initialized")
+import { PanoramaData } from '@/types/index';
+
+interface StreetViewComponentProps {
+  initialPano: PanoramaData | null,
+  pendingPano: PanoramaData | null,
+  setPendingPano: (panoramaData: PanoramaData | null) => void,
+  updateCurrentPos: (panoId: string, lat: number, lng: number) => void,
+  updateCurrentPov: (heading: number, pitch: number, zoom: number) => void,
+}
+const streetViewPanoramaStyles = {
+  width: '100%',
+  height: '100%',
+};
+const StreetViewComponent: React.FC<StreetViewComponentProps> = ({ initialPano, pendingPano, setPendingPano, updateCurrentPos, updateCurrentPov }) => {
+    //const { currentPanorama, pendingPanorama, setPendingPanorama, updateCurrentPos, updateCurrentPov } = useLocalEditorContext();
+    //-commented-console.log("[StreetViewComponent] - Initialized")
     const streetViewRef = useRef<HTMLDivElement>(null);
     const panoramaRef = useRef<google.maps.StreetViewPanorama>(null);
     const panoListenerRef = useRef<google.maps.MapsEventListener | null>(null);
     const povListenerRef = useRef<google.maps.MapsEventListener | null>(null);
-    const panoramaOptions: google.maps.StreetViewPanoramaOptions = {
-        pano: currentPanorama?.panoId ?? "Zyr6Q4_9hDBQB9F-DweeFQ",
-        position: { lat: currentPanorama?.lat ?? 0, lng: currentPanorama?.lng ?? 0},
-        pov: { heading: currentPanorama?.heading ?? 0, pitch: currentPanorama?.pitch ?? 0 },
-        zoom: currentPanorama?.zoom ?? 1
-    };
+    console.log("initial Pano:", initialPano)
+
+    //if(initialPano?.panoId == displayedPanorama?.panoId &&displayedPanorama?.panoId != panoramaRef.current?.getPano()) panoramaRef.current = null;
+
     useEffect(() => {
+        const panoramaOptions: google.maps.StreetViewPanoramaOptions = pendingPano ? 
+        {
+            pano: pendingPano?.panoId ?? "Zyr6Q4_9hDBQB9F-DweeFQ",
+            //position: initialPano?.panoId ?{ lat: 0, lng : 0 }:{ lat: initialPano?.lat ?? 0, lng: initialPano?.lng ?? 0 },
+            pov: { heading: pendingPano?.heading ?? 0, pitch: pendingPano?.pitch ?? 0 },
+            zoom: pendingPano?.zoom ?? 1,
+        }
+        :
+        {
+            pano: initialPano?.panoId ?? "Zyr6Q4_9hDBQB9F-DweeFQ",
+            //position: initialPano?.panoId ?{ lat: 0, lng : 0 }:{ lat: initialPano?.lat ?? 0, lng: initialPano?.lng ?? 0 },
+            pov: { heading: initialPano?.heading ?? 0, pitch: initialPano?.pitch ?? 0 },
+            zoom: initialPano?.zoom ?? 1,
+        };
         //-commented-console.log("AAAAAAAAAAAAAA")
-        if (streetViewRef.current && currentPanorama) {
-            console.log("[StreetViewComponent] - 1:", currentPanorama.panoId)
-            if(!panoramaRef.current){
-                console.log("[StreetViewComponent] - 2:", currentPanorama.panoId)
-                
+        if (streetViewRef.current && initialPano) {
+            console.log("[StreetViewComponent] - 1:", initialPano.panoId)
+            if (!panoramaRef.current || pendingPano) {
+                console.log("[StreetViewComponent] - 2:", initialPano.panoId)
                 panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, panoramaOptions);
+
             }
-            
+
             if (panoramaRef.current && !panoListenerRef.current) {
                 panoListenerRef.current = google.maps.event.addListener(panoramaRef.current, 'position_changed', () => {
                     if (!panoramaRef.current) return;
                     console.warn("[STreetViewComponent] - new PanoId: ", panoramaRef.current.getPano())
                     const coord = panoramaRef.current.getPosition();
                     if (coord) {
-                        const panoId=panoramaRef.current.getPano();
+                        const panoId = panoramaRef.current.getPano();
                         const lat = coord.lat();
                         const lng = coord.lng();
                         updateCurrentPos(panoId, lat, lng);
@@ -42,17 +66,17 @@ const StreetViewComponent: React.FC = () => {
                     const pov = panoramaRef.current.getPov();
                     if (pov) {
                         //-commented-console.log("Pov changed: ", pov.heading)
-                        const heading=pov.heading;
-                        const lat =  pov.pitch;
-                        const lng =  panoramaRef.current.getZoom();
+                        const heading = pov.heading;
+                        const lat = pov.pitch;
+                        const lng = panoramaRef.current.getZoom();
                         updateCurrentPov(heading, lat, lng);
                     }
                 });
             }
-        
+            setPendingPano(null);
         }
         return () => {
-            // NOTE: This cleanup now runs less often. Listeners persist until currentPanorama changes
+            // NOTE: This cleanup now runs less often. Listeners persist until initialPano changes
             // or component unmounts. This is generally more stable for event handling.
             const pListener = panoListenerRef.current;
             const vListener = povListenerRef.current;
@@ -68,13 +92,13 @@ const StreetViewComponent: React.FC = () => {
             }
             // We DO NOT destroy the panorama instance here, just the listeners associated with the *previous* run of this effect.
             // The instance persists in panoramaRef unless the component fully unmounts.
-          };
-    }, [panoramaOptions, currentPanorama, updateCurrentPos, updateCurrentPov]);
+        };
+    }, [initialPano, pendingPano, setPendingPano, updateCurrentPos, updateCurrentPov]);
 
 
 
     return (
-        <div ref={streetViewRef} style={{ width: '100%', height: '400px' }}>
+        <div style={streetViewPanoramaStyles} ref={streetViewRef}>
 
         </div>
     );
@@ -86,7 +110,7 @@ export default StreetViewComponent;
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext'; // Adjust path
 const StreetViewComponent: React.FC = () => {
   // Get context values needed
-  const { currentPanorama, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
+  const { initialPano, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
  
 
   // Refs for the DOM element and the Google Maps objects/listeners
@@ -113,7 +137,7 @@ const StreetViewComponent: React.FC = () => {
     if (!panorama) {
       //-commented-console.log("[StreetViewComponent] Initializing StreetViewPanorama instance.");
       const initialOptions: google.maps.StreetViewPanoramaOptions = {
-        // Sensible defaults, will be overridden immediately if currentPanorama exists
+        // Sensible defaults, will be overridden immediately if initialPano exists
         //position: { lat: displayedPanorama.lat, lng: displayedPanorama.lng },
         //pov: { heading: displayedPanorama.heading, pitch:  displayedPanorama.pitch },
         //zoom: displayedPanorama.zoom,
@@ -149,13 +173,13 @@ const StreetViewComponent: React.FC = () => {
          const panoId = panorama?.getPano();
          const position = panorama?.getPosition();
          ////-commented-console.log("[StreetViewComponent] User moved: pano_changed event - ", panoId);
-         if (panoId && position && currentPanorama) {
+         if (panoId && position && initialPano) {
              // Update displayedPanorama based on the *actual* state of the viewer
              
              setDisplayedPanorama({
-                ...(displayedPanorama ?? currentPanorama), // Keep potentially existing pov/zoom
+                ...(displayedPanorama ?? initialPano), // Keep potentially existing pov/zoom
                 ...movement,
-                movementHistory: [...(displayedPanorama?.movementHistory ?? currentPanorama.movementHistory), movement]
+                movementHistory: [...(displayedPanorama?.movementHistory ?? initialPano.movementHistory), movement]
 
              });
              console.warn(displayedPanorama?.movementHistory ?? "No movement History")
@@ -170,10 +194,10 @@ const StreetViewComponent: React.FC = () => {
          const pov = panorama?.getPov();
          const zoom = panorama?.getZoom();
           ////-commented-console.log("[StreetViewComponent] User looked/zoomed: pov_changed event - ", pov, zoom);
-         if (pov && typeof zoom === 'number' && currentPanorama) { // Ensure zoom is a number
+         if (pov && typeof zoom === 'number' && initialPano) { // Ensure zoom is a number
              // Update displayedPanorama based on the *actual* state of the viewer
              setDisplayedPanorama({
-                ...(displayedPanorama ?? currentPanorama), // Keep potentially existing pov/zoom
+                ...(displayedPanorama ?? initialPano), // Keep potentially existing pov/zoom
                 heading: pov.heading,
                 pitch: pov.pitch,
                 zoom: zoom,
@@ -184,8 +208,8 @@ const StreetViewComponent: React.FC = () => {
     }
 
 
-    // --- Synchronize Panorama with external `currentPanorama` ---
-    // This part runs on initial load AND whenever `currentPanorama` changes.
+    // --- Synchronize Panorama with external `initialPano` ---
+    // This part runs on initial load AND whenever `initialPano` changes.
     if (panorama && displayedPanorama) {
         const currentInstancePano = panorama.getPano();
         const currentInstancePos = panorama.getPosition();
@@ -222,7 +246,7 @@ const StreetViewComponent: React.FC = () => {
 
 
         if (needsUpdate) {
-            //-commented-console.log("[StreetViewComponent] Applying update from currentPanorama.");
+            //-commented-console.log("[StreetViewComponent] Applying update from initialPano.");
             isProgrammaticUpdate.current = true; // Set flag before making changes
 
             // Prioritize setting by Pano ID if available
@@ -251,9 +275,9 @@ const StreetViewComponent: React.FC = () => {
              panorama.setVisible(true);
         }
 
-    } else if (panorama && !currentPanorama) {
-      // If the external context clears currentPanorama, hide the viewer
-      //-commented-console.log("[StreetViewComponent] Hiding Panorama (no currentPanorama).");
+    } else if (panorama && !initialPano) {
+      // If the external context clears initialPano, hide the viewer
+      //-commented-console.log("[StreetViewComponent] Hiding Panorama (no initialPano).");
       panorama.setVisible(false);
     }
 
@@ -277,13 +301,13 @@ const StreetViewComponent: React.FC = () => {
       }
       // NOTE: We don't destroy the panorama instance itself here.
       // If the component truly unmounts, React/GC handles it.
-      // If only currentPanorama changes, we want to reuse the instance.
+      // If only initialPano changes, we want to reuse the instance.
     };
 
   // Dependencies:
-  // - `currentPanorama`: The primary driver for updating the view programmatically.
+  // - `initialPano`: The primary driver for updating the view programmatically.
   // - `setDisplayedPanorama`: Needed by the listeners (stable reference from context).
-  }, [currentPanorama, displayedPanorama, setDisplayedPanorama]); // Only these two are needed.
+  }, [initialPano, displayedPanorama, setDisplayedPanorama]); // Only these two are needed.
 
   // Render the container div
   return (
@@ -299,7 +323,7 @@ import { useLocalEditorContext } from '@/contexts/LocalEditorContext'; // Adjust
 import { LocalPano } from '@/types';
 const StreetViewComponent: React.FC = () => {
   // Get context values
-  const { currentPanorama, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
+  const { initialPano, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
 
   // Refs
   const streetViewRef = useRef<HTMLDivElement>(null);
@@ -307,7 +331,7 @@ const StreetViewComponent: React.FC = () => {
   const panoListenerRef = useRef<google.maps.MapsEventListener | null>(null);
   const povListenerRef = useRef<google.maps.MapsEventListener | null>(null);
   // Ref to track the Pano ID we last *set* programmatically
-  // This helps decide if we need to reset the view when currentPanorama changes
+  // This helps decide if we need to reset the view when initialPano changes
   const lastSetPanoId = useRef<string | null>(null);
 
   // --- Effect for Initialization and Synchronization ---
@@ -406,23 +430,23 @@ const StreetViewComponent: React.FC = () => {
     } // End of initialization block
 
 
-    // --- Set/Reset the view based on external `currentPanorama` ---
-    // This runs on initial load and ONLY when `currentPanorama` reference changes.
-    if (panorama && currentPanorama) {
-        if (currentPanorama.panoId !== lastSetPanoId.current) {
-          //-commented-console.log(`[StreetViewComponent] Setting view to new currentPanorama: ${currentPanorama.panoId}`);
-          panorama.setPano(currentPanorama.panoId);
-          panorama.setPov({ heading: currentPanorama.heading, pitch: currentPanorama.pitch });
-          panorama.setZoom(currentPanorama.zoom);
+    // --- Set/Reset the view based on external `initialPano` ---
+    // This runs on initial load and ONLY when `initialPano` reference changes.
+    if (panorama && initialPano) {
+        if (initialPano.panoId !== lastSetPanoId.current) {
+          //-commented-console.log(`[StreetViewComponent] Setting view to new initialPano: ${initialPano.panoId}`);
+          panorama.setPano(initialPano.panoId);
+          panorama.setPov({ heading: initialPano.heading, pitch: initialPano.pitch });
+          panorama.setZoom(initialPano.zoom);
           panorama.setVisible(true);
           // Update the displayed state immediately to match the new source
-          setDisplayedPanorama(currentPanorama); // <<< Call with direct value
-          lastSetPanoId.current = currentPanorama.panoId;
+          setDisplayedPanorama(initialPano); // <<< Call with direct value
+          lastSetPanoId.current = initialPano.panoId;
         } else if (!panorama.getVisible()){
            panorama.setVisible(true);
         }
-      } else if (panorama && !currentPanorama) {
-        //-commented-console.log("[StreetViewComponent] Hiding Panorama (no currentPanorama).");
+      } else if (panorama && !initialPano) {
+        //-commented-console.log("[StreetViewComponent] Hiding Panorama (no initialPano).");
         panorama.setVisible(false);
         lastSetPanoId.current = null;
         // setDisplayedPanorama(null); // Call with direct value if clearing
@@ -439,9 +463,9 @@ const StreetViewComponent: React.FC = () => {
       // //-commented-console.log("[StreetViewComponent] Cleaned up listeners.");
     };
 
-  // Dependencies: Only `currentPanorama` to trigger view resets,
+  // Dependencies: Only `initialPano` to trigger view resets,
   // and `setDisplayedPanorama` for the listeners.
-  }, [currentPanorama, displayedPanorama, setDisplayedPanorama]);
+  }, [initialPano, displayedPanorama, setDisplayedPanorama]);
 
   // Render the container div
   return (
@@ -456,7 +480,7 @@ import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
 import { LocalPano } from '@/types'
 const StreetViewComponent: React.FC = () => {
   // Get context values
-  const { currentPanorama, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
+  const { initialPano, displayedPanorama, setDisplayedPanorama } = useLocalEditorContext();
 
   // Refs for DOM, Maps objects, and stable callbacks/state
   const streetViewRef = useRef<HTMLDivElement>(null);
@@ -481,7 +505,7 @@ const StreetViewComponent: React.FC = () => {
 
   // --- Effect for Initialization and Synchronization ---
   useEffect(() => {
-    // This effect now primarily depends on currentPanorama to trigger resets.
+    // This effect now primarily depends on initialPano to trigger resets.
     // It uses refs to access the latest displayedPanorama and setDisplayedPanorama inside listeners.
 
     const mapApiReady = google?.maps?.StreetViewPanorama && google?.maps?.event;
@@ -579,23 +603,23 @@ const StreetViewComponent: React.FC = () => {
     } // End of initialization block
 
 
-    // --- Set/Reset the view based on external `currentPanorama` ---
+    // --- Set/Reset the view based on external `initialPano` ---
     // This logic remains largely the same, ensuring it uses the current 'panorama' variable
-    if (panorama && currentPanorama) {
-        if (currentPanorama.panoId !== lastSetPanoId.current) {
-            //-commented-console.log(`[StreetViewComponent] Setting view to new currentPanorama: ${currentPanorama.panoId}`);
-            panorama.setPano(currentPanorama.panoId);
-            panorama.setPov({ heading: currentPanorama.heading, pitch: currentPanorama.pitch });
-            panorama.setZoom(currentPanorama.zoom);
+    if (panorama && initialPano) {
+        if (initialPano.panoId !== lastSetPanoId.current) {
+            //-commented-console.log(`[StreetViewComponent] Setting view to new initialPano: ${initialPano.panoId}`);
+            panorama.setPano(initialPano.panoId);
+            panorama.setPov({ heading: initialPano.heading, pitch: initialPano.pitch });
+            panorama.setZoom(initialPano.zoom);
             panorama.setVisible(true);
             // Use the setter ref immediately after setting view
-            setDisplayedPanoramaRef.current(currentPanorama);
-            lastSetPanoId.current = currentPanorama.panoId;
+            setDisplayedPanoramaRef.current(initialPano);
+            lastSetPanoId.current = initialPano.panoId;
         } else if (!panorama.getVisible()){
              panorama.setVisible(true);
         }
-    } else if (panorama && !currentPanorama) {
-        //-commented-console.log("[StreetViewComponent] Hiding Panorama (no currentPanorama).");
+    } else if (panorama && !initialPano) {
+        //-commented-console.log("[StreetViewComponent] Hiding Panorama (no initialPano).");
         panorama.setVisible(false);
         lastSetPanoId.current = null;
         // Optionally clear displayed panorama via ref setter:
@@ -603,9 +627,9 @@ const StreetViewComponent: React.FC = () => {
     }
 
     // --- Effect Cleanup ---
-    // Runs ONLY when component unmounts OR when currentPanorama changes (forcing re-initialization if needed)
+    // Runs ONLY when component unmounts OR when initialPano changes (forcing re-initialization if needed)
     return () => {
-      // NOTE: This cleanup now runs less often. Listeners persist until currentPanorama changes
+      // NOTE: This cleanup now runs less often. Listeners persist until initialPano changes
       // or component unmounts. This is generally more stable for event handling.
       const pListener = panoListenerRef.current;
       const vListener = povListenerRef.current;
@@ -623,8 +647,8 @@ const StreetViewComponent: React.FC = () => {
       // The instance persists in panoramaRef unless the component fully unmounts.
     };
 
-  // The MAIN dependency is currentPanorama. setDisplayedPanorama is stable from context.
-  }, [currentPanorama]); // REMOVED displayedPanorama and setDisplayedPanorama from deps
+  // The MAIN dependency is initialPano. setDisplayedPanorama is stable from context.
+  }, [initialPano]); // REMOVED displayedPanorama and setDisplayedPanorama from deps
 
 
   // Render the container div

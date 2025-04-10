@@ -1,19 +1,45 @@
 import { useState, useCallback } from 'react';
-import { LocalPano, LocalEditorContextType } from '@/types';
-import { getPanoramaFromPanoId } from '@/services/googleMapsService'
-import { getPanoramaFromCoords } from '@/services/googleMapsService'
-import { convertSvPanoramaData } from '@/utils/helpers'
+import { TagCategory } from '@/types/index'
+import { LocalPano, LocalEditorContextType, DataBaseItem } from '@/types/LocalEditor';
+import { getPanoramaFromCoords, getPanoramaFromPanoId } from '@/services/googleMapsService'
+import { convertSvPanoramaData, convertToDataBaseItem } from '@/utils/helpers'
+import { supabase } from '@/lib/supabaseClient';
 
 export function useLocalEditorManager(): LocalEditorContextType {
   const [localPanos, setLocalPanos] = useState<LocalPano[]>([]);
   const [displayedPanorama, setDisplayedPanorama] = useState<LocalPano | null>(null);
   const [currentPanorama, setCurrentPanorama] = useState<LocalPano | null>(null);
+  const [pendingPanorama, setPendingPanorama] = useState<LocalPano | null>(null);
   const [currentPanoramaIsNew, setCurrentPanoramaIsNew] = useState<boolean>(true);
   const [currentSvPanorama, setCurrentSvPanorama] = useState<google.maps.StreetViewPanorama | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  //const [error, setError] = useState<string | null>(null);
 
-
+  const uploadPanoToDatabase = async (localPano: LocalPano) => {
+    const dbItem: DataBaseItem = convertToDataBaseItem(localPano);
+    const { data, error } = await supabase.from('pano-library-beta').insert([dbItem]);
+  
+    if (error) {
+      console.error('Error uploading:', error.message);
+      return false;
+    } else {
+      console.log('Upload successful:', data);
+      return true;
+    }
+  };
+  const publishLocalPanos = useCallback(async (): Promise<boolean> => {
+    let succeeded = true;
+  
+    for (const lp of localPanos) {
+      const result = await uploadPanoToDatabase(lp);
+      if (!result) {
+        succeeded = false;
+        break; // stop on failure if needed
+      }
+    }
+  
+    return succeeded;
+  }, [localPanos]);
   const clearCurrentPano = useCallback(() => {
     setCurrentPanorama(null);
     setDisplayedPanorama(null)
@@ -33,7 +59,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
         lpid += lp.localId + ", ";
       }
       console.warn("localIds (length: ", localPanos.length, "): ", lpid)
-    setError(null)
+    //setError(null)
     clearCurrentPano();
   }, [clearCurrentPano, localPanos]);
 
@@ -41,7 +67,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     
     setLocalPanos(prev => prev.map(pano => pano.localId === panoData.localId ? panoData : pano));
     clearCurrentPano();
-  }, [clearCurrentPano, localPanos]);
+  }, [clearCurrentPano]);
 
   const deleteLocalPano = useCallback((localId: string) => {
     setLocalPanos(prev => prev.filter(pano => pano.localId !== localId));
@@ -51,13 +77,10 @@ export function useLocalEditorManager(): LocalEditorContextType {
   const getLocalPanoById = useCallback((localId: string): LocalPano | undefined => {
     return localPanos.find(pano => {console.warn("pano: ", pano.localId, "vs", localId);if(pano.localId === localId) return pano});
   }, [localPanos]);
-  const getLocalPanoById2 = useCallback((panoData: LocalPano): LocalPano | undefined => {
-    console.log("getLocalPanosById2")
-    return localPanos.find(pano => {console.warn("pano: ", pano, "vs", panoData);if(pano.localId === panoData.localId) return pano});
-  }, [localPanos]);
-  const loadPanorama = useCallback((svPanoramaData: google.maps.StreetViewPanoramaData | null) => {
+
+  const loadPanorama = useCallback(async (svPanoramaData: google.maps.StreetViewPanoramaData | null) => {
     if (!svPanoramaData) throw new Error('Invalid panorama data received from direct getPanorama call.');
-    const localPano = convertSvPanoramaData(svPanoramaData);
+    const localPano = await convertSvPanoramaData(svPanoramaData);
     
     //if(!panoramaData) throw new Error('Failed convertion from StreetViewPanoramaData to PanoramaData');
     //const newLocalPano: LocalPano = {
@@ -80,6 +103,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
   const loadPanoramaByLocation = useCallback((async ( lat: number, lng: number ) => {
     setIsLoading(true);
     const svPanoData = await getPanoramaFromCoords(lat, lng);
+    console.log(svPanoData)
     loadPanorama(svPanoData);
   }), [loadPanorama]);
 
@@ -95,7 +119,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     
     console.warn("hello?")
     
-    const localPano = getLocalPanoById2(requestedPano);
+    const localPano = getLocalPanoById(requestedPano.localId);
     if(!localPano) {
       console.warn("no saved pano was found")
       let lpid: string = "";
@@ -111,7 +135,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     setCurrentPanorama(localPano);
     setDisplayedPanorama(localPano)
     setCurrentPanoramaIsNew(false);
-  }, [getLocalPanoById2, localPanos]);
+  }, [getLocalPanoById, localPanos]);
 
   const loadNewPanorama = useCallback(async (localPano: LocalPano) => {
     if(displayedPanorama) {
@@ -155,15 +179,22 @@ export function useLocalEditorManager(): LocalEditorContextType {
     const newPano = { ...currentPanorama, ...displayedPanorama, panoId: panoId, lat: lat, lng: lng, movementHistory: [...displayedPanorama.movementHistory, {panoId: panoId, lat: lat, lng: lng}] };
     setDisplayedPanorama(newPano);
   }), [currentPanorama, displayedPanorama]);
-
-  const updateCurrentTags = useCallback(((index: number, tag: string) => {
+  const setCurrentTags = useCallback(((tags: TagCategory[]) => {
     if(!displayedPanorama) return;
-    if(index == -1) {
+    setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: tags})
+  }), [currentPanorama, displayedPanorama]);
+  /*const toggleCurrentTags = useCallback(((tags: TagCategory) => {
+    if(!displayedPanorama) return;
+    setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: tags})
+  }), [currentPanorama, displayedPanorama]);*/
+  const updateCurrentTags = useCallback(((index: number, tag: TagCategory | null) => {
+    if(!displayedPanorama) return;
+    if(index == -1 && tag) {
       //add tag
       setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: [...displayedPanorama.tags, tag]})
       return;
     }
-    else if(tag == ""){
+    else if(tag == null){
       const updatedTags = displayedPanorama.tags.filter((_, idx) => idx !== index);
       setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: updatedTags})
       return;
@@ -185,9 +216,17 @@ export function useLocalEditorManager(): LocalEditorContextType {
   async function clickedMap(latLng: google.maps.LatLng): Promise<LocalPano | null> {
     //-commented-console.log("Clicked at: ", latLng.lat(), ", ", latLng.lng())
     const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
-    return convertSvPanoramaData(svPanoData) as LocalPano | null;
+    console.log(svPanoData)
+    console.log(JSON.stringify(svPanoData))
+    return await convertSvPanoramaData(svPanoData) as LocalPano | null;
   }
-  
+  const setStreetViewPanoId = useCallback((panoId: string) => {
+    if(!displayedPanorama) return;
+    const newLocalPano = {...displayedPanorama, panoId: panoId, movementHistory: [{panoId: displayedPanorama.panoId, lat: displayedPanorama.lat, lng: displayedPanorama.lng}]}
+    setCurrentPanorama(newLocalPano);
+    setDisplayedPanorama(newLocalPano);
+    setPendingPanorama(newLocalPano);
+  }, [displayedPanorama]);
 
   const saveDisplayedPano = useCallback(() => {
     if(!currentPanorama || !displayedPanorama) return;
@@ -210,18 +249,21 @@ export function useLocalEditorManager(): LocalEditorContextType {
   return {
     localPanos,
     currentPanorama,
+    pendingPanorama,
     displayedPanorama,
     currentPanoramaIsNew,
     currentSvPanorama,
+    publishLocalPanos,
     setCurrentPanorama,
     setDisplayedPanorama,
+    setPendingPanorama,
     addLocalPano,
     updateLocalPano,
     deleteLocalPano,
     getLocalPanoById,
     setCurrentSvPanorama,
     isLoading,
-    error,
+    //error,
     loadPanoramaByLocation,
     loadPanoramaByPanoId,
     loadExistingPanorama,
@@ -229,9 +271,11 @@ export function useLocalEditorManager(): LocalEditorContextType {
     clearCurrentPano,
     updateCurrentPov,
     updateCurrentPos,
+    setCurrentTags,
     updateCurrentTags,
     updateCurrentDescription,
     clickedMap,
+    setStreetViewPanoId,
     saveDisplayedPano,
     updateDisplayedPano,
     deleteDisplayedPano,

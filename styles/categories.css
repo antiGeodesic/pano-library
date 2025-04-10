@@ -1,0 +1,133 @@
+
+
+.categoryEditor {
+    grid-column: 1 / span 3;
+  grid-row: 3;
+  width: 100%;
+  height: 100%;
+    padding: 50px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    letter-spacing: normal;
+}
+.categoryEditorTwo {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    --border: #ddd;
+      --border-hover: rgb(71, 71, 71);
+      --bg-hover: rgba(0, 0, 0, 0.1);
+      --text: rgba(102, 102, 102, 1);
+      --text-hover: #000;
+      --ident: 30px;
+      --left: -(var(--ident));
+      --first: #DDF3FE;
+      --second: #DDEBC8;
+      --third: #FEFCD5;
+}
+
+
+h1 {
+  padding: 0 0 10px 0;
+}
+
+ol {
+  margin-left: var(--ident);
+  counter-reset: item;
+}
+
+.wtree li {
+  list-style-type: none;
+  margin: 10px 0 10px 10px;
+  position: relative;
+}
+
+.wtree li::before,
+.wtree li::after {
+  position: absolute;
+  content: "";
+}
+
+.wtree li::before {
+  counter-increment: item;
+  top: -10px;
+  left: var(--left);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  width: var(--ident);
+  height: 15px;
+}
+
+.wtree li::after {
+  top: 5px;
+  left: var(--left);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  width: var(--ident);
+  height: 100%;
+}
+
+.wtree li:last-child::after {
+  display: none;
+}
+
+.wtree li span {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 10px;
+  color: var(--text);
+  text-decoration: none;
+  &::before {
+    content: counters(item, ".") " ";
+  }
+}
+
+.wtree li span:hover,
+.wtree li span:focus {
+  color: var(--text-hover);
+  border: 1px solid var(--border-hover);
+}
+
+.wtree li span:hover + ol,
+.wtree li span:focus + ol {
+  li::after, li::before {
+    border-color: var(--border-hover);
+  }
+}
+
+li span {
+  background-color: var(--first);
+}
+
+li li span {
+  background-color: var(--second);
+}
+
+li li li span {
+  background-color: var(--third);
+}
+
+.display {
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+input, label {
+  margin: 12px 0px 20px 0px;
+}
+
+label {
+  padding-left: 6px;
+  padding-right: 12px;
+}
+
+#radio-1:checked + label ~ ol li ol li {
+  display: none;
+}
+
+#radio-2:checked + label ~ ol li ol li ol li {
+  display: none;
+}
+
+#radio-3:checked + label ~ li ol li ol li {
+  display: none;
+}

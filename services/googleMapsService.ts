@@ -1,5 +1,5 @@
 // services/googleMapsService.ts
-import { SVRequestOptions } from '@/types'; // Corrected import
+import { SVRequestOptions } from '@/types/LocalEditor'; // Corrected import
 
 // --- Cache for the Service Instance ---
 let cachedSvServiceInstance: google.maps.StreetViewService | null = null;
@@ -73,6 +73,7 @@ export async function getPanoramaFromPanoId(panoId: string): Promise<google.maps
         });
     });
 }
+
 export async function getPanoramaFromCoords(lat: number, lng: number): Promise<google.maps.StreetViewPanoramaData | null> {
     return new Promise((resolve, reject) => {
         const svServiceInstance = getStreetViewServiceInstance();
@@ -86,14 +87,7 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
         svServiceInstance.getPanorama(requestOptions, (data, status) => {
             if (status === google.maps.StreetViewStatus.OK && data) resolve(data);
             else {
-                // Instead of rejecting, resolve with null indicating no panorama was found.
-                //-commented-console.log(`Panorama not found or request failed. Status: ${status}`);
-                return;
-                
-            }
-        });
-        //-commented-console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-        requestOptions.radius = 1000;
+                requestOptions.radius = 1000;
         requestOptions.preference = google.maps.StreetViewPreference.BEST;
         //-commented-console.log(requestOptions.preference)
         svServiceInstance.getPanorama(requestOptions, (data, status) => {
@@ -105,8 +99,38 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
                 
             }
         });
+            }
+        });
+        //-commented-console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+        
         
     });
+}
+
+export async function Ue(panoId: string): Promise<object | undefined> {
+    try {
+        const u = `https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/GetMetaData`;
+        const payload = JSON.stringify([["apiv3",null,null,null,"US",null,null,null,null,null,[[0]]],["en","US"],[[[2,panoId]]],[[1,2,3,4,8,6]]]);
+
+        const response = await fetch(u, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json+protobuf; charset=UTF-8",
+                "x-user-agent": "grpc-web-javascript/0.1"
+            },
+            body: payload,
+            mode: "cors",
+            credentials: "omit"
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+            return await response.json();
+        }
+    } catch {
+        console.error(`There was a problem with GetMetaData`);
+    }
 }
 /*const loadPanoramaByPanoId = useCallback(async (panoId: string) => {
     try {

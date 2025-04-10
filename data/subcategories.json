@@ -1,0 +1,1961 @@
+[
+    {
+        "category": "Nature",
+        "index": 0,
+        "subcategories": [
+            {
+                "subcategory": "Geographical Feature",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Geographical Feature (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Mountain",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Forest",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Cliff",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Island",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Archipelago",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Beach",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Swamp",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Coast",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Canyon",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Desert",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Lake",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Hill",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Volcano",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Iceberg",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Waterfall",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "River",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Cave",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Fjord",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Glacier",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Quarry",
+                        "index": 20
+                    },
+                    {
+                        "sub-subcategory": "River Island",
+                        "index": 21
+                    },
+                    {
+                        "sub-subcategory": "Ravine",
+                        "index": 22
+                    },
+                    {
+                        "sub-subcategory": "Stream",
+                        "index": 23
+                    },
+                    {
+                        "sub-subcategory": "Pond",
+                        "index": 24
+                    },
+                    {
+                        "sub-subcategory": "Salt Pan",
+                        "index": 25
+                    },
+                    {
+                        "sub-subcategory": "Grassland",
+                        "index": 26
+                    },
+                    {
+                        "sub-subcategory": "Mesa",
+                        "index": 27
+                    },
+                    {
+                        "sub-subcategory": "Geyser",
+                        "index": 28
+                    },
+                    {
+                        "sub-subcategory": "Sinkhole",
+                        "index": 29
+                    },
+                    {
+                        "sub-subcategory": "Dune",
+                        "index": 30
+                    },
+                    {
+                        "sub-subcategory": "Plain",
+                        "index": 31
+                    },
+                    {
+                        "sub-subcategory": "Atoll",
+                        "index": 32
+                    }
+                ]
+            },
+            {
+                "subcategory": "Vegetation",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Vegetation (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Tree",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Bush",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Grass",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Palm Tree",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Vineyard",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Orchard",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Bamboo",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Flower Field",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Reeds",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Cactus",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Moss",
+                        "index": 11
+                    }
+                    
+                ]
+            },
+            {
+                "subcategory": "Agriculture",
+                "index": 2,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Agriculture (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Corn",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Wheat",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Rice",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Cotton",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Sugarcane",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Sunflower",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Barley",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Soybean",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Canola",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Tobacco",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Potato",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Grapevine",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Tea",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Coffee",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Banana",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Pineapple",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Orchard",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Greenhouse",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Pasture",
+                        "index": 19
+                    }
+                    
+                ]
+            },
+            {
+                "subcategory": "Weather",
+                "index": 3,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Weather (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Clear",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Partly Cloudy",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Overcast",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Rain",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Thunderstorm",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Fog",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Snow",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Hail",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Dust",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Rainbow",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Mist",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Frost",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Sunrise",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Day",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Sunset",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Night",
+                        "index": 16
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Infrastructure",
+        "index": 1,
+        "subcategories": [
+            {
+                "subcategory": "Road",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Road (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Paved Road",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Dirt Road",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Gravel Road",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Highway",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Roundabout",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Bridge",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Tunnel",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Overpass",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Underpass",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Flooded",
+                        "index": 10
+                    }
+                ]
+            },
+            {
+                "subcategory": "Railway",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Railway (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Train Tracks",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Railway Crossing",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Railway Bridge",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Train Station",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Subway Entrance",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Tram Line",
+                        "index": 6
+                    }
+                ]
+            },
+            {
+                "subcategory": "Building",
+                "index": 2,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Building (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Skyscraper",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Apartment Block",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "House",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Cabin",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Church",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Mosque",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Temple",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Castle",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Town Hall",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Warehouse",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Barn",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Factory",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "School",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Gas Station",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Fire Station",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Hospital",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Shopping Mall",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Hotel",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Stadium",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Lighthouse",
+                        "index": 20
+                    }
+                    
+                ]
+            },
+            {
+                "subcategory": "Utility / Signs",
+                "index": 3,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Utility / Signs (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Pole",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Poletop",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Stobey Pole",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Possum Guard",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Pole Paint",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Insulator",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Pole Sticker",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Transformer",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Wind Turbine",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Lamp",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Cell Tower",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Water Tower",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Power Plant",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Satellite Dish",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Fire Hydrant",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Bollard",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Road Marking",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Road Sign",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Road Sign",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Traffic Light",
+                        "index": 20
+                    },
+                    {
+                        "sub-subcategory": "Guardrail",
+                        "index": 21
+                    },
+                    {
+                        "sub-subcategory": "Crosswalk",
+                        "index": 22
+                    },
+                    {
+                        "sub-subcategory": "Speed Bump",
+                        "index": 23
+                    },
+                    {
+                        "sub-subcategory": "One-Way Sign",
+                        "index": 24
+                    },
+                    {
+                        "sub-subcategory": "Mile Marker",
+                        "index": 25
+                    },
+                    {
+                        "sub-subcategory": "Highway Marker",
+                        "index": 26
+                    }
+                ]
+            },
+            {
+                "subcategory": "Transportation",
+                "index": 4,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Transportation (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Bus Stop",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Parking Lot",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Helipad",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Airport Runway",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Airport Terminal",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Taxi Stand",
+                        "index": 6
+                    }
+                ]
+            },
+            {
+                "subcategory": "Public Space",
+                "index": 5,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Public Space (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Park",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Fountain",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Plaza",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Playground",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Monument",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Public Art",
+                        "index": 6
+                    }
+                    
+                ]
+            },
+            {
+                "subcategory": "Barrier",
+                "index": 6,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Barrier (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Fence",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Wall",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Gate",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Barrier Pole",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Checkpoint",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Border Crossing",
+                        "index": 6
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Life",
+        "index": 2,
+        "subcategories": [
+            {
+                "subcategory": "Human",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Human (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Waving",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Running",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Walking",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Cycling",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Working",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Children",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Group",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Singular",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Wearing Unique Clothing",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Wearing Uniform",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Photographer / Filming",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Interacting with Google Car",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Unusual Behavior",
+                        "index": 13
+                    }
+                ]
+            },
+            {
+                "subcategory": "Animal",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Animal (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Dog",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Cat",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Cow",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Horse",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Sheep",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Goat",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Pig",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Chicken",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Duck",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Bird",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Monkey",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Elephant",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Camel",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Llama / Alpaca",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Deer",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Giraffe",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Bear",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Snake",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Donkey",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Frog / Toad",
+                        "index": 20
+                    },
+                    {
+                        "sub-subcategory": "Turtle / Tortoise",
+                        "index": 21
+                    },
+                    {
+                        "sub-subcategory": "Fish",
+                        "index": 22
+                    },
+                    {
+                        "sub-subcategory": "Rodent",
+                        "index": 23
+                    },
+                    {
+                        "sub-subcategory": "Crocodile / Alligator",
+                        "index": 24
+                    },
+                    {
+                        "sub-subcategory": "Wild Boar",
+                        "index": 25
+                    },
+                    {
+                        "sub-subcategory": "Reindeer",
+                        "index": 26
+                    },
+                    {
+                        "sub-subcategory": "Zebra",
+                        "index": 27
+                    },
+                    {
+                        "sub-subcategory": "Kangaroo",
+                        "index": 28
+                    },
+                    {
+                        "sub-subcategory": "Raccoon",
+                        "index": 29
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Vehicle",
+        "index": 3,
+        "subcategories": [
+            {
+                "subcategory": "Car",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Car (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Code",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "License Plate",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Taxi",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Police",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Accident",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Parked",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Driving",
+                        "index": 8
+                    }
+                    
+                ]
+            },
+            {
+                "subcategory": "Truck",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Truck (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "License Plate",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Company Logo",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Cargo Type",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Accident",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Driving",
+                        "index": 6
+                    }
+                ]
+            },
+            {
+                "subcategory": "Bus",
+                "index": 2,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Bus (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Route Number",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "License Plate",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Tour Bus",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "City Bus",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "School Bus",
+                        "index": 6
+                    }
+                ]
+            },
+            {
+                "subcategory": "Motorcycle",
+                "index": 3,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Motorcycle (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "License Plate",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Rider Present",
+                        "index": 3
+                    }
+                ]
+            },
+            {
+                "subcategory": "Bicycle",
+                "index": 4,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Bicycle (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Rider Present",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Parked",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Cargo Bike",
+                        "index": 3
+                    }
+                ]
+            },
+            {
+                "subcategory": "Train",
+                "index": 5,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Train (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Passenger",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Freight",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Stationary",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Moving",
+                        "index": 4
+                    }
+                ]
+            },
+            {
+                "subcategory": "Boat",
+                "index": 6,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Boat (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Fishing Boat",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Sailboat",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Ferry",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Yacht",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Cargo Ship",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Docked",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "At Sea",
+                        "index": 7
+                    }
+                ]
+            },
+            {
+                "subcategory": "Aircraft",
+                "index": 7,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Aircraft (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "In Flight",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "On Ground",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Helicopter",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Jet",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Propeller Plane",
+                        "index": 5
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Text / Information",
+        "index": 4,
+        "subcategories": [
+            {
+                "subcategory": "Area Code",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Area Code (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Single Digit",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Two Digits",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Three Digits",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Four Digits",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Zip Code",
+                        "index": 5
+                    }
+                ]
+            },
+            {
+                "subcategory": "Address",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Address (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "First Level Subdivision",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Second Level Subdivision",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Third Level Subdivision",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "City / Town",
+                        "index": 4
+                    }
+                ]
+            },
+            {
+                "subcategory": "Road Number",
+                "index": 2,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Road Number (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Contains Letter",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Number",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 3
+                    }
+                ]
+            },
+            {
+                "subcategory": "Language",
+                "index": 3,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Language (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "English",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Spanish",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Portuguese",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "French",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "German",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Italian",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Dutch",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Russian",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Polish",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Turkish",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Arabic",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Hebrew",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Hindi",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Bengali",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Tamil",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Thai",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Vietnamese",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Malay/Indonesian",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Chinese (Mandarin)",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Cantonese",
+                        "index": 20
+                    },
+                    {
+                        "sub-subcategory": "Japanese",
+                        "index": 21
+                    },
+                    {
+                        "sub-subcategory": "Korean",
+                        "index": 22
+                    },
+                    {
+                        "sub-subcategory": "Greek",
+                        "index": 23
+                    },
+                    {
+                        "sub-subcategory": "Ukrainian",
+                        "index": 24
+                    },
+                    {
+                        "sub-subcategory": "Romanian",
+                        "index": 25
+                    },
+                    {
+                        "sub-subcategory": "Hungarian",
+                        "index": 26
+                    },
+                    {
+                        "sub-subcategory": "Swedish",
+                        "index": 27
+                    },
+                    {
+                        "sub-subcategory": "Norwegian",
+                        "index": 28
+                    },
+                    {
+                        "sub-subcategory": "Finnish",
+                        "index": 29
+                    },
+                    {
+                        "sub-subcategory": "Czech",
+                        "index": 30
+                    },
+                    {
+                        "sub-subcategory": "Slovak",
+                        "index": 31
+                    },
+                    {
+                        "sub-subcategory": "Serbian",
+                        "index": 32
+                    },
+                    {
+                        "sub-subcategory": "Croatian",
+                        "index": 33
+                    },
+                    {
+                        "sub-subcategory": "Bulgarian",
+                        "index": 34
+                    },
+                    {
+                        "sub-subcategory": "Afrikaans",
+                        "index": 35
+                    },
+                    {
+                        "sub-subcategory": "Swahili",
+                        "index": 36
+                    },
+                    {
+                        "sub-subcategory": "Tagalog",
+                        "index": 37
+                    },
+                    {
+                        "sub-subcategory": "Urdu",
+                        "index": 38
+                    },
+                    {
+                        "sub-subcategory": "Persian (Farsi)",
+                        "index": 39
+                    }
+                ]
+            },
+            {
+                "subcategory": "Writing System",
+                "index": 4,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Writing System (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Latin",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Cyrillic",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Arabic",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Hebrew",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Greek",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Devanagari",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Bengali",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Tamil",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Thai",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Khmer",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Chinese (Simplified)",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Chinese (Traditional)",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Japanese",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Hangul",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Lao",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Sinhala",
+                        "index": 16
+                    }
+                ]
+            },
+            {
+                "subcategory": "Language Family",
+                "index": 5,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Language Family (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Indo-European",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Uralic",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Altaic",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Sino-Tibetan",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Japonic",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Koreanic",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Dravidian",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Afro-Asiatic",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Austroasiatic",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Austronesian",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Turkic",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Slavic (Indo-European)",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Germanic (Indo-European)",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Romance (Indo-European)",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "Celtic (Indo-European)",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "Semitic (Afro-Asiatic)",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Bantu (Niger-Congo)",
+                        "index": 17
+                    },
+                    {
+                        "sub-subcategory": "Niger-Congo",
+                        "index": 18
+                    },
+                    {
+                        "sub-subcategory": "Tai-Kadai",
+                        "index": 19
+                    },
+                    {
+                        "sub-subcategory": "Isolate (e.g. Basque)",
+                        "index": 20
+                    }
+                ]
+            },
+            {
+                "subcategory": "Website Domain",
+                "index": 6,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Website Domain (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Country",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Territory",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Misplaced",
+                        "index": 3
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Gameplay",
+        "index": 5,
+        "subcategories": [
+            {
+                "subcategory": "Visuals",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Visuals (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Ugly",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Bad",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Medium",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Good",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Amazing",
+                        "index": 5
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Car Meta",
+        "index": 6,
+        "subcategories": [
+            {
+                "subcategory": "Camera",
+                "index": 0,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Camera (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Generation",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Sky Rift",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Artifact",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Overexposed",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "No Blur",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Blur",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Grainy (Dark)",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Hiroshima Cam (Tunnels)",
+                        "index": 8
+                    }
+                ]
+            },
+            {
+                "subcategory": "Roof Rack",
+                "index": 1,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Roof Rack (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Visible",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Visible Front",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Visible Back",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Barely Visible",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Not Visible",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Meta",
+                        "index": 6
+                    }
+                ]
+            },
+            {
+                "subcategory": "Pickup Truck",
+                "index": 2,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Pickup Truck (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Visible",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Visible Front",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Visible Back",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Barely Visible",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Not Visible",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Color",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Backlight",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Window",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Smudges",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Truck Bed",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Wire",
+                        "index": 11
+                    }
+                ]
+            },
+            {
+                "subcategory": "Antenna",
+                "index": 3,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Antenna (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Visible",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Visible Front",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Visible Back",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Barely Visible",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Not Reliably Visible",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Not Visible",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Long Antenna",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Blurred Antenna",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "Blurred Short Antenna",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Blurred Short Antenna",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "A-Type Long Antenna",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "A-Type Short Antenna",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "B-Type Long Antenna",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "B-Type Short Antenna",
+                        "index": 14
+                    },
+                    {
+                        "sub-subcategory": "B-Type Pronounced Antenna",
+                        "index": 15
+                    },
+                    {
+                        "sub-subcategory": "C-Type Short Antenna",
+                        "index": 16
+                    },
+                    {
+                        "sub-subcategory": "Tilted Short Antenna",
+                        "index": 17
+                    }
+                ]
+            },
+            {
+                "subcategory": "Car Color",
+                "index": 4,
+                "sub-subcategories": [
+                    {
+                        "sub-subcategory": "Car Color (Other)",
+                        "index": 0
+                    },
+                    {
+                        "sub-subcategory": "Visible",
+                        "index": 1
+                    },
+                    {
+                        "sub-subcategory": "Visible Front",
+                        "index": 2
+                    },
+                    {
+                        "sub-subcategory": "Visible Back",
+                        "index": 3
+                    },
+                    {
+                        "sub-subcategory": "Barely Visible",
+                        "index": 4
+                    },
+                    {
+                        "sub-subcategory": "Not Reliably Visible",
+                        "index": 5
+                    },
+                    {
+                        "sub-subcategory": "Not Visible",
+                        "index": 6
+                    },
+                    {
+                        "sub-subcategory": "Black",
+                        "index": 7
+                    },
+                    {
+                        "sub-subcategory": "Gray",
+                        "index": 8
+                    },
+                    {
+                        "sub-subcategory": "White",
+                        "index": 9
+                    },
+                    {
+                        "sub-subcategory": "Red",
+                        "index": 10
+                    },
+                    {
+                        "sub-subcategory": "Blue",
+                        "index": 11
+                    },
+                    {
+                        "sub-subcategory": "Green",
+                        "index": 12
+                    },
+                    {
+                        "sub-subcategory": "Striped",
+                        "index": 13
+                    },
+                    {
+                        "sub-subcategory": "Brake Light",
+                        "index": 14
+                    }
+                ]
+            }
+        ]
+    }
+]
