@@ -1,6 +1,6 @@
 // utils/helpers.ts
 import { LocalPano, DataBaseItem } from '@/types/LocalEditor'; // Corrected import
-import { Ue } from '@/services/googleMapsService';
+//import { Ue } from '@/services/googleMapsService';
 export function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
   // Use optional chaining and nullish coalescing for safety
   // The 'any' assertion is sometimes necessary due to incomplete Google Maps types
@@ -9,25 +9,76 @@ export function extractImageDate(data: google.maps.StreetViewPanoramaData): stri
   return anyData?.imageDate ?? anyData?.tiles?.imageDate ?? 'unknown';
 }
 function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: string, date: string}[] {
-  const dates: {pano: string, Mu: string}[] = JSON.parse((JSON.stringify(data))).time;
-  console.warn(dates);
-  return dates.map(date => ({panoId: date.pano, date: date.Mu}));
+  // Parse the data to access all properties
+  const parsedData = JSON.parse(JSON.stringify(data));
+  
+  // Check if time property exists
+  if (!parsedData.time || !Array.isArray(parsedData.time)) {
+    console.warn('Time data not found or not in expected format', parsedData);
+    return [];
+  }
+  
+  // Log for debugging
+  console.warn('Coverage data structure:', parsedData.time);
+  
+  // Define a more specific type for the date objects
+  type DateObject = {
+    pano: string;
+    [key: string]: unknown; // Allow for unknown properties without using 'any'
+  };
+  
+  return parsedData.time.map((dateObj: DateObject) => {
+    // Extract pano ID - this seems to be consistent
+    const panoId = dateObj.pano;
+    
+    // Find the date value by looking for strings that match date format
+    let date: string | null = null;
+    
+    // Iterate through all properties looking for date-like strings
+    const keys = Object.keys(dateObj).filter(key => key !== 'pano');
+    for (const key of keys) {
+      const value = dateObj[key];
+      
+      // Check if the value is a string and follows ISO date format
+      if (
+        typeof value === 'string' && 
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)
+      ) {
+        date = value;
+        break;
+      }
+    }
+    
+    if (!date) {
+      console.warn('Could not find date property for panorama:', panoId);
+    }
+    
+    return {
+      panoId,
+      date: date || 'Unknown Date'
+    };
+  });
 }
-export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): Promise<{country: string, subdivision: string, region: string, road: string}> {
+//function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: string, date: string}[] {
+//  const dates: {pano: string, Mu: string}[] = JSON.parse((JSON.stringify(data))).time;
+//  console.warn(dates);
+//  return dates.map(date => ({panoId: date.pano, date: date.Mu}));
+//}
+export function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): {country: string, subdivision: string, region: string, road: string} {
   let address =  {country: "", subdivision: "", region: "", road: ""}
   if(!data.location)
     return address;
   const dataAddress = data.location?.description?.split(', ');
-  
-  if(dataAddress?.length == 2)
+  console.log(dataAddress)
+  if(dataAddress?.length == 3)
     address = {country: "", subdivision: dataAddress[2], region: dataAddress[1], road: dataAddress[0]}
-  else if(dataAddress?.length == 1)
+  else if(dataAddress?.length == 2)
     address = {country: "", subdivision: dataAddress[1], region: "", road: dataAddress[0]}
-  else if(dataAddress?.length == 0)
+  else if(dataAddress?.length == 1)
     address = {country: "", subdivision: dataAddress[0], region: "", road: ""}
 
-  const metaData = await Ue(data.location?.pano )
-  console.log(metaData);
+  //const metaData = await Ue(data.location?.pano )
+  //console.log(metaData);
   /*if(metaData)
   {
     try{
@@ -71,7 +122,7 @@ export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaDat
   }
   
 
-export async function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData | null): Promise<LocalPano | null> {
+export function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData | null): LocalPano | null {
   if(!data || !data.location || !data.location.pano || !data.location.latLng || !data) return null;
 
   console.log("[Helpers}---------", data);
@@ -84,7 +135,7 @@ export async function convertSvPanoramaData(data: google.maps.StreetViewPanorama
     heading: data.links && data.links.length > 0 ? data.links[0].heading ?? 0 : 0,
     pitch: 0,
     zoom: 1,
-    address: await getPanoramaAddress(data),
+    address: getPanoramaAddress(data),
     description: "",
     tags: [],
     date: data.imageDate,

@@ -61,9 +61,9 @@ const TagEditor: React.FC<TagEditorProps> = ({initialTags, setCurrentTags}) => {
   };
 
   return (
-    <div className={styles.panoEditorInfoWrapper}>
-      <label className={styles.editorLabel}>Tags:</label>
+
       <div className={styles.tagList}>
+        <div className={styles.editorLabel}>Tags:</div>
         {tags.map((tag, index) => (
           <div key={index} className={styles.tagListItem}>
             <input
@@ -104,7 +104,7 @@ const TagEditor: React.FC<TagEditorProps> = ({initialTags, setCurrentTags}) => {
         </div>
         {error && <p id="tag-error-message" className={styles.errorText}>{error}</p>}
       </div>
-    </div>
+
   );
 };
 

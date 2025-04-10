@@ -7,12 +7,15 @@ interface AddressDisplayProps {
 }
 const AddressDisplay: React.FC<AddressDisplayProps> = ({displayedPano}) => {
 
-
+    const displayRegion = displayedPano.address.region != "";
+    //const displaySubdivision = displayedPano.address.subdivision != "";
+    const displayCountry = displayedPano.address.country != "";
+    
     if (!displayedPano) return;
     return (
         <div className={styles.addressDisplay}>
             <span>{displayedPano.address.road}</span>
-            <span>{displayedPano.address.region + ", " + displayedPano.address.subdivision + ", " + displayedPano.address.country}</span>
+            <span>{`${displayRegion ? (displayedPano.address.region + ", ") : ''}` + displayedPano.address.subdivision + `${displayCountry ? (", " + displayedPano.address.country) : ''}`}</span>
         </div>
     )
     

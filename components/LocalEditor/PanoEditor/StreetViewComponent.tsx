@@ -52,10 +52,20 @@ const StreetViewComponent: React.FC<StreetViewComponentProps> = ({ initialPano, 
                     if (!panoramaRef.current) return;
                     console.warn("[STreetViewComponent] - new PanoId: ", panoramaRef.current.getPano())
                     const coord = panoramaRef.current.getPosition();
+                    const description = panoramaRef.current.getLocation().description;
+                    //console.log("panoramaRef------",panoramaRef)
+                    //console.log("panoramaRef.current------",panoramaRef.current)
+//
+                    //console.log("streetViewRef------",streetViewRef)
+                   //
+                    //console.log("streetViewRef.current------",streetViewRef.current)
+
+                    if(false) console.log(description)
                     if (coord) {
                         const panoId = panoramaRef.current.getPano();
                         const lat = coord.lat();
                         const lng = coord.lng();
+                        
                         updateCurrentPos(panoId, lat, lng);
                     }
                 });

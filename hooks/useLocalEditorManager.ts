@@ -80,7 +80,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 
   const loadPanorama = useCallback(async (svPanoramaData: google.maps.StreetViewPanoramaData | null) => {
     if (!svPanoramaData) throw new Error('Invalid panorama data received from direct getPanorama call.');
-    const localPano = await convertSvPanoramaData(svPanoramaData);
+    const localPano = convertSvPanoramaData(svPanoramaData);
     
     //if(!panoramaData) throw new Error('Failed convertion from StreetViewPanoramaData to PanoramaData');
     //const newLocalPano: LocalPano = {
@@ -174,9 +174,11 @@ export function useLocalEditorManager(): LocalEditorContextType {
     //-commented-console.log("Heading: ", displayedPanorama.heading)
   }), [currentPanorama, displayedPanorama]);
 
-  const updateCurrentPos = useCallback(((panoId: string, lat: number, lng: number) => {
+  const updateCurrentPos = useCallback((async (panoId: string, lat: number, lng: number) => {
     if(!displayedPanorama) return;
-    const newPano = { ...currentPanorama, ...displayedPanorama, panoId: panoId, lat: lat, lng: lng, movementHistory: [...displayedPanorama.movementHistory, {panoId: panoId, lat: lat, lng: lng}] };
+    const svPanoData = await getPanoramaFromPanoId(panoId);
+    const convertedPano = convertSvPanoramaData(svPanoData);
+    const newPano = { ...currentPanorama ,...displayedPanorama, address: convertedPano?.address ?? displayedPanorama.address, availableDates: convertedPano?.availableDates ?? displayedPanorama.availableDates, panoId: panoId, lat: lat, lng: lng, movementHistory: [...displayedPanorama.movementHistory, {panoId: panoId, lat: lat, lng: lng}] };
     setDisplayedPanorama(newPano);
   }), [currentPanorama, displayedPanorama]);
   const setCurrentTags = useCallback(((tags: TagCategory[]) => {
@@ -218,7 +220,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
     console.log(svPanoData)
     console.log(JSON.stringify(svPanoData))
-    return await convertSvPanoramaData(svPanoData) as LocalPano | null;
+    return convertSvPanoramaData(svPanoData) as LocalPano | null;
   }
   const setStreetViewPanoId = useCallback((panoId: string) => {
     if(!displayedPanorama) return;

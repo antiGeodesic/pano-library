@@ -3,6 +3,7 @@ import { SVRequestOptions } from '@/types/LocalEditor'; // Corrected import
 
 // --- Cache for the Service Instance ---
 let cachedSvServiceInstance: google.maps.StreetViewService | null = null;
+
 // --- Google Maps API Key Access ---
 function getApiKey(): string {
     const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -107,12 +108,13 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
     });
 }
 
-export async function Ue(panoId: string): Promise<object | undefined> {
+/*export async function Ue(panoId: string): Promise<object | undefined> {
     try {
-        const u = `https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/GetMetaData`;
-        const payload = JSON.stringify([["apiv3",null,null,null,"US",null,null,null,null,null,[[0]]],["en","US"],[[[2,panoId]]],[[1,2,3,4,8,6]]]);
+        const u = `https://maps.googleapis.com/maps/api/streetview/metadata?${panoId}=&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&signature=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_SIGNATURE}`;
+        //const payload = JSON.stringify([["apiv3",null,null,null,"US",null,null,null,null,null,[[0]]],["en","US"],[[[2,panoId]]],[[1,2,3,4,8,6]]]);
 
         const response = await fetch(u, {
+            key: 
             method: "POST",
             headers: {
                 "content-type": "application/json+protobuf; charset=UTF-8",
@@ -131,7 +133,7 @@ export async function Ue(panoId: string): Promise<object | undefined> {
     } catch {
         console.error(`There was a problem with GetMetaData`);
     }
-}
+}*/
 /*const loadPanoramaByPanoId = useCallback(async (panoId: string) => {
     try {
         // Using the direct call promise method which worked
@@ -202,7 +204,7 @@ export function getSVData2(
             source: google.maps.StreetViewSource.DEFAULT,
             ...options,
         };
-
+        
         //-commented-console.log(`>>> getSVData: Calling svServiceInstance.getPanorama with request:`, requestOptions);
         svServiceInstance.getPanorama(requestOptions, (data, status) => {
             //-commented-console.log(`>>> getSVData: getPanorama callback executed. Status: ${status}`, data); // Keep this log!

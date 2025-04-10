@@ -20,7 +20,7 @@ const DescriptionEditor: React.FC = () => {
         //onChange={(e) => setDescription(e.target.value)}
         //onChange={(e) => setDisplayedPanorama({ ...currentPanorama, panoId: displayedPanorama.panoId, lat: displayedPanorama.lat, lng: displayedPanorama.lng, heading: displayedPanorama.heading, pitch: displayedPanorama.pitch, zoom: displayedPanorama.zoom, tags: tags, movementHistory: displayedPanorama?.movementHistory ? [...displayedPanorama?.movementHistory, panoValues] : [panoValues] })}
         onChange={(e) => {description = e.target.value; updateCurrentDescription(description)}}
-        rows={4}
+        rows={1}
       />
     </div>
   );
