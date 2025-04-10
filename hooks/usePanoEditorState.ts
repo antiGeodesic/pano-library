@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+/*import { useState, useCallback } from 'react';
 import { LocalPano } from '@/types/LocalEditor';
 
 export function useLocalEditorManager() {
@@ -76,3 +76,4 @@ export function useLocalEditorManager() {
         populateEditorState,
     };
 }
+*/
