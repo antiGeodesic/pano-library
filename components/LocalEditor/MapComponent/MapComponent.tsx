@@ -257,7 +257,7 @@ function tileCacheKey(x: number,y: number,zoom: number, layerType: string) {
 //
 //export default MapComponent;
 
-import React, { useCallback, useState, useEffect, useMemo  } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { AdvancedMarker, APIProvider, Map, useMap, MapMouseEvent } from '@vis.gl/react-google-maps';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
 import { MovementHistoryPolyline } from '@/components/LocalEditor/MapComponent/MovementHistoryPolyline';
@@ -290,6 +290,7 @@ const encodedNoPanoSvgDataUrl = `data:image/svg+xml;charset=UTF-8,${encodeURICom
 interface MapComponentContentProps {
     noPanoMarkerPosition: google.maps.LatLngLiteral | null; // Receive position as prop
 }
+
 //
 // MapComponent.tsx (or wherever MapComponentContent is)
 
@@ -358,7 +359,7 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
 }) => {
     const { localPanos, displayedPanorama } = useLocalEditorContext();
     const map = useMap();
-
+    
     // --- Create the CoordMapType instance ONLY ONCE using useMemo ---
     const coordMapType = useMemo(() => {
         //-commented-console.log("Creating CoordMapType instance (should happen once)");
@@ -396,22 +397,24 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
         }
         // Cleanup function runs if map or coordMapType instance changes (or on unmount)
     }, [map, coordMapType]); // Depend on map instance and the memoized type instance
-
-
-    // --- State/Effects for initial values (can likely be removed if not used by controller) ---
-    // const [initialMapValues, setInitialMapValues] = useState<number[] | undefined>();
-    // useEffect(() => {
-    //     if (map && !initialMapValues) { /* ... */ }
-    // }, [map, initialMapValues]);
-    //setTimeout(() => {
-    //    console.error(displayedPanorama?.panoId)
-    //  }, 1000);
     
+    if(!map)
+        return null;
+    const mapBounds: google.maps.LatLngBounds | undefined = map.getBounds();
+    if(!mapBounds)
+        return null;
+    const max = mapBounds.getNorthEast();
+    const min = mapBounds.getSouthWest();
+    const isInBounds = (lat: number, lng: number): boolean => {
+        return (lat < max.lat() && lat > min.lat() && lng < max.lng() && lng > min.lng())
+    }
+    console.log("max: (", max.lng(), ", ", max.lat(), "), min: (", min.lng(), ", ", min.lat(), ")");
     return (
         <>
             {/* --- Markers --- */}
-             {localPanos.map((loc) => (
-                 <AdvancedMarker key={loc.localId} position={{ lat: loc.lat, lng: loc.lng }} title={`Saved: ${loc.description || 'Untitled'}`}>
+             {localPanos.map((loc, index) => isInBounds(loc.lat, loc.lng) && (
+                
+                 <AdvancedMarker key={loc.localId} position={{ lat: loc.lat, lng: loc.lng }} zIndex={index}>
                      <ArrowSvg heading={loc.heading} size={45} rgb={{r: 0, g: 0, b: 0}} />
                  </AdvancedMarker>
              ))}
@@ -503,7 +506,6 @@ const MapComponent: React.FC = () => {
                     // *** Assign the onClick handler HERE ***
                     onClick={onMapClick}
                 >
-                    {/* Pass the marker position state down */}
                     <MapComponentContent noPanoMarkerPosition={noPanoMarkerPosition} />
                 </Map>
             </div>

@@ -1,4 +1,5 @@
 // utils/helpers.ts
+import { PanoramaData, DataBasePano } from '@/types';
 import { LocalPano, DataBaseItem } from '@/types/LocalEditor'; // Corrected import
 //import { Ue } from '@/services/googleMapsService';
 export function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
@@ -156,6 +157,24 @@ export function convertToDataBaseItem(localPano: LocalPano) : DataBaseItem {
     address: {country: localPano.address.country, subdivision: localPano.address.subdivision, region: localPano.address.region, road: localPano.address.road},
     description: localPano.description,
     tags: localPano.tags.map(tag => ({x: tag.x, y: tag.y, z: tag.z, t: tag.t}))
+  }
+}
+export function convertFromDataBasePano(dbPano: DataBasePano) : PanoramaData {
+  return {
+    localId: dbPano.id?.toString(),
+    gen: dbPano.gen,
+    panoId: dbPano.panoId,
+    lat: dbPano.lat,
+    lng: dbPano.lng,
+    heading: dbPano.heading,
+    pitch: dbPano.pitch,
+    zoom: dbPano.zoom,
+    date: dbPano.date,
+    address: dbPano.address,
+    availableDates: [],
+    description: dbPano.description,
+    tags: dbPano.tags,
+    movementHistory: []
   }
 }
 /*function isGen2(data: google.maps.StreetViewPanoramaData, country: string) {

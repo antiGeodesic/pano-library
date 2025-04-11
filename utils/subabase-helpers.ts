@@ -1,6 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
-import { DataBasePano } from '@/types/Explorer';
-import { TagCategory } from '@/types';
+import { DataBasePano, TagCategory } from '@/types';
 export async function downloadAll(): Promise<DataBasePano[] | null> {
         const { data, error } = await supabase.from('pano-library-beta').select('*');
         console.log(error?.message)

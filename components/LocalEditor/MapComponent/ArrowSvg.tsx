@@ -71,3 +71,18 @@ export const ArrowSvg: React.FC<{ heading: number | null | undefined, size?: num
         </svg>
     );
 };
+
+export const ArrowSvg2: React.FC = () => {
+    // Default heading to 0 if null/undefined
+    return (
+        <svg
+            width={540}
+            height={540}
+            
+            viewBox="0 0 540 540" // Viewbox defines the coordinate system 
+            xmlns="http://www.w3.org/2000/svg">
+
+                <path fill='white' stroke="black" strokeWidth="30" strokeLinecap="butt" strokeLinejoin="round" d="M 300 205 L 300 120 L 350 160 C 380 130 350 100 350 100 L 285.867 33.838 C 281.259 29.231 275.174 26.9 269.075 26.886 C 262.976 26.873 256.863 29.177 252.2 33.84 L 190 100 C 190 100 160 130 190 160 L 240 120 L 240 205 L 235 209.5 C 188.3 236.4 188.3 303.8 235 330.7 C 256.7 343.2 283.3 343.2 305 330.7 C 351.7 303.8 351.7 236.4 305 209.5 L 300 205 Z"/>
+        </svg>
+    );
+};

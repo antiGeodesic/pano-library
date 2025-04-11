@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
-import { ExplorerContextType, DataBasePano } from '@/types/Explorer';
+import { ExplorerContextType,  } from '@/types/Explorer';
 import { PanoramaData } from '@/types/index';
 import { getPanoramaFromCoords } from '@/services/googleMapsService'
-import { convertSvPanoramaData } from '@/utils/helpers'
+import { convertSvPanoramaData, convertFromDataBasePano } from '@/utils/helpers'
 import { downloadAll, downloadByTag, downloadByTagKeyword } from '@/utils/subabase-helpers';
 
 
@@ -10,10 +10,14 @@ export function useExplorerManager(): ExplorerContextType {
     const [displayedPano, setDisplayedPano] = useState<PanoramaData | null>(null)
     const [initialPano, setInitialPano] = useState<PanoramaData | null>(null);
     const [pendingPano, setPendingPano] = useState<PanoramaData | null>(null);
-    const [displayedPanos, setDisplayedPanos] = useState<DataBasePano[]>([]);
+    const [displayedPanos, setDisplayedPanos] = useState<PanoramaData[]>([]);
 
 
-    
+    const clearCurrentPano = useCallback(() => {
+      setInitialPano(null);
+      setDisplayedPano(null);
+      setPendingPano(null);
+    }, []);
     const displayAll = useCallback(async (): Promise<boolean> => {
         const data = await downloadAll();
         if (data) {
@@ -21,7 +25,7 @@ export function useExplorerManager(): ExplorerContextType {
             for(const pano of data) {
                 console.log("lat: ", pano.lat, "lng: ", pano.lng)
             }
-            setDisplayedPanos(data);
+            setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
     }, []);
@@ -33,7 +37,7 @@ export function useExplorerManager(): ExplorerContextType {
             for(const pano of data) {
                 console.log("lat: ", pano.lat, "lng: ", pano.lng)
             }
-            setDisplayedPanos(data);
+            setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
     }, []);
@@ -45,10 +49,32 @@ export function useExplorerManager(): ExplorerContextType {
             for(const pano of data) {
                 console.log("lat: ", pano.lat, "lng: ", pano.lng)
             }
-            setDisplayedPanos(data);
+            setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
     }, []);
+
+
+
+
+
+      const getExistingPanoById = useCallback((localId: string): PanoramaData | undefined => {
+        return displayedPanos.find(pano => {if(pano.localId === localId) return pano});
+      }, [displayedPanos]);
+
+        const loadExistingPano = useCallback((requestedPano: PanoramaData) => {
+          
+          console.warn("hello?")
+          
+          const localPano = getExistingPanoById(requestedPano.localId);
+          if(!localPano) {
+            console.warn("no saved pano was found")
+            return;
+          } 
+          setInitialPano(localPano);
+          setDisplayedPano(localPano);
+          setPendingPano(localPano);
+        }, [getExistingPanoById]);
     async function clickedMap(latLng: google.maps.LatLng): Promise<PanoramaData | null> {
         //-commented-console.log("Clicked at: ", latLng.lat(), ", ", latLng.lng())
         const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
@@ -58,8 +84,11 @@ export function useExplorerManager(): ExplorerContextType {
       }
     const loadNewPano = useCallback(async (panoramaData: PanoramaData) => {
       setInitialPano(panoramaData);
-      setDisplayedPano(panoramaData)
+      setDisplayedPano(panoramaData);
+      setPendingPano(panoramaData);
     }, [setInitialPano, setDisplayedPano]);
+
+    
       const setPanoId = useCallback((panoId: string) => {
         if(!displayedPano) return;
         const newLocalPano = {...displayedPano, panoId: panoId, movementHistory: [{panoId: displayedPano.panoId, lat: displayedPano.lat, lng: displayedPano.lng}]}
@@ -95,6 +124,9 @@ export function useExplorerManager(): ExplorerContextType {
         displayAll,
         displayByTag,
         displayByTagKeyword,
+        clearCurrentPano,
+        getExistingPanoById,
+        loadExistingPano,
         clickedMap,
         updateCurrentPos,
         updateCurrentPov

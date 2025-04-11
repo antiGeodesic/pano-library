@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocalEditorContext } from '@/contexts/LocalEditorContext';
-import MapComponent from '@/components/LocalEditor/MapComponent/MapComponent';
+//import MapComponent from '@/components/LocalEditor/MapComponent/MapComponent';
+import DeckMap from '@/components/Deck/DeckMap'
 import PanoEditorPanel from '@/components/LocalEditor/PanoEditor/PanoEditorPanel';
 import PanoSelectionPanel from '@/components/LocalEditor/PanoEditor/PanoSelectionPanel';
 import styles from '@/styles/LocalEditor.module.css';
@@ -10,8 +11,12 @@ const LocalEditorManager = () => {
   const {
     currentPanorama,
     isLoading,
-    //error,
-    //clearCurrentPano
+    clickedMap, 
+    loadNewPanorama,
+    getExistingPanoById,
+    loadExistingPanorama,
+    localPanos,
+    displayedPanorama
   } = useLocalEditorContext();
   //-commented-console.log("[LocalEditorManager] - Initialized")
   const { isLoaded, loadError } = useGoogleMapsApi({
@@ -42,7 +47,17 @@ const LocalEditorManager = () => {
       {/* Map View (Left Side) */}
 
         <div className={styles.panoEditorMap}>
-          <MapComponent />
+          {
+            //<MapComponent />
+          }
+          <DeckMap
+          clickedMap={clickedMap}
+          loadNewPano={loadNewPanorama}
+          getExistingPanoById={getExistingPanoById}
+          loadExistingPanorama={loadExistingPanorama}
+          displayedPanos={localPanos}
+          displayedPano={displayedPanorama}
+          />
           {/* onMapClick={(e) => e.latLng && loadPanoramaByLocation(e.latLng.lat(), e.latLng.lng())}*/}
         </div>
 

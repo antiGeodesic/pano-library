@@ -74,7 +74,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     clearCurrentPano();
   }, [clearCurrentPano]);
 
-  const getLocalPanoById = useCallback((localId: string): LocalPano | undefined => {
+  const getExistingPanoById = useCallback((localId: string): LocalPano | undefined => {
     return localPanos.find(pano => {console.warn("pano: ", pano.localId, "vs", localId);if(pano.localId === localId) return pano});
   }, [localPanos]);
 
@@ -91,7 +91,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     if(!localPano) return;
     //clearCurrentPano();
     if(displayedPanorama) {
-      if(getLocalPanoById(displayedPanorama.localId)) updateLocalPano(displayedPanorama);
+      if(getExistingPanoById(displayedPanorama.localId)) updateLocalPano(displayedPanorama);
       else addLocalPano(displayedPanorama);
     }
     setTimeout(() => {
@@ -99,7 +99,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
       setDisplayedPanorama(localPano)
       setIsLoading(false);
     }, 1000);
-  }, [addLocalPano, displayedPanorama, getLocalPanoById, updateLocalPano]);
+  }, [addLocalPano, displayedPanorama, getExistingPanoById, updateLocalPano]);
   const loadPanoramaByLocation = useCallback((async ( lat: number, lng: number ) => {
     setIsLoading(true);
     const svPanoData = await getPanoramaFromCoords(lat, lng);
@@ -117,35 +117,33 @@ export function useLocalEditorManager(): LocalEditorContextType {
 
   const loadExistingPanorama = useCallback((requestedPano: LocalPano) => {
     
-    console.warn("hello?")
+    if(displayedPanorama) {
+      //if(getExistingPanoById(displayedPanorama.localId)) updateLocalPano({...currentPanorama, ...displayedPanorama});
+      //else addLocalPano({...currentPanorama, ...displayedPanorama});
+      if(!getExistingPanoById(displayedPanorama.localId)) addLocalPano({...currentPanorama, ...displayedPanorama});
+    }
     
-    const localPano = getLocalPanoById(requestedPano.localId);
+    const localPano = getExistingPanoById(requestedPano.localId);
     if(!localPano) {
-      console.warn("no saved pano was found")
-      let lpid: string = "";
-      for(const lp of localPanos) {
-        lpid += lp.localId + ", ";
-      }
-      console.warn("localIds (length: ", localPanos.length, "): ", lpid)
-      console.warn("requestedPano: ", requestedPano)
-      console.warn("localId: ", requestedPano.localId)
-
       return;
     } 
     setCurrentPanorama(localPano);
-    setDisplayedPanorama(localPano)
+    setDisplayedPanorama(localPano);
+    setPendingPanorama(localPano);
     setCurrentPanoramaIsNew(false);
-  }, [getLocalPanoById, localPanos]);
+  }, [getExistingPanoById,currentPanorama, displayedPanorama, addLocalPano]);
 
   const loadNewPanorama = useCallback(async (localPano: LocalPano) => {
     if(displayedPanorama) {
-      if(getLocalPanoById(displayedPanorama.localId)) updateLocalPano({...currentPanorama, ...displayedPanorama});
-      else addLocalPano({...currentPanorama, ...displayedPanorama});
+      //if(getExistingPanoById(displayedPanorama.localId)) updateLocalPano({...currentPanorama, ...displayedPanorama});
+      //else addLocalPano({...currentPanorama, ...displayedPanorama});
+      if(!getExistingPanoById(displayedPanorama.localId)) addLocalPano({...currentPanorama, ...displayedPanorama});
     }
     setCurrentPanorama(localPano);
-    setDisplayedPanorama(localPano)
+    setDisplayedPanorama(localPano);
+    setPendingPanorama(localPano);
     setCurrentPanoramaIsNew(true);
-  }, [addLocalPano, currentPanorama, displayedPanorama, getLocalPanoById, updateLocalPano]);
+  }, [addLocalPano, currentPanorama, displayedPanorama, getExistingPanoById]);
 
   
 
@@ -248,6 +246,10 @@ export function useLocalEditorManager(): LocalEditorContextType {
     clearCurrentPano();
   }, [currentPanorama, displayedPanorama, clearCurrentPano])
   
+
+  const setLocalPanoList = (newLPs: LocalPano[]) => {
+    setLocalPanos(newLPs);
+  }
   return {
     localPanos,
     currentPanorama,
@@ -262,7 +264,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
     addLocalPano,
     updateLocalPano,
     deleteLocalPano,
-    getLocalPanoById,
+    getExistingPanoById,
     setCurrentSvPanorama,
     isLoading,
     //error,
@@ -282,6 +284,12 @@ export function useLocalEditorManager(): LocalEditorContextType {
     updateDisplayedPano,
     deleteDisplayedPano,
     clearDisplayedPano
+
+
+
+
+    ,
+    setLocalPanoList
   };
 }
 //import { useState, useCallback, useEffect } from 'react'; // Added useEffect
@@ -345,7 +353,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //
 //  // --- State Accessors ---
 //  // Memoized: Depends on `localPanos` state
-//  const getLocalPanoById = useCallback((localId: string): LocalPano | undefined => {
+//  const getExistingPanoById = useCallback((localId: string): LocalPano | undefined => {
 //    return localPanos.find(pano => pano.localId === localId);
 //  }, [localPanos]);
 //
@@ -424,11 +432,11 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    
 //  }, [loadPanorama]);
 //
-//  // Memoized: Depends on `getLocalPanoById`, `localPanos` (indirectly via getLocalPanoById)
+//  // Memoized: Depends on `getExistingPanoById`, `localPanos` (indirectly via getExistingPanoById)
 //  const loadExistingPanorama = useCallback((localPanoToLoad: LocalPano) => {
 //      // The check if it exists should happen *before* calling this ideally,
 //      // but we ensure it's the exact object from state if possible.
-//      const currentVersionInState = getLocalPanoById(localPanoToLoad.localId);
+//      const currentVersionInState = getExistingPanoById(localPanoToLoad.localId);
 //      const panoToLoad = currentVersionInState ?? localPanoToLoad; // Use state version if available
 //
 //      //-commented-console.log("[useLocalEditorManager] Loading existing panorama:", panoToLoad.localId);
@@ -437,7 +445,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //      setCurrentPanoramaIsNew(false);
 //      setError(null);
 //      setIsLoading(false);
-//  }, [getLocalPanoById]); // Dependency is getLocalPanoById
+//  }, [getExistingPanoById]); // Dependency is getExistingPanoById
 //
 //  // This seems redundant now with loadPanorama? Or is it for loading *from* StreetViewComponent's interactions?
 //  // Let's assume it's for taking a potentially modified 'displayedPanorama' and making it 'current'
@@ -578,7 +586,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    addLocalPano,
 //    updateLocalPano,
 //    deleteLocalPano,
-//    getLocalPanoById,
+//    getExistingPanoById,
 //    setCurrentSvPanorama, // Keep if used
 //    isLoading,
 //    error,

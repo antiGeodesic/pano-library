@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import StreetViewComponent from '@/components/LocalEditor/PanoEditor/StreetViewComponent'
 import CoverageDatesDropdown from '@/components/LocalEditor/PanoEditor/CoverageDatesDropdown';
 import AddressDisplay from '@/components/LocalEditor/PanoEditor/AddressDisplay';
@@ -14,13 +14,41 @@ const ExplorerPanoViewer: React.FC = () => {
     setPendingPano,
     setPanoId,
     updateCurrentPos,
-    updateCurrentPov
+    updateCurrentPov,
+    clearCurrentPano
   } = useExplorerContext();
   console.log("[ExplorerPanoViewer]----------------DisplayedPano: ", displayedPano)
   console.log("[ExplorerPanoViewer]----------------InitialPano: ", initialPano)
+  const [toggled, setToggled] = useState<boolean>(false);
   if (!initialPano || !displayedPano) return null;
   
-  
+  const handleClear = async() => {
+
+    clearCurrentPano()
+};
+
+
+const renderButton = (label: string, confirmLabel: string, action: () => void, className: string) => {
+return (
+  <button
+    className={`${styles.publishButton} ${className} ${toggled ? styles.publishButtonToggled : ''}`}
+    onClick={() => {
+
+      if (toggled) {
+        action();
+        setToggled(false);
+      } else {
+        setToggled(true);
+      }
+    }}
+    aria-live="polite"
+  >
+    <span className={`${styles.publishButtonContent} ${toggled ? styles.publishButtonContentToggled : ''}`}>
+      {toggled ? confirmLabel : label}
+    </span>
+  </button>
+);
+};
 
   return (
     <div className={styles.panoEditorPanel}>
@@ -44,6 +72,9 @@ const ExplorerPanoViewer: React.FC = () => {
         <AddressDisplay 
             displayedPano={displayedPano}
         />
+        <>
+          {renderButton('Close', 'Confirm Close', handleClear, styles.closeButton)}
+        </>
       </div>
     </div>
 

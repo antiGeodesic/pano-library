@@ -135,3 +135,71 @@
     display: inline-block;
     transition: all 0.25s ease;
   }
+
+
+  .coverageInfo {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .editButton {
+    border-radius: 10px;
+    border: 3px solid #000000;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+  }
+  
+  .editButton:hover {
+    transform: scale(1.05);
+    border-radius: 15px;
+  }
+  .editButtonToggled, .editButtonToggled:hover {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+    transform: rotateX(180deg);
+    background-color: var(--button-color) !important; /* or any highlight color */
+    filter: brightness(1.1);
+  }
+  
+  .editButtonContent {
+    user-select: none;
+    display: inline-block;
+    transition: all 0.25s ease;
+  }
+  .editButtonContentToggled {
+    user-select: none;
+    transform: rotateX(-180deg);
+  }
+  /*.editButtonToggled:hover {
+    transform: rotateX(180deg) scaleY(-1) scale(1.05);
+    border-radius: 15px;
+  }*/
+  .saveButton {
+    --button-color: #a0ff00;
+    border: 3px solid var(--button-color);
+  }
+  
+  .updateButton {
+    --button-color: #a0ff00;
+    border: 3px solid var(--button-color);
+  }
+  
+  .splitButton {
+    --button-color: #a000ff;
+    border: 3px solid var(--button-color);
+  }
+  
+  .deleteButton {
+    --button-color: #ff0000;
+    border: 3px solid var(--button-color);
+  }
+  
+  .closeButton {
+    --button-color: #ffa000;
+    border: 3px solid var(--button-color);
+    cursor: pointer;
+  }

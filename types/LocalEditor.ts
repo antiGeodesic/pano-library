@@ -91,7 +91,7 @@ export type SVRequestOptions =
     setCurrentPanorama: (panorama: LocalPano | null) => void;
     setDisplayedPanorama: (panorama: LocalPano | null) => void;
     setPendingPanorama: (panorama: LocalPano | null) => void;
-    getLocalPanoById: (localId: string) => LocalPano | undefined;
+    getExistingPanoById: (localId: string) => LocalPano | undefined;
     setCurrentSvPanorama: (panorama: google.maps.StreetViewPanorama | null) => void;
     isLoading: boolean;
     //error: string | null;
@@ -112,6 +112,11 @@ export type SVRequestOptions =
     updateDisplayedPano: () => void;
     deleteDisplayedPano: () => void;
     clearDisplayedPano: () => void;
+
+
+
+
+    setLocalPanoList: (newLPs: LocalPano[]) => void;
   }
   // --- NEW TYPES ---
 

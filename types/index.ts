@@ -21,3 +21,19 @@ export interface TagCategory {
     z: number,
     t: string
   }
+
+  export interface DataBasePano {
+    id: number;
+    gen: string;
+    localId: string; // A unique identifier for local storage
+    panoId: string;
+    lat: number;
+    lng: number;
+    heading: number;
+    pitch: number;
+    zoom: number;
+    date: string;
+    address: {country: string, subdivision: string, region: string, road: string};
+    description: string;
+    tags: TagCategory[];
+  }
