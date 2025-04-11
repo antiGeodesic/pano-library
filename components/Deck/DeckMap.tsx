@@ -243,7 +243,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
         return {
             position: [loc.lng, loc.lat],
             icon: isHovered ? icons.highlightedArrow : icons.arrow,
-      angle: loc.heading || 0,
+      angle: -loc.heading || 0,
       id: loc.localId,
         }
       
@@ -252,7 +252,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
     const highlightedLocation = displayedPano ? [{
       position: [displayedPano.lng, displayedPano.lat],
       icon: icons.highlightedArrow,
-      angle: displayedPano.heading || 0,
+      angle: -displayedPano.heading || 0,
       id: displayedPano.localId,
     }] : [];
     
