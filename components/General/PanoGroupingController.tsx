@@ -43,7 +43,14 @@ console.log(primaryDataGroups)
             />
           }
         </div>
-
+        <div className={styles.primaryPanoGroupWrapper}>
+          {
+            primaryDataGroups.gens &&
+            <PanoGroupingComponent 
+              dataGroup={primaryDataGroups.gens}
+            />
+          }
+        </div>
     </div>
   );
 };
