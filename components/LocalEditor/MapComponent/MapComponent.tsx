@@ -481,7 +481,7 @@ const MapComponent: React.FC = () => {
                 setNoPanoMarkerPosition(latLngLiteral); // Set state here
             }
         } catch (error) {
-           //commented-console.error("Error during map click processing (outer):", error);
+           console.error("Error during map click processing (outer):", error);
             setNoPanoMarkerPosition(latLngLiteral); // Show marker even on error
         }
     }, [clickedMap, loadNewPanorama]); // Dependencies from context
