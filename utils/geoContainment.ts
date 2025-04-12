@@ -105,7 +105,8 @@ type CountryNameMap = {
 
 
 
-import { point, Polygon, MultiPolygon, Feature } from '@turf/helpers';
+import { point } from '@turf/helpers';
+import type { Polygon, MultiPolygon, Feature } from 'geojson';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import rawCountryNames from "@/data/countries_a3.json";
 const countryNames = rawCountryNames as CountryNameMap;
