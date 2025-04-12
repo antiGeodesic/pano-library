@@ -41,7 +41,7 @@ const CategoryEditor: React.FC = () => {
     
     setActiveCategories(newActiveCategories);
     setCurrentTags(newActiveCategories);
-    console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
+   //commented-console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
   };
 
   const defaultTag = '';
@@ -177,7 +177,7 @@ const CategoryEditor: React.FC = () => {
     
     setActiveCategories(newActiveCategories);
     setCurrentTags(newActiveCategories);
-    console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
+   //commented-console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
   };
 
   const defaultTag = '';
@@ -422,7 +422,7 @@ const CategoryEditor: React.FC = () => {
     setExpandedCategories({...expandedCategories, [x]: true});
     setExpandedSubCategories({...expandedSubCategories, [`${x}-${y}`]: true});
     
-    console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
+   //commented-console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
   };
 
   const toggleCategoryExpansion = (categoryIndex: number) => {
@@ -623,7 +623,7 @@ const CategoryEditor: React.FC = () => {
     setExpandedCategories({ ...expandedCategories, [x]: true });
     setExpandedSubCategories({ ...expandedSubCategories, [`${x}-${y}`]: true });
 
-    console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
+   //commented-console.log(`category: ${x}, subCategory: ${y}, sub-subCategory: ${z}`);
   };
 
   const toggleCategoryExpansion = (categoryIndex: number) => {

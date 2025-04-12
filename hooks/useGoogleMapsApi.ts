@@ -18,7 +18,7 @@ interface UseGoogleMapsApiOptions {
  */
 export function useGoogleMapsApi({ googleMapsApiKey }: UseGoogleMapsApiOptions) {
   if (!googleMapsApiKey) {
-    console.error("Google Maps API key is missing. Please provide NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.");
+   //commented-console.error("Google Maps API key is missing. Please provide NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.");
     // You could throw an error here or return a specific error state if preferred
   }
 

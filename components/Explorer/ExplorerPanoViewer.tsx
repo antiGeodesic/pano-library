@@ -17,8 +17,8 @@ const ExplorerPanoViewer: React.FC = () => {
     updateCurrentPov,
     clearCurrentPano
   } = useExplorerContext();
-  console.log("[ExplorerPanoViewer]----------------DisplayedPano: ", displayedPano)
-  console.log("[ExplorerPanoViewer]----------------InitialPano: ", initialPano)
+ //commented-console.log("[ExplorerPanoViewer]----------------DisplayedPano: ", displayedPano)
+ //commented-console.log("[ExplorerPanoViewer]----------------InitialPano: ", initialPano)
   const [toggled, setToggled] = useState<boolean>(false);
   if (!initialPano || !displayedPano) return null;
   
@@ -27,7 +27,9 @@ const ExplorerPanoViewer: React.FC = () => {
     clearCurrentPano()
 };
 
-
+function loadAvailableDatesData() {
+  return null;
+}
 const renderButton = (label: string, confirmLabel: string, action: () => void, className: string) => {
 return (
   <button
@@ -68,6 +70,7 @@ return (
         <CoverageDatesDropdown 
           displayedPano={displayedPano}
           setPanoId={setPanoId}
+          loadAvailableDatesData={loadAvailableDatesData}
         />
         <AddressDisplay 
             displayedPano={displayedPano}

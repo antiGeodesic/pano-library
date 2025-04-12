@@ -1,0 +1,122 @@
+.panoGroupingComponent {
+    width: 100%;
+    height: 100%;
+}
+
+.primaryPanoGroupWrapper {
+    width: 100%;
+    height: auto;
+
+    border-radius: 0.5rem;
+    border: 2px solid black;
+}
+
+.primaryPanoGroup {
+    width: 100%;
+    height: auto;
+}
+
+.primaryPanoGroupHeader {
+    width: 100%;
+    height: 2rem;
+    
+    background-color: darkgray;
+    border-radius: 1rem;
+    border: 2px solid red;
+}
+
+.primaryPanoGroupHeaderDisabled {
+
+}
+
+.primaryPanoGroupButton {
+    width: 100%;
+    height: 100%;
+}
+
+.primaryPanoGroupButtonDisabled {
+
+}
+
+.primaryPanoGroupDropdown {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.panoDataGroup {
+    width: auto;
+    height: auto;
+
+    margin-right: 1rem;
+}
+
+.panoDataGroupButton {
+    width: auto;
+    height: auto;
+
+    transition: all 0.15s ease;
+}
+
+.panoDataGroupButton:hover {
+    filter: brightness(0.9);
+}
+
+.panoDataGroupContent {
+    --content-height: 2rem;
+
+    --content-count-width: 1rem;
+    --content-value-width: auto;
+    --border-width: 4px;
+
+    width: auto;
+    height: var(--content-height);
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    pointer-events: none;
+    justify-content: center;
+
+    border: calc(var(--border-width) * 0.5) solid black;
+    border-radius: calc(var(--content-height) * 0.5);
+
+    text-align: center;
+    align-content: center;
+}
+
+.panoDataGroupContentCount {
+    width: 1.5rem;
+    height: calc(var(--content-height) - var(--border-width));
+
+    /*border: 2px solid green;
+    border-radius: calc(var(--content-height) * 0.5);*/
+    text-align: center;
+    text-anchor: middle;
+    align-content: center;
+    margin-right: calc(-1 * var(--border-width));
+
+    font-size: calc(var(--content-height) * 0.5 - var(--border-width));
+    color: #444444;
+}
+
+.panoDataGroupContentValue {
+    width: auto;
+    height: var(--content-height);
+
+    border: var(--border-width) solid black;
+    /*border-right: none;*/
+    border-radius: calc(var(--content-height) * 0.5);
+
+    margin-top: calc(-0.5 * var(--border-width));
+    margin-right: calc(-0.5 * var(--border-width));
+
+    padding-left: calc(var(--content-height) * 0.5);
+    padding-right: calc(var(--content-height) * 0.5);
+
+    text-anchor: calc(center - calc(var(--content-height) * 0.5));
+    color: #000000;
+    font-weight: 600;
+}

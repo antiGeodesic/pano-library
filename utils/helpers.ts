@@ -3,6 +3,16 @@ import { PanoramaData, DataBasePano } from '@/types';
 import { LocalPano, DataBaseItem } from '@/types/LocalEditor'; // Corrected import
 import { getCountryFromCoordinate } from '@/utils/geoContainment';
 //import { Ue } from '@/services/googleMapsService';
+export function generateRandomColor(): string {
+  return `#${Math.floor(Math.random()*16777215).toString(16)}`
+}
+export function monthNumberToName(m: string | number): string {
+  const num = typeof m == 'string' ? parseInt(m) : m;
+  const months = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const month = months[num - 1];
+  console.error("Num: ", num, ", Month: ", month);
+  return month;
+}
 export function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
   // Use optional chaining and nullish coalescing for safety
   // The 'any' assertion is sometimes necessary due to incomplete Google Maps types
@@ -10,18 +20,18 @@ export function extractImageDate(data: google.maps.StreetViewPanoramaData): stri
   const anyData = data as any;
   return anyData?.imageDate ?? anyData?.tiles?.imageDate ?? 'unknown';
 }
-function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: string, date: string}[] {
+function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: string, date: string, gen: string, panoData: google.maps.StreetViewPanoramaData | null}[] {
   // Parse the data to access all properties
   const parsedData = JSON.parse(JSON.stringify(data));
   
   // Check if time property exists
   if (!parsedData.time || !Array.isArray(parsedData.time)) {
-    console.warn('Time data not found or not in expected format', parsedData);
+   //commented-console.warn('Time data not found or not in expected format', parsedData);
     return [];
   }
   
   // Log for debugging
-  console.warn('Coverage data structure:', parsedData.time);
+ //commented-console.warn('Coverage data structure:', parsedData.time);
   
   // Define a more specific type for the date objects
   type DateObject = {
@@ -52,18 +62,20 @@ function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: s
     }
     
     if (!date) {
-      console.warn('Could not find date property for panorama:', panoId);
+     //commented-console.warn('Could not find date property for panorama:', panoId);
     }
     
     return {
       panoId,
-      date: date || 'Unknown Date'
+      date: date || 'Unknown Date',
+      gen: "",
+      panoData: null
     };
   });
 }
 //function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: string, date: string}[] {
 //  const dates: {pano: string, Mu: string}[] = JSON.parse((JSON.stringify(data))).time;
-//  console.warn(dates);
+// //commented-console.warn(dates);
 //  return dates.map(date => ({panoId: date.pano, date: date.Mu}));
 //}
 export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): Promise<{country: string, subdivision: string, region: string, road: string}> {
@@ -72,7 +84,7 @@ export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaDat
     return address;
   const country = await getCountryFromCoordinate(data.location.latLng.lat(), data.location.latLng.lng());
   const dataAddress = data.location?.description?.split(', ');
-  console.log(dataAddress)
+ //commented-console.log(dataAddress)
   if(dataAddress?.length == 3)
     address = {country: country, subdivision: dataAddress[2], region: dataAddress[1], road: dataAddress[0]}
   else if(dataAddress?.length == 2)
@@ -85,37 +97,37 @@ export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaDat
   /*if(metaData)
   {
     try{
-      console.log(`countryTag: ${metaData[5][0][1][4]}`)
+     //commented-console.log(`countryTag: ${metaData[5][0][1][4]}`)
     }
     catch(error){
         countryTag=null
     }
     try{
-        console.log(`elevationTag: ${metaData[5][0][1][1][0]}`)
+       //commented-console.log(`elevationTag: ${metaData[5][0][1][1][0]}`)
       }
     catch(error){
         elevationTag=null
     }
     try{
-        console.log(`roadTag: ${metaData[5][0][12][0][0][0][2][0]}`)
+       //commented-console.log(`roadTag: ${metaData[5][0][12][0][0][0][2][0]}`)
       }
     catch(error){
         roadTag=null
     }
     try{
-        console.log(`driDirTag: ${ccData[5][0][1][2][0]}`)
+       //commented-console.log(`driDirTag: ${ccData[5][0][1][2][0]}`)
       }
     catch(error){
         driDirTag=null
     }
     try{
-        console.log(`trekkerTag: ${ccData[6][5]}`)
+       //commented-console.log(`trekkerTag: ${ccData[6][5]}`)
       }
     catch(error){
         trekkerTag=null
     }
     try{
-        console.log(`floorTag: ${ccData[5][0][1][3][2][0]}`)
+       //commented-console.log(`floorTag: ${ccData[5][0][1][3][2][0]}`)
           }
     }
     catch(error){
@@ -128,7 +140,7 @@ export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaDat
 export async function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData | null): Promise<PanoramaData | null> {
   if(!data || !data.location || !data.location.pano || !data.location.latLng || !data) return null;
 
-  console.log("[Helpers}---------", data);
+ //commented-console.log("[Helpers}---------", data);
   const address = await getPanoramaAddress(data);
   return {
     gen: getCameraGen(data, address.country),
@@ -225,6 +237,7 @@ function gen2or3(data: google.maps.StreetViewPanoramaData, country: string): str
 function findCameraGen(data: google.maps.StreetViewPanoramaData, country: string) {
 
     if (data&&data.tiles) {
+     //commented-console.error(data.tiles.worldSize);
         if (data.tiles.worldSize.height === 1664) { // Gen 1
             return 'Gen 1';
         } else if (data.tiles.worldSize.height === 6656) { // Gen 2 or 3
@@ -237,17 +250,17 @@ function findCameraGen(data: google.maps.StreetViewPanoramaData, country: string
             } else {
                 date = 'nodata';
             }
-
-            if (date!=='nodata'&&((country === 'BD' && (date >= new Date('2021-04'))) ||
-                                  (country === 'EC' && (date >= new Date('2022-03'))) ||
-                                  (country === 'FI' && (date >= new Date('2020-09'))) ||
-                                  (country === 'IN' && (date >= new Date('2021-10'))) ||
-                                  (country === 'LK' && (date >= new Date('2021-02'))) ||
-                                  (country === 'KH' && (date >= new Date('2022-10'))) ||
-                                  (country === 'LB' && (date >= new Date('2021-05'))) ||
-                                  (country === 'NG' && (date >= new Date('2021-06'))) ||
-                                  (country === 'ST') ||
-                                  (country === 'US' && lat > 52 && (date >= new Date('2019-01'))))) {
+           //commented-console.error(date)
+            if (date!=='nodata'&&((country === 'Bangladesh' && (date >= new Date('2021-04'))) ||
+                                  (country === 'Ecuador' && (date >= new Date('2022-03'))) ||
+                                  (country === 'Finland' && (date >= new Date('2020-09'))) ||
+                                  (country === 'India' && (date >= new Date('2021-10'))) ||
+                                  (country === 'Sri Lanka' && (date >= new Date('2021-02'))) ||
+                                  (country === 'Cambodia' && (date >= new Date('2022-10'))) ||
+                                  (country === 'Lebanon' && (date >= new Date('2021-05'))) ||
+                                  (country === 'Nigeria' && (date >= new Date('2021-06'))) ||
+                                  (country === 'Sao Tome and Principe') ||
+                                  (country === 'United States of America' && lat > 52 && (date >= new Date('2019-01'))))) {
                 return 'Shitcam';
             }
             return gen2or3(data, country)
@@ -264,15 +277,18 @@ export function getCameraGenCache(panoId: string): string | null {
   if(genCache) return genCache.gen;
   return null;
 }
+export function genIsCorrectFormat(gen: string): boolean {
+  return (gen == "Gen 1" || gen == "Gen 2" || gen == "Gen 2 or 3" || gen == "Gen 3" || gen == "Gen 4" || gen == "Smallcam" || gen == "Shitcam" || gen == "Unofficial")
+}
 export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: string): string | null {
-  console.warn("...")
-  console.error("gen --- 1")
+ //commented-console.warn("...")
+ //commented-console.error("gen --- 1")
   const dataLocation = data.location;
   if(!dataLocation) return null;
   const genCache = panoIdCameraGenCache.find(item => item.panoId === dataLocation.pano)
   if(genCache) return genCache.gen;
   const gen = findCameraGen(data, country);
-  console.error("gen --- 2")
+ //commented-console.error("gen --- 2")
   panoIdCameraGenCache.push({panoId: dataLocation.pano, gen: gen});
   return gen;
 }

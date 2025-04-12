@@ -2,13 +2,13 @@ import { supabase } from '@/lib/supabaseClient';
 import { DataBasePano, TagCategory } from '@/types';
 export async function downloadAll(): Promise<DataBasePano[] | null> {
         const { data, error } = await supabase.from('pano-library-beta').select('*');
-        console.log(error?.message)
-        console.log(data)
+       //commented-console.log(error?.message)
+       //commented-console.log(data)
         if (error) {
-            console.warn(error);
+           //commented-console.warn(error);
             return null;
         }
-        console.log("Download Successful")
+       //commented-console.log("Download Successful")
         return data;
     }
     export async function downloadByTagKeyword(tag: string): Promise<DataBasePano[] | null> {
@@ -18,13 +18,13 @@ export async function downloadAll(): Promise<DataBasePano[] | null> {
             z: -1,
             t: tag,
           });
-          console.log(error?.message)
-          console.log(data)
+         //commented-console.log(error?.message)
+         //commented-console.log(data)
           if (error) {
-              console.warn(error);
+             //commented-console.warn(error);
               return null;
           }
-          console.log("Download Successful")
+         //commented-console.log("Download Successful")
           return data;
     }
     export async function downloadByTag(tag: string): Promise<DataBasePano[] | null> {
@@ -34,13 +34,13 @@ export async function downloadAll(): Promise<DataBasePano[] | null> {
             z: -1,
             t: tag,
           });
-          console.log(error?.message)
-          console.log(data)
+         //commented-console.log(error?.message)
+         //commented-console.log(data)
           if (error) {
-              console.warn(error);
+             //commented-console.warn(error);
               return null;
           }
-          console.log("Download Successful")
+         //commented-console.log("Download Successful")
           return data;
     }
     
@@ -51,12 +51,12 @@ export async function downloadAll(): Promise<DataBasePano[] | null> {
             z: tag.z,
             t: tag.t
           });
-          console.log(error?.message)
-        console.log(data)
+         //commented-console.log(error?.message)
+       //commented-console.log(data)
         if (error) {
-            console.warn(error);
+           //commented-console.warn(error);
             return null;
         }
-        console.log("Download Successful")
+       //commented-console.log("Download Successful")
         return data;
     }

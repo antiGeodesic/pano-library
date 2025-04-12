@@ -21,34 +21,34 @@ export function useExplorerManager(): ExplorerContextType {
     const displayAll = useCallback(async (): Promise<boolean> => {
         const data = await downloadAll();
         if (data) {
-            console.log("Yes")
-            for(const pano of data) {
-                console.log("lat: ", pano.lat, "lng: ", pano.lng)
-            }
+           //commented-console.log("Yes")
+            /*for(const pano of data) {
+               //commented-console.log("lat: ", pano.lat, "lng: ", pano.lng)
+            }*/
             setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
     }, []);
     const displayByTag = useCallback(async (tag: string): Promise<boolean> => {
-        console.log("Display By Tag")
+       //commented-console.log("Display By Tag")
         const data = await downloadByTag(tag);
         if (data) {
-            console.log("Yes")
-            for(const pano of data) {
-                console.log("lat: ", pano.lat, "lng: ", pano.lng)
-            }
+           //commented-console.log("Yes")
+            /*for(const pano of data) {
+               //commented-console.log("lat: ", pano.lat, "lng: ", pano.lng)
+            }*/
             setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
     }, []);
     const displayByTagKeyword = useCallback(async (tag: string): Promise<boolean> => {
-        console.log("Display By Tag")
+       //commented-console.log("Display By Tag")
         const data = await downloadByTagKeyword(tag);
         if (data) {
-            console.log("Yes")
-            for(const pano of data) {
-                console.log("lat: ", pano.lat, "lng: ", pano.lng)
-            }
+           //commented-console.log("Yes")
+            /*for(const pano of data) {
+               //commented-console.log("lat: ", pano.lat, "lng: ", pano.lng)
+            }*/
             setDisplayedPanos(data.map(dbPano => convertFromDataBasePano(dbPano)));
         }
         return typeof data !== null;
@@ -64,11 +64,11 @@ export function useExplorerManager(): ExplorerContextType {
 
         const loadExistingPano = useCallback((requestedPano: PanoramaData) => {
           
-          console.warn("hello?")
+         //commented-console.warn("hello?")
           
           const localPano = getExistingPanoById(requestedPano.localId);
           if(!localPano) {
-            console.warn("no saved pano was found")
+           //commented-console.warn("no saved pano was found")
             return;
           } 
           setInitialPano(localPano);
@@ -78,8 +78,8 @@ export function useExplorerManager(): ExplorerContextType {
     async function clickedMap(latLng: google.maps.LatLng): Promise<PanoramaData | null> {
         //-commented-console.log("Clicked at: ", latLng.lat(), ", ", latLng.lng())
         const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
-        console.log(svPanoData)
-        console.log(JSON.stringify(svPanoData))
+       //commented-console.log(svPanoData)
+       //commented-console.log(JSON.stringify(svPanoData))
         const panoramaData = await convertSvPanoramaData(svPanoData) as PanoramaData | null;
         return panoramaData;
       }

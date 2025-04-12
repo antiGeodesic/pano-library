@@ -112,7 +112,7 @@ export type SVRequestOptions =
     updateDisplayedPano: () => void;
     deleteDisplayedPano: () => void;
     clearDisplayedPano: () => void;
-
+    loadAvailableDatesData: () => void;
 
 
 

@@ -14,7 +14,7 @@ const LocalPanoList: React.FC = () => {
   function activatePanos() {
     btnStyle = {width:'10rem', height:'4rem', backgroundColor: 'blue', color:'white'};
     btnConent = "Clicked"
-    console.warn(btnConent)
+   //commented-console.warn(btnConent)
     const newLPs = carMeta.customCoordinates.map(car => {const newLP: PanoramaData = {
       gen: "gen4",
       localId: crypto.randomUUID(), // A unique identifier for local storage

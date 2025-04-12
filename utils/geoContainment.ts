@@ -24,7 +24,7 @@ async function addData(country: string): Promise<GeojsonInfo | null> {
   return item;
   }
   catch {
-    console.warn("Somethign went wrong with getting geojson data")
+   //commented-console.warn("Somethign went wrong with getting geojson data")
     return null;
   }
 }
@@ -49,7 +49,7 @@ export async function isCoordinateInCountry(
     const geojson = await getData(country);
     const pt = point([lng, lat]);
     if(!geojson){
-      console.error(`Error getting geojson data for ${country}:`);
+     //commented-console.error(`Error getting geojson data for ${country}:`);
       return false;
     }
     try {
@@ -71,7 +71,7 @@ console.log("catch x3")
 console.log(geojson.geometry.type)
 if(geojson.geometry.type == "Polygon") {
   if (booleanPointInPolygon(pt, geojson.geometry)) {
-    console.log(geojson.geometry.type)
+   //commented-console.log(geojson.geometry.type)
     return true;
   }
 }
@@ -82,7 +82,7 @@ if(geojson.geometry.type == "Polygon") {
 
     return false;
   } catch (error) {
-    console.error(`Error checking containment for ${country}:`, error);
+   //commented-console.error(`Error checking containment for ${country}:`, error);
     return false;
   }
 }
@@ -127,7 +127,7 @@ export async function isCoordinateInCountry(
       !geojson.geometry.coordinates ||
       !geojson.geometry.coordinates.length
     ) {
-      console.error("Invalid geometry for country:", country, geojson.geometry);
+     //commented-console.error("Invalid geometry for country:", country, geojson.geometry);
       return false;
     }
 
@@ -136,7 +136,7 @@ export async function isCoordinateInCountry(
 
     return isInside;
   } catch (error) {
-    console.error(`Error checking containment for ${country}:`, error);
+   console.error(`Error checking containment for ${country}:`, error);
     return false;
   }
 }
@@ -147,7 +147,7 @@ export async function getCountryA3FromCoordinate(lat: number, lng: number): Prom
   const roundedLng = Math.floor(lng).toString();
 
   const countries = latLngList.lat?.[roundedLat]?.[roundedLng]?.countries;
-  console.log("[geoContainment.ts]" ,countries)
+ //commented-console.log("[geoContainment.ts]" ,countries)
   if (Array.isArray(countries) && countries.length == 1) {
     return countries[0];
   } else if(Array.isArray(countries)) {
@@ -157,12 +157,12 @@ export async function getCountryA3FromCoordinate(lat: number, lng: number): Prom
         return country;
       }
     }
-    console.error(`Did not find a matching country at coordinate (lat: ${lat}, lng: ${lng})`)
-    console.error("Countries are: ", countries)
+   //commented-console.error(`Did not find a matching country at coordinate (lat: ${lat}, lng: ${lng})`)
+   //commented-console.error("Countries are: ", countries)
     return "Unknown";
   }
   else {
-    console.warn(`No data for lat ${lat}, lng ${lng}`);
+   //commented-console.warn(`No data for lat ${lat}, lng ${lng}`);
     return "Unknown";
   }
 }
@@ -173,7 +173,7 @@ export async function getCountryFromCoordinate(lat: number, lng: number): Promis
     const country = countryNames.A3[countryA3];
     if(country) return country;
   } catch {
-    console.error("No Country Was found when converting from A3 - ", countryA3);
+   //commented-console.error("No Country Was found when converting from A3 - ", countryA3);
     
   }
   return countryA3;

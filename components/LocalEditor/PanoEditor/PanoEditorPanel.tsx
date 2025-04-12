@@ -20,7 +20,8 @@ const PanoEditorPanel: React.FC = () => {
     setStreetViewPanoId,
     updateCurrentPos,
     updateCurrentPov,
-    setCurrentTags
+    setCurrentTags,
+    loadAvailableDatesData
   } = useLocalEditorContext();
   if (!currentPanorama || !displayedPanorama) return null;
   //-commented-console.log("[PanoEditorPanel] - Initialized")
@@ -44,6 +45,7 @@ const PanoEditorPanel: React.FC = () => {
         <CoverageDatesDropdown 
           displayedPano={displayedPanorama}
           setPanoId={setStreetViewPanoId}
+          loadAvailableDatesData={loadAvailableDatesData}
         />
         <AddressDisplay 
           displayedPano={displayedPanorama}

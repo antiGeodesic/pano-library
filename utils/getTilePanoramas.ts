@@ -71,7 +71,7 @@
 //        .filter((pano): pano is TilePano => pano !== null); // ✅ This fixes the type
 //      
 //      } catch (err) {
-//        console.error('Failed to fetch tile panos:', err);
+//       //commented-console.error('Failed to fetch tile panos:', err);
 //        return [];
 //      }
 //    }

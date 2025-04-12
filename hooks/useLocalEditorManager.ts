@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { TagCategory } from '@/types/index'
 import { LocalPano, LocalEditorContextType, DataBaseItem } from '@/types/LocalEditor';
 import { getPanoramaFromCoords, getPanoramaFromPanoId } from '@/services/googleMapsService'
-import { convertSvPanoramaData, convertToDataBaseItem } from '@/utils/helpers'
+import { convertSvPanoramaData, convertToDataBaseItem, genIsCorrectFormat, getCameraGenCache, getCameraGen } from '@/utils/helpers'
 import { supabase } from '@/lib/supabaseClient';
 
 export function useLocalEditorManager(): LocalEditorContextType {
@@ -20,10 +20,10 @@ export function useLocalEditorManager(): LocalEditorContextType {
     const { data, error } = await supabase.from('pano-library-beta').insert([dbItem]);
   
     if (error) {
-      console.error('Error uploading:', error.message);
+     //commented-console.error('Error uploading:', error.message);
       return false;
     } else {
-      console.log('Upload successful:', data);
+     console.log('Upload successful:', data);
       return true;
     }
   };
@@ -50,18 +50,18 @@ export function useLocalEditorManager(): LocalEditorContextType {
     
     setLocalPanos(prev => {
       // Log the PREVIOUS state length inside the updater
-      console.warn(`Adding pano. Previous localPanos length: ${prev.length}`);
+     //commented-console.warn(`Adding pano. Previous localPanos length: ${prev.length}`);
       return [...prev, newPano];
     });
-    console.warn("no saved pano was found")
-      let lpid: string = "";
+   //commented-console.warn("no saved pano was found")
+      /*let lpid: string = "";
       for(const lp of localPanos) {
         lpid += lp.localId + ", ";
-      }
-      console.warn("localIds (length: ", localPanos.length, "): ", lpid)
+      }*/
+     //commented-console.warn("localIds (length: ", localPanos.length, "): ", lpid)
     //setError(null)
     clearCurrentPano();
-  }, [clearCurrentPano, localPanos]);
+  }, [clearCurrentPano]);
 
   const updateLocalPano = useCallback((panoData: LocalPano) => {
     
@@ -103,7 +103,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
   const loadPanoramaByLocation = useCallback((async ( lat: number, lng: number ) => {
     setIsLoading(true);
     const svPanoData = await getPanoramaFromCoords(lat, lng);
-    console.log(svPanoData)
+   //commented-console.log(svPanoData)
     loadPanorama(svPanoData);
   }), [loadPanorama]);
 
@@ -206,7 +206,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
       setDisplayedPanorama({...currentPanorama, ...displayedPanorama, tags: updatedTags})
       return;
     }
-    console.warn("Tried to update tag with incompatible index")
+   //commented-console.warn("Tried to update tag with incompatible index")
   }), [currentPanorama, displayedPanorama]);
   const updateCurrentDescription = useCallback((description: string) => {
     if(!displayedPanorama) return;
@@ -216,8 +216,8 @@ export function useLocalEditorManager(): LocalEditorContextType {
   async function clickedMap(latLng: google.maps.LatLng): Promise<LocalPano | null> {
     //-commented-console.log("Clicked at: ", latLng.lat(), ", ", latLng.lng())
     const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
-    console.log(svPanoData)
-    console.log(JSON.stringify(svPanoData))
+   //commented-console.log(svPanoData)
+   //commented-console.log(JSON.stringify(svPanoData))
     const panoramaData = await convertSvPanoramaData(svPanoData) as LocalPano | null;
     return panoramaData;
   }
@@ -246,7 +246,35 @@ export function useLocalEditorManager(): LocalEditorContextType {
     if(!currentPanorama || !displayedPanorama) return;
     clearCurrentPano();
   }, [currentPanorama, displayedPanorama, clearCurrentPano])
-  
+  const loadAvailableDatesData = useCallback(async () =>  {
+    
+    if(!displayedPanorama || displayedPanorama.address.country == "" || displayedPanorama.address.country == "Unknown") return;
+    console.log("Loading", displayedPanorama.availableDates.length, " gens")
+    const newAvailableDates = [];
+    for(const dateInfo of displayedPanorama.availableDates) {
+      const genCache = getCameraGenCache(dateInfo.panoId);
+      if(genIsCorrectFormat(dateInfo.gen)) {
+
+        const newDateInfo = {panoId: dateInfo.panoId, date: dateInfo.date, panoData: dateInfo.panoData, gen: dateInfo.gen}
+        newAvailableDates.push(newDateInfo);
+      }
+      else if(genCache) {
+        const newDateInfo = {panoId: dateInfo.panoId, date: dateInfo.date, panoData: dateInfo.panoData, gen: genCache}
+        newAvailableDates.push(newDateInfo);
+      }
+      else
+      {
+        const dateInfoPano = dateInfo.panoData ?? await getPanoramaFromPanoId(dateInfo.panoId);
+        const gen = getCameraGen(dateInfoPano, displayedPanorama.address.country);
+        if(gen) {
+          const newDateInfo = {panoId: dateInfo.panoId, date: dateInfo.date, panoData: dateInfoPano, gen: gen};
+          newAvailableDates.push(newDateInfo);
+        }
+
+      }
+    }
+    setDisplayedPanorama({...displayedPanorama, availableDates: newAvailableDates})
+  }, [displayedPanorama])
 
   const setLocalPanoList = (newLPs: LocalPano[]) => {
     setLocalPanos(newLPs);
@@ -284,8 +312,8 @@ export function useLocalEditorManager(): LocalEditorContextType {
     saveDisplayedPano,
     updateDisplayedPano,
     deleteDisplayedPano,
-    clearDisplayedPano
-
+    clearDisplayedPano,
+    loadAvailableDatesData
 
 
 
@@ -324,7 +352,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    //-commented-console.log("[useLocalEditorManager] Adding Local Pano:", newPano);
 //    setLocalPanos(prev => {
 //      // Log the PREVIOUS state length inside the updater
-//      console.warn(`Adding pano. Previous localPanos length: ${prev.length}`);
+//     //commented-console.warn(`Adding pano. Previous localPanos length: ${prev.length}`);
 //      return [...prev, newPano];
 //    });
 //    setError(null);
@@ -365,7 +393,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    setError(null);
 //
 //    if (!svPanoramaData) {
-//      console.error('Invalid panorama data received.');
+//     //commented-console.error('Invalid panorama data received.');
 //      setError('Could not find panorama data.');
 //      setIsLoading(false);
 //      return; // Exit early
@@ -373,7 +401,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //
 //    const localPano = convertSvPanoramaData(svPanoramaData);
 //    if (!localPano) {
-//      console.error('Failed conversion from StreetViewPanoramaData to LocalPano');
+//     //commented-console.error('Failed conversion from StreetViewPanoramaData to LocalPano');
 //      setError('Failed to process panorama data.');
 //      setIsLoading(false);
 //      return; // Exit early
@@ -426,7 +454,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    setError(null);
 //    const svPanoData = await getPanoramaFromPanoId(panoId);
 //    if(!svPanoData) {
-//      console.warn("nothing happened")
+//     //commented-console.warn("nothing happened")
 //      return;
 //    }
 //    loadPanorama(svPanoData); // loadPanorama handles setting state/loading false
@@ -522,7 +550,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //        const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
 //        return convertSvPanoramaData(svPanoData) as LocalPano | null; // Assume conversion handles null
 //    } catch (err) {
-//        console.error("Error getting panorama on map click:", err);
+//       //commented-console.error("Error getting panorama on map click:", err);
 //        return null;
 //    }
 //  }, []); // No dependencies assuming service/utils are stable
@@ -540,7 +568,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //    } else {
 //        // If it already has a real localId, maybe this should be update?
 //        // Or maybe saving always creates a new copy? For now, assume add=new.
-//        console.warn("Attempting to save a panorama that might already be saved. Use Update instead?");
+//       //commented-console.warn("Attempting to save a panorama that might already be saved. Use Update instead?");
 //        addLocalPano(dataToSave); // Creates a new entry with a new localId
 //    }
 //  }, [displayedPanorama, addLocalPano]);
@@ -548,7 +576,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //  // Memoized: Depends on functions and state it reads/uses
 //  const updateDisplayedPano = useCallback(() => {
 //    if (!displayedPanorama || displayedPanorama.localId.startsWith('temp-')) {
-//        console.warn("Cannot update - displayed panorama is new or null.");
+//       //commented-console.warn("Cannot update - displayed panorama is new or null.");
 //        return;
 //    }
 //    //-commented-console.log("Updating saved panorama from displayed:", displayedPanorama.localId);
@@ -558,7 +586,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 //  // Memoized: Depends on functions and state it reads/uses
 //  const deleteDisplayedPano = useCallback(() => {
 //    if (!displayedPanorama || displayedPanorama.localId.startsWith('temp-')) {
-//         console.warn("Cannot delete - displayed panorama is new or null.");
+//        //commented-console.warn("Cannot delete - displayed panorama is new or null.");
 //         return; // Can't delete one not saved yet
 //    }
 //    //-commented-console.log("Deleting displayed panorama:", displayedPanorama.localId);

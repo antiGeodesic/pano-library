@@ -19,7 +19,7 @@ const StreetViewComponent: React.FC<StreetViewComponentProps> = ({ initialPano, 
     const panoramaRef = useRef<google.maps.StreetViewPanorama>(null);
     const panoListenerRef = useRef<google.maps.MapsEventListener | null>(null);
     const povListenerRef = useRef<google.maps.MapsEventListener | null>(null);
-    console.log("initial Pano:", initialPano)
+   //commented-console.log("initial Pano:", initialPano)
 
     //if(initialPano?.panoId == displayedPanorama?.panoId &&displayedPanorama?.panoId != panoramaRef.current?.getPano()) panoramaRef.current = null;
 
@@ -40,9 +40,9 @@ const StreetViewComponent: React.FC<StreetViewComponentProps> = ({ initialPano, 
         };
         //-commented-console.log("AAAAAAAAAAAAAA")
         if (streetViewRef.current && initialPano) {
-            console.log("[StreetViewComponent] - 1:", initialPano.panoId)
+           //commented-console.log("[StreetViewComponent] - 1:", initialPano.panoId)
             if (!panoramaRef.current || pendingPano) {
-                console.log("[StreetViewComponent] - 2:", initialPano.panoId)
+               //commented-console.log("[StreetViewComponent] - 2:", initialPano.panoId)
                 panoramaRef.current = new google.maps.StreetViewPanorama(streetViewRef.current, panoramaOptions);
 
             }
@@ -50,7 +50,7 @@ const StreetViewComponent: React.FC<StreetViewComponentProps> = ({ initialPano, 
             if (panoramaRef.current && !panoListenerRef.current) {
                 panoListenerRef.current = google.maps.event.addListener(panoramaRef.current, 'position_changed', () => {
                     if (!panoramaRef.current) return;
-                    console.warn("[STreetViewComponent] - new PanoId: ", panoramaRef.current.getPano())
+                   //commented-console.warn("[STreetViewComponent] - new PanoId: ", panoramaRef.current.getPano())
                     const coord = panoramaRef.current.getPosition();
                     const description = panoramaRef.current.getLocation().description;
                     //console.log("panoramaRef------",panoramaRef)
@@ -192,7 +192,7 @@ const StreetViewComponent: React.FC = () => {
                 movementHistory: [...(displayedPanorama?.movementHistory ?? initialPano.movementHistory), movement]
 
              });
-             console.warn(displayedPanorama?.movementHistory ?? "No movement History")
+            //commented-console.warn(displayedPanorama?.movementHistory ?? "No movement History")
          }
          
       });
@@ -212,7 +212,7 @@ const StreetViewComponent: React.FC = () => {
                 pitch: pov.pitch,
                 zoom: zoom,
              });
-             console.warn(displayedPanorama?.heading)
+            //commented-console.warn(displayedPanorama?.heading)
          }
       });
     }

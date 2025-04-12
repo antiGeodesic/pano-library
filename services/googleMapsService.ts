@@ -9,7 +9,7 @@ function getApiKey(): string {
     const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!key) {
         const errorMsg = "Google Maps API Key (NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) is not configured in environment variables.";
-        console.error(errorMsg);
+       console.error(errorMsg);
         return ''; // Returning empty string, handle errors in calling functions
     }
     return key;
@@ -31,7 +31,7 @@ export function getStreetViewServiceInstance(): google.maps.StreetViewService | 
         cachedSvServiceInstance = new google.maps.StreetViewService();
         return cachedSvServiceInstance;
     }
-    console.error(">>> getStreetViewServiceInstance: Google Maps API or StreetViewService not ready for instantiation.");
+   //commented-console.error(">>> getStreetViewServiceInstance: Google Maps API or StreetViewService not ready for instantiation.");
     return null; // API not ready
 }
 /*export function getStreetViewPanoramaInstance(): google.maps.StreetViewPanorama | null {
@@ -134,7 +134,7 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
             return await response.json();
         }
     } catch {
-        console.error(`There was a problem with GetMetaData`);
+       //commented-console.error(`There was a problem with GetMetaData`);
     }
 }*/
 /*const loadPanoramaByPanoId = useCallback(async (panoId: string) => {
@@ -167,7 +167,7 @@ export async function getPanoramaFromCoords(lat: number, lng: number): Promise<g
             lng: latLng.lng();
         };
     } catch (err) {
-      console.error(`usePanoManagement: Error during loadPanoramaByPanoId:`, err);
+     //commented-console.error(`usePanoManagement: Error during loadPanoramaByPanoId:`, err);
       const message = err instanceof Error ? err.message : 'An unknown error occurred while loading the panorama.';
       setError(message);
       // Clear potentially partially set states
@@ -215,7 +215,7 @@ export function getSVData2(
                 //-commented-console.log(`>>> getSVData: Status OK. Resolving promise.`);
                 resolve(data);
             } else {
-                console.warn(`>>> getSVData: Status not OK (${status}). Rejecting promise.`);
+               //commented-console.warn(`>>> getSVData: Status not OK (${status}). Rejecting promise.`);
                 // Don't clear the cache on error, the instance itself is likely fine
                 reject(new Error(`Panorama not found or request failed. Status: ${status}`));
             }
@@ -347,7 +347,7 @@ export function getStreetViewPreviewUrl(
               new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`Timeout fetching pano ${panoId}`)), 5000)) // 5-second timeout
           ]).catch(error => {
                // Ensure getSVData rejections are caught here so allSettled sees them as 'rejected'
-               console.warn(`findNearbyPanoramas: Error fetching linked pano ${panoId}:`, error.message);
+              //commented-console.warn(`findNearbyPanoramas: Error fetching linked pano ${panoId}:`, error.message);
                return { error, panoId }; // Return an object indicating failure
           });
       });
@@ -387,19 +387,19 @@ export function getStreetViewPreviewUrl(
                        //-commented-console.log(`findNearbyPanoramas: Added nearby pano ${linkedPanoData.location.pano} (Date: ${date}, Dist: ${distance.toFixed(1)}m)`);
                   }
               } catch (processingError) {
-                   console.warn(`findNearbyPanoramas: Error processing fulfilled result for pano ${linkedPanoData.location?.pano}:`, processingError);
+                  //commented-console.warn(`findNearbyPanoramas: Error processing fulfilled result for pano ${linkedPanoData.location?.pano}:`, processingError);
               }
           } else {
                //-commented-console.log(`findNearbyPanoramas: Fulfilled result lacked valid location data.`);
           }
       } else if (result.status === 'rejected') {
-          console.warn(`findNearbyPanoramas: A linked pano fetch promise was rejected:`, result.reason);
+         //commented-console.warn(`findNearbyPanoramas: A linked pano fetch promise was rejected:`, result.reason);
       } else {
            // Handle cases where the promise fulfilled but contained our custom error object
            if(result.value && (result.value as any).error){
-              console.warn(`findNearbyPanoramas: Caught error fetching linked pano ${ (result.value as any).panoId } within Promise.allSettled.`);
+             //commented-console.warn(`findNearbyPanoramas: Caught error fetching linked pano ${ (result.value as any).panoId } within Promise.allSettled.`);
            } else {
-              console.warn(`findNearbyPanoramas: Unhandled fulfilled status with unexpected value:`, result.value);
+             //commented-console.warn(`findNearbyPanoramas: Unhandled fulfilled status with unexpected value:`, result.value);
            }
       }
   });

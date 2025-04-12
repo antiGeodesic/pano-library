@@ -7,7 +7,7 @@ const StreetViewLayerManager: React.FC = () => {
 
         // Check if StreetViewCoverageLayer constructor is available
         if (!google.maps.StreetViewCoverageLayer) {
-            console.warn("StreetViewCoverageLayer not available. Ensure 'streetView' library is loaded via APIProvider.");
+           //commented-console.warn("StreetViewCoverageLayer not available. Ensure 'streetView' library is loaded via APIProvider.");
             return;
         }
 
@@ -222,7 +222,7 @@ function tileCacheKey(x: number,y: number,zoom: number, layerType: string) {
 //                setNoPanoMarkerPosition(latLngLiteral); // Set state here
 //            }
 //        } catch (error) {
-//            console.error("Error during map click processing (outer):", error);
+//           //commented-console.error("Error during map click processing (outer):", error);
 //            setNoPanoMarkerPosition(latLngLiteral); // Show marker even on error
 //        }
 //    }, [clickedMap, loadNewPanorama]); // Dependencies from context
@@ -391,7 +391,7 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
                     }
                 }
                 if (!found) {
-                    console.warn("Could not find custom overlay instance to remove.");
+                   //commented-console.warn("Could not find custom overlay instance to remove.");
                 }
             };
         }
@@ -408,7 +408,7 @@ const MapComponentContent: React.FC<MapComponentContentProps> = ({
     const isInBounds = (lat: number, lng: number): boolean => {
         return (lat < max.lat() && lat > min.lat() && lng < max.lng() && lng > min.lng())
     }
-    console.log("max: (", max.lng(), ", ", max.lat(), "), min: (", min.lng(), ", ", min.lat(), ")");
+   //commented-console.log("max: (", max.lng(), ", ", max.lat(), "), min: (", min.lng(), ", ", min.lat(), ")");
     return (
         <>
             {/* --- Markers --- */}
@@ -481,7 +481,7 @@ const MapComponent: React.FC = () => {
                 setNoPanoMarkerPosition(latLngLiteral); // Set state here
             }
         } catch (error) {
-            console.error("Error during map click processing (outer):", error);
+           //commented-console.error("Error during map click processing (outer):", error);
             setNoPanoMarkerPosition(latLngLiteral); // Show marker even on error
         }
     }, [clickedMap, loadNewPanorama]); // Dependencies from context

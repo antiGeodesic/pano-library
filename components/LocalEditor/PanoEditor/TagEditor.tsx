@@ -45,9 +45,9 @@ const TagEditor: React.FC<TagEditorProps> = ({initialTags, setCurrentTags}) => {
 
   const removeTag = (index: number) => {
     //updateCurrentTags(index, "");
-    console.log("[TagEditor]---------------- Tag Count (1): ", tags.length)
+   //commented-console.log("[TagEditor]---------------- Tag Count (1): ", tags.length)
     const newTags: TagCategory[] = tags.splice(index, 1);
-    console.log("[TagEditor]---------------- Tag Count (2):", tags.length)
+   //commented-console.log("[TagEditor]---------------- Tag Count (2):", tags.length)
     setCurrentTags(newTags)
     setTags(newTags)
     

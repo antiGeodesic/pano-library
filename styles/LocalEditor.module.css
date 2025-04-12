@@ -248,7 +248,7 @@
     display: flex;
     justify-content: center;
   }
-  .localPanoList {
+  .panoGroupingPanel {
     width: 100%;
     height: 100%;
     grid-column: 1;
@@ -437,78 +437,94 @@
 
 .coverageDates {
     position: relative;
-    width: 7.5rem auto;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 20rem;
+    
+    height: auto;
+    background-color: transparent;
+
+    
   }
   
   .coverageDatesDropdown {
     position: relative;
-    width: 100%;
+    height: auto;
+    
+    pointer-events: none;
     overflow: hidden;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: max-height 0.3s ease, box-shadow 0.2s ease;
     z-index: 10;
-    
-    
+    padding: 2px;
+    padding-top: 0;
   }
   
   .coverageDatesDropdown.open {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    overflow-y: auto;
+
   }
   
   .coverageDatesDropdownHeader {
-    position: sticky;
-    top: 0;
-    background-color: #f8f8f8;
-    font-weight: 500;
-    border-bottom: 1px solid #eee;
+    
+    position: relative;
+    /*background-color: #f8f8f8;*/
+    /*font-weight: 500;*/
+    /*border-bottom: 1px solid #eee;*/
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 0 15px;
+    padding: 0.15rem 15px;
     z-index: 10;
-    height: 30px;
+    height: auto;
+    border-radius: 0 0 0.75rem 0.75rem;
+    transition: all 0.25s ease;
+    outline-style:solid;
+    outline-width: 2px;
+    outline-color: #000000;
+    margin-left: 2px;
+    margin-right: 2px;;
   }
   
-  .coverageDatesDropdownHeader::after {
+  .coverageDatesDropdownHeader.open {
     content: '▼';
-    margin-left: auto;
+    /*margin-left: auto;*/
+    border-radius: 0 0 0 0;
     font-size: 10px;
     color: #666;
-    transition: transform 0.2s ease;
+    transition-delay: 0s;
   }
-  
-  .coverageDatesDropdown.open .coverageDatesDropdownHeader::after {
-    transform: rotate(180deg);
+  .coverageDatesDropdownHeader.closed {
+    transition-delay: 0.19s;
   }
-  
   .coverageDatesDropdownList {
+    pointer-events: all;
+    position: relative;
     display: flex;
     flex-direction: column-reverse;
-    max-height: 0;
-    opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.2s ease;
+    opacity: 1;
+    transform: translateY(-100%);
+    transition: all 0.3s ease;
+    border-radius:  0 0 0.75rem 0.75rem;
+    outline-style:solid;
+    outline-width: 2px;
+    outline-color: #000000;
   }
-  
+
+  .coverageDatesDropdownList.open {
+    transform: translateY(0);
+    transform-origin:top;
+  }
+
   .coverageDatesDropdown.open .coverageDatesDropdownList {
-    max-height: 300px;
     opacity: 1;
   }
   
   .coverageDatesDropdownItem {
-    height: 30px;
+    height: 2rem;
     display: flex;
     align-items: center;
+    
+    /*background-color: #4a90e2;*/
   }
   
   .coverageDatesDropdownItem button {
-    width: 100%;
     text-align: left;
-    padding: 0 15px;
     height: 100%;
     background: none;
     border: none;
@@ -518,18 +534,20 @@
     font-size: 14px;
     color: #333;
     transition: background-color 0.2s ease;
+    width: 100%;
   }
   
   .coverageDatesDropdownItem button:hover {
-    background-color: #f0f8ff;
+    background-color: #DDDDDD;
   }
   
   .coverageDatesDropdownItemSelected {
-    background-color: #f5f5f5;
+    background-color: blue;
   }
   
   .coverageDatesDropdownItemSelected button,
   .coverageDatesDropdownItem button.disabled {
+    background-color: yellow;
     color: #999;
     font-style: italic;
     cursor: default;
@@ -537,16 +555,59 @@
   
   .coverageDatesDropdownItem button:focus {
     outline: none;
-    background-color: #e6f2ff;
+    background-color: yellow;
   }
   
   /* Add a subtle divider between items */
   .coverageDatesDropdownItem:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
   }
   
   /* Style for when dropdown is focused */
   .coverageDatesDropdown:focus-within {
     border-color: #4a90e2;
     outline: none;
+  }
+
+  .coverageDatesDropdownItemDate {
+    font-size: 1rem;
+    font-weight: 400;
+    text-wrap: nowrap;
+    margin-left: 0.5rem;
+  }
+
+  .coverageDatesDropdownItemGen {
+    --background-color: #555555;
+    background-color: var(--background-color);
+    height: auto;
+    width: auto;
+    border-radius: 0.5rem;
+    border: 0.25rem solid rgb(from var(--background-color) calc(r  * 0.75) calc(g  * 0.75) calc(b  * 0.75));
+    color: white;
+    text-wrap: nowrap;
+    padding: 0.15rem;
+    text-align: center;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;;
+  }
+
+  .coverageDatesDropdownItemGen1 {
+    --background-color: #66311b;
+  }
+  .coverageDatesDropdownItemGen2 {
+    --background-color: #3023a8;
+  }
+  .coverageDatesDropdownItemGen3 {
+    --background-color: #1b9717;
+  }
+  .coverageDatesDropdownItemGen4 {
+    --background-color: #0099ff;
+  }
+  .coverageDatesDropdownItemShitcam {
+    --background-color: #a80000;
+  }
+
+  .coverageDatesDropdownItemUnknown {
+    display: none;
+    visibility: hidden;
   }

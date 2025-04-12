@@ -15,11 +15,11 @@ const PublishPanel: React.FC = () => {
     setPublishResult('none')
 };
     const handleNothing = () => {
-        console.warn("Nothing")
+       //commented-console.warn("Nothing")
     };
   
     const handlePublish = async() => {
-        console.warn("Publish")
+       //commented-console.warn("Publish")
         const success = await publishLocalPanos();
         setPublishResult(success ? 'success' : 'fail');
     };

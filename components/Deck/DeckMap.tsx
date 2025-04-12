@@ -93,7 +93,7 @@ class CoordMapType implements google.maps.MapType {
   }
 
   releaseTile(tile: Element): void {
-    if(!false) console.log(tile); //So ESLint can shut the fuck up
+    if(false) console.log(tile); //So ESLint can shut the fuck up
     // Cleanup if needed
   }
 }
@@ -178,7 +178,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
     if (!map || !mapFullyLoaded || overlayRef.current) return;
     
     try {
-      console.log("Creating GoogleMapsOverlay");
+     //commented-console.log("Creating GoogleMapsOverlay");
       // Create the overlay
       const overlay = new GoogleMapsOverlay({
         pickingRadius: 5
@@ -189,9 +189,9 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
       
       // Set the map
       overlay.setMap(map);
-      console.log("GoogleMapsOverlay created and attached to map");
+     //commented-console.log("GoogleMapsOverlay created and attached to map");
     } catch (err) {
-      console.error("Error initializing overlay:", err);
+     console.error("Error initializing overlay:", err);
     }
     
     return () => {
@@ -201,7 +201,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
           overlayRef.current.setMap(null);
           overlayRef.current = null;
         } catch (err) {
-          console.error("Error cleaning up overlay:", err);
+         console.error("Error cleaning up overlay:", err);
         }
       }
     };
@@ -269,16 +269,16 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
       width: 4,
     }] : [];
     
-    console.log("Updating layers with data:", {
+   /*console.log("Updating layers with data:", {
       locations: locationData.length,
       highlighted: highlightedLocation.length,
       noPano: noPanoData.length,
       paths: pathData.length
-    });
+    });*/
 
     // Debug data format if empty but expected data
     if (locationData.length === 0 && displayedPanos.length > 0) {
-      console.log("Warning: displayedPanos has data but locationData is empty", displayedPanos);
+     //commented-console.log("Warning: displayedPanos has data but locationData is empty", displayedPanos);
     }
     
     // Add a debug point at map center for visibility testing
@@ -322,7 +322,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
             
             /*onClick: ({ object }) => {
               if (object) {
-                console.log(`Clicked pano with ID: ${object.id}`);
+               //commented-console.log(`Clicked pano with ID: ${object.id}`);
               }
             }*/
               onClick: info => {
@@ -362,7 +362,7 @@ const DeckGLWithGoogleMaps: React.FC<MapComponentContentProps> = ({
       // Update overlay with new layers
       overlayRef.current.setProps({ layers });
     } catch (err) {
-      console.error("Error updating layers:", err);
+     console.error("Error updating layers:", err);
     }
   }, [
     displayedPanos,
@@ -409,15 +409,15 @@ interface DeckMapProps {
   const [noPanoMarkerPosition, setNoPanoMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
   const clickedFromDeckRef = useRef("");
 
-  console.log("[DeckMap]-(1): ");
+ //commented-console.log("[DeckMap]-(1): ");
   
   // Map Click Handler
   const onMapClick = useCallback(async (event: MapMouseEvent) => {
     if (clickedFromDeckRef.current != "") {
       // Reset the flag and ignore this click
       //clickedFromDeckRef.current = false;
-      console.warn("----------Clicked from deck ref")
-      console.warn(clickedFromDeckRef.current)
+     //commented-console.warn("----------Clicked from deck ref")
+     //commented-console.warn(clickedFromDeckRef.current)
       const localPano = getExistingPanoById(clickedFromDeckRef.current)
       if(localPano) {
         loadExistingPanorama(localPano)
@@ -440,7 +440,7 @@ interface DeckMapProps {
         setNoPanoMarkerPosition(latLngLiteral);
       }
     } catch (error) {
-      console.error("Error during map click processing:", error);
+     console.error("Error during map click processing:", error);
       setNoPanoMarkerPosition(latLngLiteral);
     }
   }, [clickedMap, loadNewPano, loadExistingPanorama, getExistingPanoById]);
@@ -458,7 +458,7 @@ interface DeckMapProps {
         setNoPanoMarkerPosition(latLngLiteral);
       }
     } catch (error) {
-      console.error("Error during map click processing:", error);
+     //commented-console.error("Error during map click processing:", error);
       setNoPanoMarkerPosition(latLngLiteral);
     }
   }, [clickedMap, loadNewPanorama]);*/
