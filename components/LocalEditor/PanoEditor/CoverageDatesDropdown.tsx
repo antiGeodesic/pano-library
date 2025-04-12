@@ -51,7 +51,7 @@ export default CoverageDatesDropdown;
 import React, { useState } from 'react';
 import { PanoramaData } from '@/types/index';
 import styles from '@/styles/LocalEditor.module.css';
-import { getCameraGen } from '@/utils/helpers';
+import { getCameraGen, getCameraGenCache } from '@/utils/helpers';
 import { getPanoramaFromPanoId } from '@/services/googleMapsService';
 
 interface CoverageDatesComponentProps {
@@ -77,8 +77,8 @@ const CoverageDatesDropdown: React.FC<CoverageDatesComponentProps> = ({ displaye
     return yyyy_mm;
   }
   const formatGen = (gen: string): string => {
-    if(gen == "Gen 1" || gen == "Gen 2" || gen == "Gen 2 or 3" || gen == "Gen 3" || gen == "Gen 4" || gen == "Shitcam") return gen;
-    return "AAAAA";
+    if(gen == "Gen 1" || gen == "Gen 2" || gen == "Gen 2 or 3" || gen == "Gen 3" || gen == "Gen 4" || gen == "Shitcam" || gen == "Gen ?") return gen;
+    return "";
   }
   //const datesInfo = displayedPano.availableDates;
   
@@ -92,8 +92,12 @@ const CoverageDatesDropdown: React.FC<CoverageDatesComponentProps> = ({ displaye
     for(const date of availableDates) {
       let gen = date.gen;
       if(gen == "" && displayedPano.address.country != "Unknown") {
-        const svData = await getPanoramaFromPanoId(date.panoId);
-        gen = getCameraGen(svData, displayedPano.address.country);
+        gen = getCameraGenCache(date.panoId) ?? "";
+        if(gen == "") {
+          const svData = await getPanoramaFromPanoId(date.panoId);
+          gen = getCameraGen(svData, displayedPano.address.country) ?? "Gen ?";
+        }
+        
       }
       newAvailableDates.push({
         panoId: date.panoId,

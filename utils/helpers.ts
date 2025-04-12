@@ -259,11 +259,16 @@ function findCameraGen(data: google.maps.StreetViewPanoramaData, country: string
     return 'Unknown';
 }
 const panoIdCameraGenCache: {panoId: string, gen: string}[] = [];
-export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: string) {
+export function getCameraGenCache(panoId: string): string | null {
+  const genCache = panoIdCameraGenCache.find(item => item.panoId === panoId)
+  if(genCache) return genCache.gen;
+  return null;
+}
+export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: string): string | null {
   console.warn("...")
   console.error("gen --- 1")
   const dataLocation = data.location;
-  if(!dataLocation) return;
+  if(!dataLocation) return null;
   const genCache = panoIdCameraGenCache.find(item => item.panoId === dataLocation.pano)
   if(genCache) return genCache.gen;
   const gen = findCameraGen(data, country);
