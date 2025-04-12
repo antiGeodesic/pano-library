@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[1.8025, 5.92655], [1.8025, 11.1395], [-0.14397, 11.1395], [-0.14397, 5.92655], [1.8025, 5.92655]]]}, "properties": {"source_a3": "TGO"}}]}

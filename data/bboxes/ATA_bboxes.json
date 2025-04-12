@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[180.0, -85.05113], [180.0, -60.0], [-180.0, -60.0], [-180.0, -85.05113], [180.0, -85.05113]]]}, "properties": {"source_a3": "ATA"}}]}

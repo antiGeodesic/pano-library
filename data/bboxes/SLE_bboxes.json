@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[-10.27168, 6.755], [-10.27168, 9.99997], [-13.5003, 9.99997], [-13.5003, 6.755], [-10.27168, 6.755]]]}, "properties": {"source_a3": "SLE"}}]}

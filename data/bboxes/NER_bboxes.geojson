@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[15.99667, 11.69376], [15.99667, 23.51718], [0.16897, 23.51718], [0.16897, 11.69376], [15.99667, 11.69376]]]}, "properties": {"source_a3": "NER"}}]}

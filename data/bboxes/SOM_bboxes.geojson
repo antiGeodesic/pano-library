@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[51.61777, -1.8032], [51.61777, 12.18891], [40.98918, 12.18891], [40.98918, -1.8032], [51.61777, -1.8032]]]}, "properties": {"source_a3": "SOM"}}]}

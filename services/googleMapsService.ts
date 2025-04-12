@@ -23,6 +23,9 @@ function getApiKey(): string {
 export function getStreetViewServiceInstance(): google.maps.StreetViewService | null {
     if (cachedSvServiceInstance) return cachedSvServiceInstance;
     // Check if API is loaded before creating
+    
+
+
     if (typeof window !== 'undefined' && window.google?.maps?.StreetViewService) {
         //-commented-console.log(">>> getStreetViewServiceInstance: Creating and caching new StreetViewService instance.");
         cachedSvServiceInstance = new google.maps.StreetViewService();

@@ -51,6 +51,8 @@ export default CoverageDatesDropdown;
 import React, { useState } from 'react';
 import { PanoramaData } from '@/types/index';
 import styles from '@/styles/LocalEditor.module.css';
+import { getCameraGen } from '@/utils/helpers';
+import { getPanoramaFromPanoId } from '@/services/googleMapsService';
 
 interface CoverageDatesComponentProps {
   displayedPano: PanoramaData;
@@ -60,19 +62,52 @@ interface CoverageDatesComponentProps {
 const CoverageDatesDropdown: React.FC<CoverageDatesComponentProps> = ({ displayedPano, setPanoId }) => {
   const itemHeight = 30;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedDatePanoId, setSelectedDatePanoId] = useState<string | null>(displayedPano?.panoId ?? null);
+  let availableDates = displayedPano?.availableDates.map(date => ({panoId: date.panoId, date: date.date, gen: date.panoId == displayedPano.panoId ? displayedPano.gen : ""}));
   
   if (!displayedPano) return null;
 
-  const datesInfo = displayedPano.availableDates;
+  const updateSelectedDate = (panoId: string) => {
+    setSelectedDatePanoId(panoId);
+    setPanoId(panoId);
+  }
+  const formatDate = (date: string): string => {
+    const yyyy_mm_dd = date.split("T")[0].split("-") || undefined;
+    const yyyy_mm = yyyy_mm_dd? (yyyy_mm_dd[0] + "-" + yyyy_mm_dd[1]) : ""; 
+    return yyyy_mm;
+  }
+  const formatGen = (gen: string): string => {
+    if(gen == "Gen 1" || gen == "Gen 2" || gen == "Gen 2 or 3" || gen == "Gen 3" || gen == "Gen 4" || gen == "Shitcam") return gen;
+    return "AAAAA";
+  }
+  //const datesInfo = displayedPano.availableDates;
   
   // Format the currently displayed date
-  const formattedSelectedDate = displayedPano.date?.split("T")[0] || "Select Date";
-  
-  const handleMouseEnter = () => setIsOpen(true);
+  //const formattedSelectedDate = displayedPano.date?.split("T")[0] || "Select Date";
+  if(!selectedDatePanoId) {
+    setSelectedDatePanoId(displayedPano.panoId)
+  }
+  const handleMouseEnter = async() => {
+    const newAvailableDates = [];
+    for(const date of availableDates) {
+      let gen = date.gen;
+      if(gen == "" && displayedPano.address.country != "Unknown") {
+        const svData = await getPanoramaFromPanoId(date.panoId);
+        gen = getCameraGen(svData, displayedPano.address.country);
+      }
+      newAvailableDates.push({
+        panoId: date.panoId,
+        date: date.date,
+        gen: gen
+      });
+    }
+    availableDates = newAvailableDates;
+    setIsOpen(true)
+  };
   const handleMouseLeave = () => setIsOpen(false);
   
   // Calculate dropdown height based on open state
-  const dropdownHeight = isOpen ? (datesInfo.length + 1) * itemHeight : itemHeight;
+  const dropdownHeight = isOpen ? (availableDates.length + 1) * itemHeight : itemHeight;
 
   return (
     <div className={styles.coverageDates}>
@@ -84,15 +119,13 @@ const CoverageDatesDropdown: React.FC<CoverageDatesComponentProps> = ({ displaye
       >
         {/* Header - always visible and shows the selected date */}
         <div className={`${styles.coverageDatesDropdownHeader} ${styles.coverageDatesDropdownItem}`}>
-          <span>{formattedSelectedDate}</span>
+          <span>{formatDate(availableDates.filter(dateInfo => dateInfo.panoId === selectedDatePanoId || dateInfo.panoId === displayedPano.panoId)[0]?.date ?? "")}</span>
         </div>
         
         {/* Dropdown items - only visible when open */}
         <div className={styles.coverageDatesDropdownList}>
-          {datesInfo.map((dateInfo) => {
-            const isSelected = displayedPano.panoId === dateInfo.panoId;
-            const yyyy_mm_dd = dateInfo.date?.split("T")[0].split("-") || undefined;
-            const yyyy_mm = yyyy_mm_dd? (yyyy_mm_dd[0] + "-" + yyyy_mm_dd[1]) : ""; 
+          {availableDates.map((dateInfo) => {
+            const isSelected = selectedDatePanoId === dateInfo.panoId;
             return (
               <div 
                 key={dateInfo.panoId} 
@@ -101,14 +134,17 @@ const CoverageDatesDropdown: React.FC<CoverageDatesComponentProps> = ({ displaye
                 <button 
                   onClick={() => {
                     if (!isSelected) {
-                      setPanoId(dateInfo.panoId);
+                      updateSelectedDate(dateInfo.panoId);
                       setIsOpen(false);
                     }
                   }}
                   disabled={isSelected}
                   className={isSelected ? styles.disabled : ''}
                 >
-                  <span>{yyyy_mm}</span>
+                  <div style={{display:'flex', flexDirection:'row'}}>
+                  <span>{formatDate(dateInfo.date)}</span>
+                  <span>{formatGen(dateInfo.gen)}</span>
+                  </div>
                 </button>
               </div>
             );

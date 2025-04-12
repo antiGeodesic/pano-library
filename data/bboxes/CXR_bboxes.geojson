@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[105.91673, -10.76582], [105.91673, -10.21186], [105.33568, -10.21186], [105.33568, -10.76582], [105.91673, -10.76582]]]}, "properties": {"source_a3": "CXR"}}]}

@@ -1,6 +1,7 @@
 // utils/helpers.ts
 import { PanoramaData, DataBasePano } from '@/types';
 import { LocalPano, DataBaseItem } from '@/types/LocalEditor'; // Corrected import
+import { getCountryFromCoordinate } from '@/utils/geoContainment';
 //import { Ue } from '@/services/googleMapsService';
 export function extractImageDate(data: google.maps.StreetViewPanoramaData): string {
   // Use optional chaining and nullish coalescing for safety
@@ -65,18 +66,19 @@ function getLinkedCoverage(data: google.maps.StreetViewPanoramaData): {panoId: s
 //  console.warn(dates);
 //  return dates.map(date => ({panoId: date.pano, date: date.Mu}));
 //}
-export function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): {country: string, subdivision: string, region: string, road: string} {
+export async function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): Promise<{country: string, subdivision: string, region: string, road: string}> {
   let address =  {country: "", subdivision: "", region: "", road: ""}
-  if(!data.location)
+  if(!data.location || !data.location.latLng)
     return address;
+  const country = await getCountryFromCoordinate(data.location.latLng.lat(), data.location.latLng.lng());
   const dataAddress = data.location?.description?.split(', ');
   console.log(dataAddress)
   if(dataAddress?.length == 3)
-    address = {country: "", subdivision: dataAddress[2], region: dataAddress[1], road: dataAddress[0]}
+    address = {country: country, subdivision: dataAddress[2], region: dataAddress[1], road: dataAddress[0]}
   else if(dataAddress?.length == 2)
-    address = {country: "", subdivision: dataAddress[1], region: "", road: dataAddress[0]}
+    address = {country: country, subdivision: dataAddress[1], region: "", road: dataAddress[0]}
   else if(dataAddress?.length == 1)
-    address = {country: "", subdivision: dataAddress[0], region: "", road: ""}
+    address = {country: country, subdivision: dataAddress[0], region: "", road: ""}
 
   //const metaData = await Ue(data.location?.pano )
   //console.log(metaData);
@@ -123,12 +125,13 @@ export function getPanoramaAddress(data: google.maps.StreetViewPanoramaData): {c
   }
   
 
-export function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData | null): LocalPano | null {
+export async function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData | null): Promise<PanoramaData | null> {
   if(!data || !data.location || !data.location.pano || !data.location.latLng || !data) return null;
 
   console.log("[Helpers}---------", data);
+  const address = await getPanoramaAddress(data);
   return {
-    gen: "4",
+    gen: getCameraGen(data, address.country),
     localId: crypto.randomUUID(),
     panoId: data.location.pano as string,
     lat: data.location.latLng.lat() as number,
@@ -136,7 +139,7 @@ export function convertSvPanoramaData(data: google.maps.StreetViewPanoramaData |
     heading: data.links && data.links.length > 0 ? data.links[0].heading ?? 0 : 0,
     pitch: 0,
     zoom: 1,
-    address: getPanoramaAddress(data),
+    address: address,
     description: "",
     tags: [],
     date: data.imageDate,
@@ -177,60 +180,56 @@ export function convertFromDataBasePano(dbPano: DataBasePano) : PanoramaData {
     movementHistory: []
   }
 }
-/*function isGen2(data: google.maps.StreetViewPanoramaData, country: string) {
+function gen2or3(data: google.maps.StreetViewPanoramaData, country: string): string {
   const date=new Date();
-  return(
-    (country == 'AU' && date < new Date('2010-06'))
-  || (country == 'BR' && date < new Date('2010-04'))
-  || (country == 'CA' && date < new Date('2010-06'))
-  || (country == 'CL' && false )//Trekker
-  || (country == 'JP' && date < new Date('2011-10'))
-  || (country == 'GB' && date < new Date('2012-04'))
-  || (country == 'IE' && date < new Date('2011-11'))
-  || (country == 'NZ' && date < new Date('2010-04'))
-  || (country == 'MX' && date < new Date(''))
-  || (country == 'RU' && date < new Date(''))
-  || (country == 'US' && date < new Date(''))
-  || (country == 'IT' && date < new Date(''))
-  || (country == 'DK' && date < new Date(''))
-  || (country == 'GR' && date < new Date(''))
-  || (country == 'RO' && date < new Date(''))
-  || (country == 'PL' && date < new Date(''))
-  || (country == 'CZ' && date < new Date(''))
-  || (country == 'CH' && date < new Date(''))
-  || (country == 'SE' && date < new Date(''))
-  || (country == 'FI' && date < new Date(''))
-  || (country == 'BE' && date < new Date(''))
-  || (country == 'LU' && date < new Date(''))
-  || (country == 'NL' && date < new Date(''))
-  || (country == 'ZA' && date < new Date(''))
-  || (country == 'SG' && date < new Date(''))
-  || (country == 'TW' && date < new Date(''))
-  || (country == 'HK' && date < new Date(''))
-  || (country == 'MO' && date < new Date(''))
-  || (country == 'MC' && date < new Date(''))
-  || (country == 'SM' && date < new Date(''))
-  || (country == 'AD' && date < new Date(''))
-  || (country == 'IM' && date < new Date(''))
-  || (country == 'JE' && date < new Date(''))
-  || (country == 'FR' && date < new Date(''))
-  || (country == 'DE' && date < new Date(''))
-  || (country == 'ES' && date < new Date(''))
-  || (country == 'PT' && date < new Date(''))
-  || (country == 'SJ' && date < new Date('')))
-}*//*
-export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: string) {
+
+  
+    if(country == 'Australia') {if(date < new Date('2010-06')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Brazil') {if(date < new Date('2010-04')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Canada') {if(date < new Date('2010-06')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Japan') {if(date < new Date('2011-10')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'United Kingdom') {if(date < new Date('2012-04')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Ireland') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'New Zealand') {if(date < new Date('2010-04')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Mexico') {if(date < new Date('2011-05')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Russia') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'United States of America') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Italy') {if(date < new Date('2011-01')) {return "Gen 2"} else if(date < new Date('2012-01')) return "Gen 2 or 3"; return "Gen 3"}
+    if(country == 'Denmark') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Greece') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Romania') {if(date < new Date('2010-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Poland') {if(date < new Date('2011-05')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Czechia') {if(date < new Date('2010-01')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Switzerland') {if(date < new Date('2012-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Sweden') {if(date < new Date('2012-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Finland') {if(date < new Date('2012-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Belgium') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Luxembourg') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Netherlands') {if(date < new Date('2012-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'South Africa') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Singapore') {if(date < new Date('2010-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Taiwan') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Hong Kong') {if(date < new Date('2009-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Macao') {if(date < new Date('2010-01')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Monaco') {if(date < new Date('2011-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'San Marino') {if(date < new Date('2010-11')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Andorra') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Isle of Man') {if(date < new Date('2010-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Jersey') {if(date < new Date('2010-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'France') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Germany') {if(date < new Date('2012-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Spain') {if(date < new Date('2011-12')) {return "Gen 2"} return "Gen 3"}
+    if(country == 'Portugal') {if(date < new Date('2010-12')) {return "Gen 2"} return "Gen 3"}
+  return "Gen 3";
+}
+function findCameraGen(data: google.maps.StreetViewPanoramaData, country: string) {
 
     if (data&&data.tiles) {
         if (data.tiles.worldSize.height === 1664) { // Gen 1
-            return 'Gen1';
+            return 'Gen 1';
         } else if (data.tiles.worldSize.height === 6656) { // Gen 2 or 3
 
-            let lat;
-            for (let key in data.Sv) {
-                lat = data.Sv[key].lat;
-                break;
-            }
+            const lat = data.location?.latLng?.lat() ?? -90;
 
             let date;
             if (data.imageDate) {
@@ -249,18 +248,26 @@ export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: 
                                   (country === 'NG' && (date >= new Date('2021-06'))) ||
                                   (country === 'ST') ||
                                   (country === 'US' && lat > 52 && (date >= new Date('2019-01'))))) {
-                return 'Badcam';
+                return 'Shitcam';
             }
-            if (gen2Countries.includes(country)||country=='Country not found'||!country) {
-                return 'Gen2or3';
-            }
-            else{
-                return 'Gen3';}
+            return gen2or3(data, country)
         }
         else if(data.tiles.worldSize.height === 8192){
-            return 'Gen4';
+            return 'Gen 4';
         }
     }
     return 'Unknown';
 }
-*/
+const panoIdCameraGenCache: {panoId: string, gen: string}[] = [];
+export function getCameraGen(data: google.maps.StreetViewPanoramaData, country: string) {
+  console.warn("...")
+  console.error("gen --- 1")
+  const dataLocation = data.location;
+  if(!dataLocation) return;
+  const genCache = panoIdCameraGenCache.find(item => item.panoId === dataLocation.pano)
+  if(genCache) return genCache.gen;
+  const gen = findCameraGen(data, country);
+  console.error("gen --- 2")
+  panoIdCameraGenCache.push({panoId: dataLocation.pano, gen: gen});
+  return gen;
+}

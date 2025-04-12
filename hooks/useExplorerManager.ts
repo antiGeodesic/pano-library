@@ -80,7 +80,8 @@ export function useExplorerManager(): ExplorerContextType {
         const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
         console.log(svPanoData)
         console.log(JSON.stringify(svPanoData))
-        return convertSvPanoramaData(svPanoData) as PanoramaData | null;
+        const panoramaData = await convertSvPanoramaData(svPanoData) as PanoramaData | null;
+        return panoramaData;
       }
     const loadNewPano = useCallback(async (panoramaData: PanoramaData) => {
       setInitialPano(panoramaData);

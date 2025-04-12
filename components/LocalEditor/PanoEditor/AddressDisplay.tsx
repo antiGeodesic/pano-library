@@ -14,8 +14,7 @@ const AddressDisplay: React.FC<AddressDisplayProps> = ({displayedPano}) => {
     if (!displayedPano) return;
     return (
         <div className={styles.addressDisplay}>
-            <span>{displayedPano.address.road}</span>
-            <span>{`${displayRegion ? (displayedPano.address.region + ", ") : ''}` + displayedPano.address.subdivision + `${displayCountry ? (", " + displayedPano.address.country) : ''}`}</span>
+            <span style={{fontSize: "0.75rem"}}>{`${displayedPano.address.road} - ${displayRegion ? (displayedPano.address.region + ", ") : ''}` + displayedPano.address.subdivision + `${displayCountry ? (", " + displayedPano.address.country) : ''}`}</span>
         </div>
     )
     

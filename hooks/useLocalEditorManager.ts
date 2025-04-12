@@ -80,7 +80,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
 
   const loadPanorama = useCallback(async (svPanoramaData: google.maps.StreetViewPanoramaData | null) => {
     if (!svPanoramaData) throw new Error('Invalid panorama data received from direct getPanorama call.');
-    const localPano = convertSvPanoramaData(svPanoramaData);
+    const panoramaData = await convertSvPanoramaData(svPanoramaData);
     
     //if(!panoramaData) throw new Error('Failed convertion from StreetViewPanoramaData to PanoramaData');
     //const newLocalPano: LocalPano = {
@@ -88,15 +88,15 @@ export function useLocalEditorManager(): LocalEditorContextType {
     //  localId: crypto.randomUUID() // Add the unique identifier
     //};
     // Simulate an API call
-    if(!localPano) return;
+    if(!panoramaData) return;
     //clearCurrentPano();
     if(displayedPanorama) {
       if(getExistingPanoById(displayedPanorama.localId)) updateLocalPano(displayedPanorama);
       else addLocalPano(displayedPanorama);
     }
     setTimeout(() => {
-      setCurrentPanorama(localPano);
-      setDisplayedPanorama(localPano)
+      setCurrentPanorama(panoramaData);
+      setDisplayedPanorama(panoramaData)
       setIsLoading(false);
     }, 1000);
   }, [addLocalPano, displayedPanorama, getExistingPanoById, updateLocalPano]);
@@ -175,7 +175,7 @@ export function useLocalEditorManager(): LocalEditorContextType {
   const updateCurrentPos = useCallback((async (panoId: string, lat: number, lng: number) => {
     if(!displayedPanorama) return;
     const svPanoData = await getPanoramaFromPanoId(panoId);
-    const convertedPano = convertSvPanoramaData(svPanoData);
+    const convertedPano = await convertSvPanoramaData(svPanoData);
     const newPano = { ...currentPanorama ,...displayedPanorama, address: convertedPano?.address ?? displayedPanorama.address, availableDates: convertedPano?.availableDates ?? displayedPanorama.availableDates, panoId: panoId, lat: lat, lng: lng, movementHistory: [...displayedPanorama.movementHistory, {panoId: panoId, lat: lat, lng: lng}] };
     setDisplayedPanorama(newPano);
   }), [currentPanorama, displayedPanorama]);
@@ -218,7 +218,8 @@ export function useLocalEditorManager(): LocalEditorContextType {
     const svPanoData = await getPanoramaFromCoords(latLng.lat(), latLng.lng());
     console.log(svPanoData)
     console.log(JSON.stringify(svPanoData))
-    return convertSvPanoramaData(svPanoData) as LocalPano | null;
+    const panoramaData = await convertSvPanoramaData(svPanoData) as LocalPano | null;
+    return panoramaData;
   }
   const setStreetViewPanoId = useCallback((panoId: string) => {
     if(!displayedPanorama) return;
